@@ -1,0 +1,45 @@
+{
+  "appName": { "message": "URLComments" },
+  "appDesc": { "message": "Hidden comments extension based on URL - find and leave comments like a treasure hunt on the current URL." },
+  
+  "btnLogin": { "message": "Google Login" },
+  "btnLogout": { "message": "Logout" },
+  "urlLabel": { "message": "Current Page:" },
+  
+  "stateLoading": { "message": "Loading comments..." },
+  "stateUnsupportedTitle": { "message": "Unsupported Page" },
+  "stateUnsupportedDesc": { "message": "URLComments can only be used on HTTP/HTTPS web pages." },
+  "stateEmptyTitle": { "message": "No comments yet" },
+  "stateEmptyDesc": { "message": "Leave the first treasure comment for this URL!" },
+  
+  "inputPlaceholder": { "message": "Write a comment (max 1000 chars)" },
+  "authNoticeDefault": { "message": "You can write comments after logging in." },
+  "btnSubmit": { "message": "Submit" },
+  "btnSubmitting": { "message": "Submitting..." },
+  
+  "defaultUser": { "message": "User" },
+  "anonymous": { "message": "Anonymous" },
+  
+  "msgLoginInProgress": { "message": "Logging in with Google..." },
+  "msgLoginFailedClosed": { "message": "Login window closed or authentication failed." },
+  "msgSessionSaveFailed": { "message": "Failed to save session: " },
+  "msgNoAuthToken": { "message": "Authentication token not received." },
+  "msgLoginError": { "message": "An error occurred during login: " },
+  
+  "msgLogoutInProgress": { "message": "Logging out..." },
+  "msgLogoutError": { "message": "An error occurred during logout." },
+  
+  "msgUnsupportedCannotComment": { "message": "You cannot write comments on an unsupported page." },
+  
+  "msgLoadCommentsFailed": { "message": "Failed to load comments. (" },
+  "msgLoadCommentsError": { "message": "An error occurred while loading comments." },
+  
+  "msgLoginRequiredToWrite": { "message": "You must log in to write a comment." },
+  "msgCannotGetUrl": { "message": "Could not get the URL of the current page." },
+  "msgEmptyComment": { "message": "Please enter a comment." },
+  "msgCommentTooLong": { "message": "Comments can be up to 1000 characters." },
+  "msgCheckSupabaseConfig": { "message": "Please check your Supabase config (lib/config.js)." },
+  
+  "msgSubmitFailed": { "message": "Failed to register comment: " },
+  "msgSubmitError": { "message": "An error occurred while registering the comment." }
+}

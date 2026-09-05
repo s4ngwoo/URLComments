@@ -1,0 +1,45 @@
+ㄱ 수 {
+  "appName": { "message": "URLComments" },
+  "appDesc": { "message": "URL 기반 숨은 댓글 확장 프로그램 - 현재 URL에서 사람들의 댓글을 보물찾기처럼 확인하고 남겨보세요." },
+  
+  "btnLogin": { "message": "Google 로그인" },
+  "btnLogout": { "message": "로그아웃" },
+  "urlLabel": { "message": "현재 페이지:" },
+  
+  "stateLoading": { "message": "댓글을 불러오는 중..." },
+  "stateUnsupportedTitle": { "message": "지원을 안 하는 페이지입니다" },
+  "stateUnsupportedDesc": { "message": "HTTP/HTTPS 웹 페이지에서만 URLComments를 사용할 수 있습니다." },
+  "stateEmptyTitle": { "message": "아직 작성된 댓글이 없습니다" },
+  "stateEmptyDesc": { "message": "이 URL의 첫 번째 보물 댓글을 남겨보세요!" },
+  
+  "inputPlaceholder": { "message": "댓글을 작성해 보세요 (최대 1000자)" },
+  "authNoticeDefault": { "message": "로그인 후 댓글을 작성할 수 있습니다." },
+  "btnSubmit": { "message": "등록" },
+  "btnSubmitting": { "message": "등록 중..." },
+  
+  "defaultUser": { "message": "사용자" },
+  "anonymous": { "message": "익명" },
+  
+  "msgLoginInProgress": { "message": "Google 로그인 진행 중..." },
+  "msgLoginFailedClosed": { "message": "로그인 창이 닫혔거나 인증에 실패했습니다." },
+  "msgSessionSaveFailed": { "message": "세션 저장 실패: " },
+  "msgNoAuthToken": { "message": "인증 토큰을 전달받지 못했습니다." },
+  "msgLoginError": { "message": "로그인 중 오류가 발생했습니다: " },
+  
+  "msgLogoutInProgress": { "message": "로그아웃 처리 중..." },
+  "msgLogoutError": { "message": "로그아웃 중 오류가 발생했습니다." },
+  
+  "msgUnsupportedCannotComment": { "message": "미지원 페이지에서는 댓글을 작성할 수 없습니다." },
+  
+  "msgLoadCommentsFailed": { "message": "댓글을 불러오지 못했습니다. (" },
+  "msgLoadCommentsError": { "message": "댓글을 불러오는 도중 오류가 발생했습니다." },
+  
+  "msgLoginRequiredToWrite": { "message": "댓글을 작성하려면 먼저 로그인해야 합니다." },
+  "msgCannotGetUrl": { "message": "현재 페이지의 URL 정보를 가져올 수 없습니다." },
+  "msgEmptyComment": { "message": "댓글 내용을 입력해 주세요." },
+  "msgCommentTooLong": { "message": "댓글은 최대 1000자까지 작성 가능합니다." },
+  "msgCheckSupabaseConfig": { "message": "Supabase 설정(lib/config.js)을 확인해 주세요." },
+  
+  "msgSubmitFailed": { "message": "댓글 등록에 실패했습니다: " },
+  "msgSubmitError": { "message": "댓글 등록 중 오류가 발생했습니다." }
+}

@@ -1,5 +1,5 @@
 /**
- * URLComments 팝업 메인 스크립트 - Supabase Auth & Database 연동
+ * URLComments 팝업 메인 스크립트 - Supabase Auth & Database 연동 및 i18n 적용
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -45,9 +45,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 1. 앱 초기화
   async function init() {
+    setupI18n();
     setupEventListeners();
     await checkAuthSession();
     await initTabUrl();
+  }
+
+  // 1-1. 다국어(i18n) 설정
+  function setupI18n() {
+    document.querySelectorAll('[data-i18n]').forEach(elem => {
+      const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n'));
+      if (msg) elem.textContent = msg;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+      const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-placeholder'));
+      if (msg) elem.placeholder = msg;
+    });
   }
 
   // 2. 이벤트 리스너 등록
@@ -74,12 +87,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const { data: { session }, error } = await supabase.auth.getSession();
       if (error) {
-        console.error('세션 확인 에러:', error);
+        console.error('Session check error:', error);
       }
       currentUser = session?.user || null;
       updateAuthUI(currentUser);
     } catch (err) {
-      console.error('세션 상태 조회 실패:', err);
+      console.error('Session status fetch failed:', err);
       updateAuthUI(null);
     }
   }
@@ -91,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (user) {
       elements.btnLogin.classList.add('hidden');
       elements.userProfile.classList.remove('hidden');
-      elements.userEmail.textContent = user.email || '사용자';
+      elements.userEmail.textContent = user.email || chrome.i18n.getMessage("defaultUser");
       elements.userEmail.title = user.email || '';
 
       // 지원되는 URL인 경우 폼 활성화
@@ -103,20 +116,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       elements.userProfile.classList.add('hidden');
       elements.userEmail.textContent = '';
       
-      disableForm('로그인 후 댓글을 작성할 수 있습니다.');
+      disableForm(chrome.i18n.getMessage("authNoticeDefault"));
     }
   }
 
   // 5. Google 로그인 (chrome.identity.launchWebAuthFlow)
   async function handleGoogleLogin() {
     if (!supabase) {
-      showError('Supabase 클라이언트가 초기화되지 않았습니다. lib/supabaseClient.js 설정을 확인하세요.');
+      showError(chrome.i18n.getMessage("msgCheckSupabaseConfig"));
       return;
     }
 
     try {
       hideError();
-      showLoading('Google 로그인 진행 중...');
+      showLoading(chrome.i18n.getMessage("msgLoginInProgress"));
 
       const redirectUrl = chrome.identity.getRedirectURL();
 
@@ -130,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       if (error || !data?.url) {
-        throw new Error(error?.message || 'Google OAuth URL 생성 실패');
+        throw new Error(error?.message || 'Google OAuth URL generation failed');
       }
 
       // Chrome WebAuthFlow 실행
@@ -142,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         async (authUrl) => {
           if (chrome.runtime.lastError) {
             console.error('WebAuthFlow Error:', chrome.runtime.lastError);
-            showError('로그인 창이 닫혔거나 인증에 실패했습니다.');
+            showError(chrome.i18n.getMessage("msgLoginFailedClosed"));
             showState(normalizedCurrentUrl ? 'empty' : 'unsupported');
             return;
           }
@@ -161,7 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               });
 
               if (sessionErr) {
-                showError('세션 저장 실패: ' + sessionErr.message);
+                showError(chrome.i18n.getMessage("msgSessionSaveFailed") + sessionErr.message);
               } else {
                 updateAuthUI(sessionData.session?.user);
                 // 세션 유저 정보 local storage에 캐싱
@@ -170,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
               }
             } else {
-              showError('인증 토큰을 전달받지 못했습니다.');
+              showError(chrome.i18n.getMessage("msgNoAuthToken"));
             }
           }
 
@@ -181,8 +194,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       );
     } catch (err) {
-      console.error('Google 로그인 오류:', err);
-      showError('로그인 중 오류가 발생했습니다: ' + err.message);
+      console.error('Google login error:', err);
+      showError(chrome.i18n.getMessage("msgLoginError") + err.message);
       showState(normalizedCurrentUrl ? 'empty' : 'unsupported');
     }
   }
@@ -191,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function handleLogout() {
     if (!supabase) return;
     try {
-      showLoading('로그아웃 처리 중...');
+      showLoading(chrome.i18n.getMessage("msgLogoutInProgress"));
       await supabase.auth.signOut();
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
         chrome.storage.local.remove(['userCache']);
@@ -201,14 +214,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadComments(normalizedCurrentUrl);
       }
     } catch (err) {
-      showError('로그아웃 중 오류가 발생했습니다.');
+      showError(chrome.i18n.getMessage("msgLogoutError"));
     }
   }
 
   // 7. 현재 탭 정보 가져오기 및 URL 정규화
   async function initTabUrl() {
     try {
-      showLoading('댓글을 불러오는 중...');
+      showLoading(chrome.i18n.getMessage("stateLoading"));
 
       if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.query) {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -216,13 +229,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           processUrl(tab.url);
         } else {
           showState('unsupported');
-          disableForm('미지원 페이지에서는 댓글을 작성할 수 없습니다.');
+          disableForm(chrome.i18n.getMessage("msgUnsupportedCannotComment"));
         }
       } else {
         processUrl(window.location.href);
       }
     } catch (error) {
-      console.error('탭 URL 조회 오류:', error);
+      console.error('Tab URL fetch error:', error);
       showState('unsupported');
     }
   }
@@ -237,7 +250,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!helper.isSupportedUrl(rawUrl)) {
       elements.urlBar.classList.add('hidden');
       showState('unsupported');
-      disableForm('미지원 페이지에서는 댓글을 작성할 수 없습니다.');
+      disableForm(chrome.i18n.getMessage("msgUnsupportedCannotComment"));
       return;
     }
 
@@ -250,7 +263,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (currentUser) {
       enableForm();
     } else {
-      disableForm('로그인 후 댓글을 작성할 수 있습니다.');
+      disableForm(chrome.i18n.getMessage("authNoticeDefault"));
     }
 
     loadComments(normalizedCurrentUrl);
@@ -258,7 +271,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 9. Supabase에서 댓글 목록 조회
   async function loadComments(url) {
-    showLoading('댓글을 불러오는 중...');
+    showLoading(chrome.i18n.getMessage("stateLoading"));
     hideError();
 
     if (!supabase) {
@@ -275,8 +288,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('댓글 조회 에러:', error);
-        showError('댓글을 불러오지 못했습니다. (' + error.message + ')');
+        console.error('Comments fetch error:', error);
+        showError(chrome.i18n.getMessage("msgLoadCommentsFailed") + error.message + ')');
         showState('empty');
         return;
       }
@@ -288,8 +301,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         showState('list');
       }
     } catch (err) {
-      console.error('댓글 조회 중 예외 발생:', err);
-      showError('댓글을 불러오는 도중 오류가 발생했습니다.');
+      console.error('Comments fetch exception:', err);
+      showError(chrome.i18n.getMessage("msgLoadCommentsError"));
       showState('empty');
     }
   }
@@ -299,29 +312,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
 
     if (!currentUser) {
-      showError('댓글을 작성하려면 먼저 로그인해야 합니다.');
+      showError(chrome.i18n.getMessage("msgLoginRequiredToWrite"));
       return;
     }
 
     if (!normalizedCurrentUrl) {
-      showError('현재 페이지의 URL 정보를 가져올 수 없습니다.');
+      showError(chrome.i18n.getMessage("msgCannotGetUrl"));
       return;
     }
 
     const content = elements.commentInput.value.trim();
 
     if (!content) {
-      showError('댓글 내용을 입력해 주세요.');
+      showError(chrome.i18n.getMessage("msgEmptyComment"));
       return;
     }
 
     if (content.length > 1000) {
-      showError('댓글은 최대 1000자까지 작성 가능합니다.');
+      showError(chrome.i18n.getMessage("msgCommentTooLong"));
       return;
     }
 
     if (!supabase) {
-      showError('Supabase 설정(lib/supabaseClient.js)을 확인해 주세요.');
+      showError(chrome.i18n.getMessage("msgCheckSupabaseConfig"));
       return;
     }
 
@@ -332,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const authorName = currentUser.user_metadata?.full_name || 
                          currentUser.user_metadata?.name || 
                          currentUser.email?.split('@')[0] || 
-                         '익명';
+                         chrome.i18n.getMessage("anonymous");
 
       const { data, error } = await supabase
         .from('comments')
@@ -346,8 +359,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         ]);
 
       if (error) {
-        console.error('댓글 작성 오류:', error);
-        showError('댓글 등록에 실패했습니다: ' + error.message);
+        console.error('Comment post error:', error);
+        showError(chrome.i18n.getMessage("msgSubmitFailed") + error.message);
       } else {
         // 성공 시 폼 리셋 및 댓글 목록 새로고침
         elements.commentInput.value = '';
@@ -355,8 +368,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadComments(normalizedCurrentUrl);
       }
     } catch (err) {
-      console.error('댓글 작성 중 예외 발생:', err);
-      showError('댓글 등록 중 오류가 발생했습니다.');
+      console.error('Comment post exception:', err);
+      showError(chrome.i18n.getMessage("msgSubmitError"));
     } finally {
       setSubmitButtonLoading(false);
     }
@@ -368,8 +381,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     comments.forEach(item => {
       const li = document.createElement('li');
       li.className = 'comment-item';
-
-      const createdDate = new Date(item.created_at).toLocaleDateString('ko-KR', {
+      
+      // i18n 날짜 포맷 (현재 브라우저 언어 기반으로 자동 적용되도록 undefined 사용)
+      const createdDate = new Date(item.created_at).toLocaleDateString(undefined, {
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
@@ -441,7 +455,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function setSubmitButtonLoading(isLoading) {
     elements.btnSubmit.disabled = isLoading;
-    elements.btnSubmit.textContent = isLoading ? '등록 중...' : '등록';
+    elements.btnSubmit.textContent = isLoading ? chrome.i18n.getMessage("btnSubmitting") : chrome.i18n.getMessage("btnSubmit");
   }
 
   function escapeHtml(str) {
