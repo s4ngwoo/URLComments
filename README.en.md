@@ -1,5 +1,7 @@
 # 💬 URLComments (Hidden Comments like a Treasure Hunt)
 
+🇰🇷 [한국어 버전](README.md)
+
 A Chrome extension that allows you to leave your own comments on any web page and find hidden comments left by others. You can communicate based on the URL anywhere, such as specific articles, blogs, or shopping mall product pages. It provides an experience like finding treasures hidden throughout the internet.
 
 ## 1. Project Introduction
