@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "URLComments",
+  "version": "1.0.0",
+  "description": "URL 기반 숨은 댓글 확장 프로그램 - 현재 URL에서 사람들의 댓글을 보물찾기처럼 확인하고 남겨보세요.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "identity"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}
