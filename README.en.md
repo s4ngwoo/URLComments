@@ -1,11 +1,11 @@
-# 💬 URLComments (Hidden Comments like a Treasure Hunt)
+# 💬 URLComments (Leave your opinion anywhere)
 
 🇰🇷 [한국어 버전](README.md)
 
-A Chrome extension that allows you to leave your own comments on any web page and find hidden comments left by others. You can communicate based on the URL anywhere, such as specific articles, blogs, or shopping mall product pages. It provides an experience like finding treasures hidden throughout the internet.
+A Chrome extension that allows you to leave your own opinions on any web page and read what others think. You can communicate based on the URL anywhere, whether it's an article, blog, or a shopping page.
 
 ## 1. Project Introduction
-- **Service Concept:** A social annotation tool that allows you to check "Who left what comment on this page?" and leave your own mark based on the URL.
+- **Service Concept:** A social annotation tool that turns every URL into a communication space, allowing you to freely leave and share opinions about any web page.
 - **MVP Features:** 
   - Easy login using Google Account (OAuth)
   - Real-time lookup of comments on the current page (URL)

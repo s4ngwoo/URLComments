@@ -1,6 +1,6 @@
 ㄱ 수 {
   "appName": { "message": "URLComments" },
-  "appDesc": { "message": "URL 기반 숨은 댓글 확장 프로그램 - 현재 URL에서 사람들의 댓글을 보물찾기처럼 확인하고 남겨보세요." },
+  "appDesc": { "message": "웹의 모든 곳에 의견을 남기고 소통하세요 - 현재 URL에 대한 사람들의 생각을 확인하고 내 의견을 남겨보세요." },
   
   "btnLogin": { "message": "Google 로그인" },
   "btnLogout": { "message": "로그아웃" },
@@ -9,8 +9,8 @@
   "stateLoading": { "message": "댓글을 불러오는 중..." },
   "stateUnsupportedTitle": { "message": "지원을 안 하는 페이지입니다" },
   "stateUnsupportedDesc": { "message": "HTTP/HTTPS 웹 페이지에서만 URLComments를 사용할 수 있습니다." },
-  "stateEmptyTitle": { "message": "아직 작성된 댓글이 없습니다" },
-  "stateEmptyDesc": { "message": "이 URL의 첫 번째 보물 댓글을 남겨보세요!" },
+  "stateEmptyTitle": { "message": "아직 작성된 의견이 없습니다" },
+  "stateEmptyDesc": { "message": "이 페이지에 대한 첫 번째 의견을 남겨보세요!" },
   
   "inputPlaceholder": { "message": "댓글을 작성해 보세요 (최대 1000자)" },
   "authNoticeDefault": { "message": "로그인 후 댓글을 작성할 수 있습니다." },
