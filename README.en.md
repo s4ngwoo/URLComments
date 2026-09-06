@@ -16,6 +16,18 @@ URLComments values your privacy and web browsing history.
 - **Manual Refresh**: Comments for the current page are only loaded when you explicitly click the extension icon or hit the 'Refresh' button in the panel.
 - **Data Minimization**: We only use the URL of the current tab and a basic profile (email, name) essential for providing the commenting service.
 
+### Privacy-first refresh
+
+URLComments checks the current page URL and loads comments only when you explicitly request a refresh. It does not automatically send URLs or fetch comments when you switch tabs, navigate pages, or browse in the background.
+
+Auto-refresh may be reconsidered in the future, but it is not currently available because of its privacy, request-cost, and operational implications.
+
+### Planned personalization
+
+URLComments prioritizes safe, curated personalization over user-uploaded media. Future options may include free avatars and curated theme packs. User-uploaded profile images and comment image attachments are not currently available and are not committed roadmap features.
+
+For more details on product policies regarding cost and operation, see [Future Monetization and Avatars](docs/FUTURE_MONETIZATION_AND_AVATARS.md).
+
 ## 🚀 Installation and Usage
 
 ### For Users (Standard Installation)

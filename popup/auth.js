@@ -33,8 +33,10 @@ export async function updateAuthUI(user) {
     elements.userProfile.classList.remove('hidden');
     
     if (profile) {
-      elements.profileDisplayName.textContent = profile.display_name;
-      elements.profilePublicId.textContent = profile.public_id;
+      const displayNameLabel = chrome.i18n.getMessage("displayName") || "Display Name";
+      const publicIdLabel = chrome.i18n.getMessage("publicId") || "User ID";
+      elements.profileDisplayName.textContent = `${displayNameLabel}: ${profile.display_name}`;
+      elements.profilePublicId.textContent = `${publicIdLabel}: ${profile.public_id}`;
       // 지원되는 URL인 경우 폼 활성화
       if (state.normalizedCurrentUrl) {
         enableForm();

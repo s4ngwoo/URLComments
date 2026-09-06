@@ -56,5 +56,7 @@
   "displayName": { "message": "표시 이름" },
   "cancel": { "message": "취소" },
   "save": { "message": "저장" },
-  "profileSetupFailed": { "message": "프로필 설정 실패" }
+  "profileSetupFailed": { "message": "프로필 설정 실패" },
+  "publicId": { "message": "사용자 ID" },
+  "authorTooltipPublicId": { "message": "사용자 ID: " }
 }

@@ -78,7 +78,8 @@ export function renderCommentList(comments, userVotes = {}, profiles = {}) {
       tooltipDiv.id = tooltipId;
       tooltipDiv.setAttribute('role', 'tooltip');
       tooltipDiv.hidden = true;
-      tooltipDiv.textContent = publicId;
+      const tooltipLabel = chrome.i18n.getMessage('authorTooltipPublicId') || 'User ID: ';
+      tooltipDiv.textContent = `${tooltipLabel}${publicId}`;
 
       authorBtn.addEventListener('mouseenter', () => tooltipDiv.hidden = false);
       authorBtn.addEventListener('mouseleave', () => tooltipDiv.hidden = true);
