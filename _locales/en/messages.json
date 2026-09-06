@@ -42,9 +42,6 @@
   "btnDelete": { "message": "Delete" },
   "btnReport": { "message": "Report" },
   "defaultUser": { "message": "User" },
-  "sortLatest": { "message": "Latest" },
-  "sortLikes": { "message": "Most Liked" },
-  "sortDislikes": { "message": "Most Disliked" },
   "stateNeedsRefreshTitle": { "message": "Page Changed" },
   "stateNeedsRefreshDesc": { "message": "Please click the refresh button above to view comments for this page." },
   "msgNeedsRefresh": { "message": "Page changed. Please click refresh." },
@@ -88,5 +85,15 @@
   "deletedComment": { "message": "This comment was deleted." },
   "msgReplySubmitSuccess": { "message": "Reply posted successfully." },
   "msgReplySubmitError": { "message": "Failed to post reply." },
-  "labelReply": { "message": "↳ Reply" }
+  "labelReply": { "message": "↳ Reply" },
+  "settingsFontSize": { "message": "Font Size" },
+  "settingsFontSizeLabel": { "message": "Screen Font Size" },
+  "fontSizeSmall": { "message": "Small" },
+  "fontSizeDefault": { "message": "Default" },
+  "fontSizeLarge": { "message": "Large" },
+  "btnPrev": { "message": "Previous" },
+  "btnNext": { "message": "Next" },
+  "btnPrevPage": { "message": "Previous Page" },
+  "btnNextPage": { "message": "Next Page" },
+  "paginationAriaLabel": { "message": "Comment pagination navigation" }
 }

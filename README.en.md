@@ -2,77 +2,200 @@
 
 🇰🇷 [한국어 버전](README.md)
 
-**URLComments** is a Chrome extension that turns every URL on the web into a communication space. Leave your opinions and interact with others on any web page, whether it's an article, blog, or shopping site.
+**URLComments** is a privacy-first Chrome extension that turns every normalized web URL into a public discussion space. Leave and discover short public comments on articles, blog posts, documentation, and shopping sites wherever a URL exists.
+
+---
+
+## 🛡️ Privacy-First Principle
+
+URLComments strictly protects your browsing privacy and personal history:
+
+- **No URL Transmission on Page Navigation**: URLs are never automatically sent to Supabase or any external server while you browse the web or switch tabs.
+- **Explicit User Interaction Only**: The extension reads the active tab's URL and fetches page-specific comments only after you explicitly open the extension popup/side panel and request a refresh.
+- **Strict URL Normalization**: Query parameters (`?query=...`) and hash fragments (`#section`) are excluded, anchoring comments strictly to `origin + pathname`. This prevents leakage of personal identifiers, UTM tracking tags, or session tokens.
+- **Zero Surveillance & Telemetry**: Contains no background polling, analytics, telemetry, or remote code execution.
+
+---
 
 ## ✨ Key Features
-- **Easy Communication**: Log in with your Google account in seconds and start leaving comments.
-- **Real-time Interactions**: Read what others think about the current page (URL) in real-time.
-- **Like/Dislike & Sorting**: Vote on helpful comments and sort them by Newest, Most Liked, or Most Disliked.
-- **Side Panel Support**: Enjoy a clean side panel UI that doesn't interfere with your web surfing.
 
-## 🛡️ Privacy-First Philosophy
-URLComments values your privacy and web browsing history.
-- **No Background Tracking**: We do not automatically send your browsing history (URLs) to our servers when you switch tabs or visit websites.
-- **Manual Refresh**: Comments for the current page are only loaded when you explicitly click the extension icon or hit the 'Refresh' button in the panel.
-- **Data Minimization**: We only use the URL of the current tab and a basic profile (email, name) essential for providing the commenting service.
+- **Google Sign-In**: Quick and secure authentication via Supabase Auth and Chrome Identity `launchWebAuthFlow`.
+- **Normalized URL Comments**: Post comments up to 1,000 characters tied to normalized webpage URLs.
+- **Compact Inline Comment Reactions (Like/Dislike)**: Compact, non-wrapping inline reaction group located directly beside author names for efficient space usage and keyboard accessibility.
+- **Comment Editing & Soft Deletion**: Edit your own comments or soft-delete them (`is_deleted = true`).
+- **1-Depth Multi-Sibling Replies**:
+  - An active top-level parent comment can receive multiple sibling replies.
+  - Sibling replies render beneath their parent in chronological ascending order (`created_at ASC`).
+  - Active parent comments feature an accessible `↳ Reply` control; replies cannot receive further nested replies (strictly 1-depth).
+- **Thread-Based In-Memory Pagination**:
+  - Top-level comment threads are paginated in chunks of 10 (`THREADS_PER_PAGE = 10`), keeping parents and all their replies together.
+  - Page switching renders from in-memory cached threads without making additional Supabase network queries.
+  - Preserves reading position on refresh and reply creation, clamping safely on deletions.
+- **Strict Chronological ASC Ordering**:
+  - All parent comments and replies are consistently ordered oldest-first (`created_at ASC`), using bigint-safe numeric string ID tie-breaking on identical timestamps. Obsolete sort selection has been completely removed.
+- **Independent Persistent Font Size Preferences**:
+  - Choose between Small, Default, and Large font sizes, persisted in `chrome.storage.local` independently of theme.
+  - Scaled across the popup UI using root `data-font-size` attribute and CSS custom properties.
+- **Display-Only Username Truncation**:
+  - Long usernames are safely truncated visually with CSS ellipsis without mutating data, preserving full names via `title` and `aria-label` separately from public ID tooltips.
+- **Deleted-Parent Context Preservation**:
+  - Soft-deleted parent comments with active replies display a placeholder (`"This comment was deleted."`) to preserve discussion context.
+  - Deleted parents display no Reply action and do not accept new replies.
+- **My Comments Lazy Loading & Invalidation**: Loads personal comment history only when opening the My Comments tab. Cache is invalidated on comment/reply creation, edit, or deletion.
+- **Theme Persistence**: Supports System Default, Light Mode, and Dark Mode, persisted in `chrome.storage.local`.
+- **Public ID Tooltip**: Accessible horizontal tooltip revealing user public IDs on hover and keyboard focus.
+- **Auto-Growing Bounded Textarea**: Smoothly resizes between 48px min-height and 140px max-height.
 
-### Privacy-first refresh
+---
 
-URLComments checks the current page URL and loads comments only when you explicitly request a refresh. It does not automatically send URLs or fetch comments when you switch tabs, navigate pages, or browse in the background.
+## 🏗️ Architecture & Directory Structure
 
-Auto-refresh may be reconsidered in the future, but it is not currently available because of its privacy, request-cost, and operational implications.
-
-### Planned personalization
-
-URLComments prioritizes safe, curated personalization over user-uploaded media. Future options may include free avatars and curated theme packs. User-uploaded profile images and comment image attachments are not currently available and are not committed roadmap features.
-
-For more details on product policies regarding cost and operation, see [Future Monetization and Avatars](docs/FUTURE_MONETIZATION_AND_AVATARS.md).
-
-## 🚀 Installation and Usage
-
-### For Users (Standard Installation)
-1. Install the extension from the **[Chrome Web Store Link]** (Link to be added after release).
-2. Pin the 💬 URLComments icon from the extensions menu in the top right corner of your browser.
-3. Click the icon on any web page where you want to leave an opinion to open the side panel.
-4. Log in with your Google account and freely write your comments!
-
-### For Developers (Local Testing & Contribution)
-1. Clone or download this repository.
-2. Go to `chrome://extensions/` in your Chrome browser.
-3. Turn on **Developer mode** in the top right corner.
-4. Click the **[Load unpacked]** button and select the downloaded project folder.
-
-## 🛠️ Contributor Guide
-
-URLComments is open-source, and anyone is free to contribute. Bug reports, feature suggestions, and Pull Requests (PRs) are always welcome!
-
-### Directory Structure
 ```text
 URLComments/
-├── manifest.json          # Chrome Extension config
-├── background.js          # Background service worker
-├── popup/                 # Side panel UI and business logic modules (auth, comments, votes, etc.)
-├── content/               # Content scripts (e.g., SPA detection)
-├── lib/                   # Supabase client and environment variables
-├── utils/                 # Common utilities like URL normalization
-├── _locales/              # Internationalization (i18n) files
-└── docs/                  # Documentation for i18n, monetization, and avatars
+├── manifest.json              # Manifest V3 extension configuration
+├── background.js              # Background service worker for side panel and tab event dispatch
+├── popup/                     # Frontend popup and side panel modules
+│   ├── popup.html             # Markup for Home, My Comments, Settings tabs, and Profile Modal
+│   ├── popup.css              # Vanilla CSS theme variables, layouts, and component styles
+│   ├── popup.js               # Lifecycle initialization, tab switching, and event delegation
+│   ├── comments.js            # Comments fetch, thread grouping, CRUD, replies, and textarea sizing
+│   ├── auth.js                # Google OAuth session check and sign-in/sign-out handlers
+│   ├── my_comments.js         # Lazy-loaded My Comments view and cache management
+│   ├── settings.js            # Theme and preference management
+│   ├── ui.js                  # DOM cache and state transitions (loading, empty, list, etc.)
+│   ├── state.js               # Global in-memory reactive state store
+│   ├── profile.js             # Display name and Public ID management
+│   ├── votes.js               # Like/dislike reaction handler
+│   └── spa.js                 # Current tab URL extraction and SPA detection
+├── content/
+│   ├── spaDetector.js         # Content script detecting client-side routing
+│   └── config.js              # SPA detector configuration
+├── lib/
+│   ├── config.js              # Supabase project URL and anon key configuration
+│   ├── supabaseClient.js      # Supabase JS client wrapper and Chrome storage adapter
+│   ├── publicId.js            # Base62 public user ID generator
+│   └── utils.js               # Pure utility helpers
+├── utils/
+│   └── urlHelper.js           # URL normalization utility (strips query/hash)
+├── _locales/                  # Internationalization resources (ko, en)
+└── supabase/
+    └── migrations/            # Database schema, RLS policies, and database triggers
+        ├── 001_comments_baseline.sql
+        ├── 002_profiles_public_identity.sql
+        ├── 003_comment_votes.sql
+        ├── 004_comment_moderation.sql
+        ├── 005_verify_schema.sql
+        ├── 006_fix_linter_warnings.sql
+        └── 007_one_depth_replies.sql
 ```
 
-**[I18n Expansion Plan]**
-For details on how the language fallback works and our roadmap for adding Japanese, Chinese, and Spanish support, please read the [I18n Expansion Plan](docs/I18N_PLAN.md).
+---
 
-### Running Tests
-This project uses Jest for unit testing and has CI configured via GitHub Actions.
-When modifying code or adding new features, please make sure they pass the tests using the commands below.
+## 🔑 Extension Permissions Audit
 
+All permissions defined in `manifest.json` adhere to the principle of least privilege:
+
+| Permission | Real Purpose in Codebase |
+| :--- | :--- |
+| `sidePanel` | Configures and opens the extension UI within Chrome's native side panel via `chrome.sidePanel.setPanelBehavior`. |
+| `storage` | Stores theme preferences, cached authentication state, and per-tab SPA detection flags in `chrome.storage.local`. |
+| `identity` | Launches Google OAuth web authentication via `chrome.identity.launchWebAuthFlow`. |
+| `tabs` | 1) Listens for active tab changes (`chrome.tabs.onActivated`, `chrome.tabs.onUpdated`) in `background.js` to notify the open side panel to prompt manual refresh. 2) Opens original URLs from My Comments in a new tab via `chrome.tabs.create`. |
+| `activeTab` | Temporarily grants access to the current tab URL only at the moment the user interacts with the extension popup, without requiring broad `<all_urls>` host permissions. |
+
+> **Follow-up Note**: Future permission reviews will evaluate whether background tab change notifications can be refined to further isolate `tabs` and `activeTab` scopes.
+
+---
+
+## 💻 Local Development & Testing
+
+### Prerequisites
+- Node.js 18+
+- Google Chrome browser
+- Supabase Project (PostgreSQL + Auth)
+
+### 1. Installation
 ```bash
+# Clone repository
+git clone https://github.com/s4ngwoo/URLComments.git
+cd URLComments
+
 # Install dependencies
 npm install
+```
 
-# Run unit tests
+### 2. Configure Supabase Credentials
+Copy `lib/config.example.js` to `lib/config.js` and set your Supabase project credentials:
+```javascript
+window.APP_CONFIG = {
+  SUPABASE_URL: "https://your-project.supabase.co",
+  SUPABASE_ANON_KEY: "your-anon-key"
+};
+```
+
+### 3. Run Unit Tests
+Run Jest tests to verify all pure helpers, state flows, 1-depth multi-sibling replies, and DOM structures:
+```bash
 npm test
 ```
 
-## 📄 License
-This project is open for anyone to fork, modify, and use freely.
+### 4. Load Unpacked Extension in Chrome
+1. Navigate to `chrome://extensions/` in Google Chrome.
+2. Enable **Developer mode** in the top right corner.
+3. Click **Load unpacked** and select the `URLComments` repository folder.
+
+---
+
+## 🗄️ Supabase Migrations
+
+Apply migrations sequentially in the Supabase **SQL Editor**:
+
+1. `001_comments_baseline.sql`: Core `comments` table and baseline RLS policies.
+2. `002_profiles_public_identity.sql`: Public profile, display name, and Public ID generation.
+3. `003_comment_votes.sql`: Comment reaction tables and server-side count triggers.
+4. `004_comment_moderation.sql`: Moderation and reporting tables.
+5. `005_verify_schema.sql`: Schema integrity verification views and helpers.
+6. `006_fix_linter_warnings.sql`: Performance and index optimizations.
+7. `007_one_depth_replies.sql`: Foreign key `parent_id`, 1-depth constraint trigger (`check_comment_one_depth()`), and active reply checker function (`comment_has_active_replies()`).
+
+### 📌 Reply Policy & Deferred Multi-Level Nesting
+- **Current Policy**: Multiple sibling replies sharing one active top-level parent are supported. Reply-to-reply nesting (>1 depth) is strictly prevented by database triggers.
+- **Future Plan**: Deeper multi-level nesting is intentionally deferred. Supporting it will require a database migration altering the `check_comment_one_depth()` trigger and implementing a recursive thread tree component.
+
+---
+
+## ⚠️ Known Limitations
+
+- **No Real-Time Push Updates**: WebSocket realtime subscriptions are intentionally omitted to safeguard privacy, minimize client battery usage, and reduce unnecessary server load. Use the manual refresh (`↻`) button to reload comments.
+- **Normalized URL Matching**: Comments are tied to the canonical normalized URL (`origin + pathname`). Websites with dynamic internal state sharing identical URLs will share a single comment space.
+
+---
+
+## 🧪 Manual Verification Checklist
+
+1. **Privacy Verification**:
+   - Open Chrome DevTools Network panel, switch tabs, and navigate through websites.
+   - Verify that no URL data or background queries are dispatched.
+   - Confirm that network requests only occur when opening the popup and clicking refresh.
+2. **Multi-Sibling Replies**:
+   - Post top-level comment P.
+   - Click `↳ Reply` to submit Reply A.
+   - Click `↳ Reply` again on parent P to submit Reply B.
+   - Verify Reply A and Reply B render in chronological order beneath parent P, and neither reply shows a Reply button.
+3. **Soft Deletion & Context Retention**:
+   - Soft-delete a top-level parent that has replies.
+   - Verify the parent changes to `"This comment was deleted."` while replies remain visible.
+   - Confirm the deleted parent no longer displays a Reply button.
+4. **My Comments Verification**:
+   - Post a comment, navigate to the My Comments tab, and verify the comment is listed.
+   - Click "Open original page" and verify it opens in a new tab.
+5. **Theme Persistence**:
+   - Change theme between System, Light, and Dark mode in Settings.
+   - Close and reopen the extension to confirm the theme persists.
+6. **Thread Pagination & Position Preservation**:
+   - On a page with >10 comment threads, verify the pagination navigation bar (`< Prev`, `1 / N`, `Next >`) is displayed.
+   - Click `Next >` and verify that page 2 renders immediately with no network request, keeping parent and all replies grouped together.
+   - Trigger a refresh and confirm reading position remains on the current page.
+7. **Font Size & Compact Header Verification**:
+   - Switch font size between Small, Default, and Large in Settings, confirming the UI scales properly across the extension.
+   - Confirm Like and Dislike reactions are rendered directly beside author names in `.comment-header-left` without wrapping, and long usernames are cleanly truncated with an ellipsis.

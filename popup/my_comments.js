@@ -106,7 +106,7 @@ export function renderMyComments(comments) {
     const displayUrl = formatDisplayUrl(item.url);
     const openLabel = (typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage('openOriginalPage')) || '원문 보기';
     const replyBadge = item.parent_id
-      ? `<span class="badge-reply" style="font-size: 10px; background: var(--surface-color); border: 1px solid var(--border-color); padding: 1px 5px; border-radius: 4px; color: var(--primary-color); font-weight: 600; flex-shrink: 0;">${escapeHtml((typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage('labelReply')) || '↳ 답글')}</span>`
+      ? `<span class="badge-reply">${escapeHtml((typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage('labelReply')) || '↳ 답글')}</span>`
       : '';
 
     li.innerHTML = `

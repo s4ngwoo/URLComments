@@ -7,7 +7,7 @@ export async function handleVoteClick(commentId, requestedVoteType, btnElem) {
     return;
   }
   
-  const container = btnElem.closest('.vote-area');
+  const container = btnElem.closest('.vote-group') || btnElem.closest('.vote-area');
   if (!container) return;
   
   const likeBtn = container.querySelector('.btn-like');

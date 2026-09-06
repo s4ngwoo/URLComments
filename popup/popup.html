@@ -60,20 +60,12 @@
 
     <!-- ==================== HOME TAB ==================== -->
     <section id="tab-home" class="tab-content active">
-      <!-- Toolbar 영역 (현재 URL + 정렬) -->
+      <!-- Toolbar 영역 (현재 URL) -->
       <div id="page-toolbar" class="page-toolbar hidden">
         <div class="url-info">
           <span class="toolbar-label" data-i18n="urlLabel">현재 페이지</span>
           <span id="current-url" class="url-text" title="">-</span>
         </div>
-        <label class="sort-control">
-          <span class="sr-only" data-i18n="sortLabel">댓글 정렬</span>
-          <select id="sort-select" class="sort-select">
-            <option value="latest" data-i18n="sortLatest">최신순</option>
-            <option value="likes" data-i18n="sortLikes">좋아요순</option>
-            <option value="dislikes" data-i18n="sortDislikes">싫어요순</option>
-          </select>
-        </label>
       </div>
 
       <!-- Content Area 영역 -->
@@ -112,6 +104,17 @@
           </ul>
         </div>
       </main>
+
+      <!-- Pagination 영역 (최상위 스레드 페이지네이션) -->
+      <nav id="pagination-controls" class="pagination-controls hidden" aria-label="댓글 페이지 탐색" data-i18n-aria-label="paginationAriaLabel">
+        <button id="btn-prev-page" class="btn btn-outline btn-sm btn-page" type="button" aria-label="이전 페이지" data-i18n-aria-label="btnPrevPage">
+          &lt; <span class="page-btn-text" data-i18n="btnPrev">이전</span>
+        </button>
+        <span id="page-indicator" class="page-indicator" aria-live="polite">1 / 1</span>
+        <button id="btn-next-page" class="btn btn-outline btn-sm btn-page" type="button" aria-label="다음 페이지" data-i18n-aria-label="btnNextPage">
+          <span class="page-btn-text" data-i18n="btnNext">다음</span> &gt;
+        </button>
+      </nav>
 
       <!-- Footer 영역 (댓글 작성) -->
       <footer id="app-footer" class="app-footer hidden">
@@ -184,10 +187,22 @@
           <h3 class="settings-group-title" data-i18n="settingsTheme">테마 설정</h3>
           <div class="settings-item">
             <label for="theme-select" data-i18n="settingsThemeMode">화면 모드</label>
-            <select id="theme-select" class="sort-select">
+            <select id="theme-select" class="settings-select">
               <option value="system" data-i18n="themeSystem">시스템 기본값</option>
               <option value="light" data-i18n="themeLight">라이트 모드</option>
               <option value="dark" data-i18n="themeDark">다크 모드</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-group" style="margin-top: 16px;">
+          <h3 class="settings-group-title" data-i18n="settingsFontSize">글자 크기</h3>
+          <div class="settings-item">
+            <label for="font-size-select" data-i18n="settingsFontSizeLabel">화면 글자 크기</label>
+            <select id="font-size-select" class="settings-select">
+              <option value="small" data-i18n="fontSizeSmall">작게</option>
+              <option value="default" data-i18n="fontSizeDefault">보통</option>
+              <option value="large" data-i18n="fontSizeLarge">크게</option>
             </select>
           </div>
         </div>

@@ -11,6 +11,9 @@ import {
   handleDeleteComment, 
   handleReportComment, 
   handleReplySubmit,
+  handleEditComment,
+  prevCommentPage,
+  nextCommentPage,
   autoResizeTextarea,
   resetTextareaSize
 } from './comments.js';
@@ -153,12 +156,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       await initTabUrl();
     });
 
-    // 정렬 변경
-    elements.sortSelect.addEventListener('change', () => {
-      if (state.normalizedCurrentUrl) {
-        loadComments(state.normalizedCurrentUrl);
-      }
-    });
+    // 페이지네이션
+    if (elements.btnPrevPage) {
+      elements.btnPrevPage.addEventListener('click', prevCommentPage);
+    }
+    if (elements.btnNextPage) {
+      elements.btnNextPage.addEventListener('click', nextCommentPage);
+    }
 
     elements.commentInput.addEventListener('input', (e) => {
       const length = Array.from(e.target.value).length;
@@ -252,6 +256,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 inputEl.focus();
                 autoResizeTextarea(inputEl);
               }
+              if (typeof formContainer.scrollIntoView === 'function') {
+                formContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              }
             }
           }
         } else if (action === 'delete') {
@@ -313,7 +320,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
           }
           saveBtn.disabled = true;
-          const { handleEditComment } = await import('./comments.js');
           await handleEditComment(commentId, newContent);
         }
         return;

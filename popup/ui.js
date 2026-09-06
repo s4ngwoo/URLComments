@@ -22,9 +22,8 @@ export function initElements() {
     btnSaveProfile: document.getElementById('btn-save-profile'),
     modalError: document.getElementById('modal-error'),
 
-    // Top Bar (Refresh, Sort, Toolbar)
+    // Top Bar (Refresh, Toolbar)
     btnRefresh: document.getElementById('btn-refresh'),
-    sortSelect: document.getElementById('sort-select'),
     pageToolbar: document.getElementById('page-toolbar'),
     currentUrlText: document.getElementById('current-url'),
 
@@ -44,6 +43,12 @@ export function initElements() {
     stateEmpty: document.getElementById('state-empty'),
     stateList: document.getElementById('state-list'),
     commentList: document.getElementById('comment-list'),
+
+    // Pagination Controls
+    paginationControls: document.getElementById('pagination-controls'),
+    btnPrevPage: document.getElementById('btn-prev-page'),
+    btnNextPage: document.getElementById('btn-next-page'),
+    pageIndicator: document.getElementById('page-indicator'),
 
     // Form
     appFooter: document.getElementById('app-footer'),
@@ -68,6 +73,11 @@ export function showState(targetState) {
   const targetEl = elements[targetElName];
   if (targetEl) targetEl.classList.remove('hidden');
 
+  // Hide pagination controls if not on list view
+  if (elements.paginationControls && targetState !== 'list') {
+    elements.paginationControls.classList.add('hidden');
+  }
+
   // Show/Hide footer based on state
   if (elements.appFooter) {
     if (targetState === 'list' || targetState === 'empty') {
@@ -75,6 +85,24 @@ export function showState(targetState) {
     } else {
       elements.appFooter.classList.add('hidden');
     }
+  }
+}
+
+export function updatePaginationUI(currentPage, totalPages) {
+  if (!elements.paginationControls) return;
+  if (elements.pageIndicator) {
+    elements.pageIndicator.textContent = `${currentPage} / ${totalPages}`;
+  }
+  if (totalPages <= 1) {
+    elements.paginationControls.classList.add('hidden');
+    return;
+  }
+  elements.paginationControls.classList.remove('hidden');
+  if (elements.btnPrevPage) {
+    elements.btnPrevPage.disabled = currentPage <= 1;
+  }
+  if (elements.btnNextPage) {
+    elements.btnNextPage.disabled = currentPage >= totalPages;
   }
 }
 
