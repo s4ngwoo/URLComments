@@ -178,17 +178,30 @@ drop policy if exists "comments_insert_auth" on comments;
 drop policy if exists "comments_update_auth" on comments;
 
 -- 4. 읽기 정책: 삭제되지 않은 댓글 또는 활성 대댓글이 달린 부모 댓글 조회 허용
+-- RLS 무한 재귀(infinite recursion) 방지를 위해 SECURITY DEFINER 함수 활용
+create or replace function public.comment_has_active_replies(p_comment_id bigint)
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (
+    select 1 from public.comments
+    where parent_id = p_comment_id
+      and is_deleted = false
+  );
+$$;
+
+grant execute on function public.comment_has_active_replies(bigint) to anon, authenticated;
+
 create policy "comments_select_public"
   on comments
   for select
   using (
     (
       is_deleted = false
-      or exists (
-        select 1 from comments replies
-        where replies.parent_id = comments.id
-          and replies.is_deleted = false
-      )
+      or (parent_id is null and public.comment_has_active_replies(id))
     )
     and not exists (
       select 1 from user_profiles 
@@ -196,6 +209,7 @@ create policy "comments_select_public"
       and is_spammer = true
     )
   );
+
 
 -- 5. 쓰기 정책: 로그인한 본인 명의로만 INSERT
 create policy "comments_insert_auth"

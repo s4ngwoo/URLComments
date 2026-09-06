@@ -968,3 +968,18 @@ textarea:disabled {
   align-items: center;
   gap: 4px;
 }
+
+.developer-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: color 0.15s ease;
+}
+
+.developer-link:hover {
+  color: var(--primary-color);
+}
+

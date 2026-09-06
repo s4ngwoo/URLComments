@@ -95,10 +95,27 @@ CREATE TRIGGER before_insert_update_comments_one_depth
   EXECUTE FUNCTION public.check_comment_one_depth();
 
 -- --------------------------------------------------------------------
--- 4. 부모 댓글 Soft-Delete 시 대댓글 보존을 위한 RLS SELECT 정책 보완
+-- 4. 부모 댓글 Soft-Delete 시 대댓글 보존을 위한 헬퍼 함수 및 RLS SELECT 정책
 -- --------------------------------------------------------------------
--- 부모 댓글이 is_deleted = true로 소프트 삭제되더라도,
--- 하위에 활성(is_deleted = false) 대댓글이 존재하면 스레드 유지를 위해 부모 row를 읽을 수 있도록 허용합니다.
+-- RLS 정책식 내부에서 동일한 comments 테이블을 직접 서브쿼리(EXISTS (SELECT 1 FROM comments ...))하면
+-- 서브쿼리에도 동일한 SELECT 정책이 적용되어 PostgreSQL RLS 'infinite recursion' 에러가 발생합니다.
+-- 따라서 SECURITY DEFINER 함수를 정의하여 RLS 재귀 없이 부모 댓글에 활성 대댓글이 있는지 검사합니다.
+CREATE OR REPLACE FUNCTION public.comment_has_active_replies(p_comment_id bigint)
+RETURNS boolean
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.comments
+    WHERE parent_id = p_comment_id
+      AND is_deleted = false
+  );
+$$;
+
+GRANT EXECUTE ON FUNCTION public.comment_has_active_replies(bigint) TO anon, authenticated;
+
 DROP POLICY IF EXISTS "comments_select_public" ON public.comments;
 CREATE POLICY "comments_select_public"
   ON public.comments
@@ -106,11 +123,7 @@ CREATE POLICY "comments_select_public"
   USING (
     (
       is_deleted = false
-      OR EXISTS (
-        SELECT 1 FROM public.comments replies
-        WHERE replies.parent_id = comments.id
-          AND replies.is_deleted = false
-      )
+      OR (parent_id IS NULL AND public.comment_has_active_replies(id))
     )
     AND NOT EXISTS (
       SELECT 1 FROM public.user_profiles 
@@ -118,3 +131,4 @@ CREATE POLICY "comments_select_public"
         AND is_spammer = true
     )
   );
+
