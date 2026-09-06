@@ -57,7 +57,7 @@ export function processUrl(rawUrl) {
     elements.urlBar.classList.add('hidden');
     
     showState('unsupported-spa');
-    disableForm("이 사이트는 JS 로 내용만 바뀌는 페이지이거나, 메인 도메인이 아닙니다.");
+    disableForm(chrome.i18n.getMessage("stateUnsupportedSpaDesc") || "이 사이트는 JS 로 내용만 바뀌는 페이지이거나, 메인 도메인이 아닙니다.");
     return;
   }
 

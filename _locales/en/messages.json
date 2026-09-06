@@ -42,5 +42,11 @@
   "defaultUser": { "message": "User" },
   "sortLatest": { "message": "Latest" },
   "sortLikes": { "message": "Most Liked" },
-  "sortDislikes": { "message": "Most Disliked" }
+  "sortDislikes": { "message": "Most Disliked" },
+  "stateNeedsRefreshTitle": { "message": "Page Changed" },
+  "stateNeedsRefreshDesc": { "message": "Please click the refresh button above to view comments for this page." },
+  "stateUnsupportedSpaTitle": { "message": "Site Not Supported" },
+  "stateUnsupportedSpaDesc": { "message": "For JS-heavy sites like Instagram or Twitter, comments are only allowed on the main domain (root). They are not available on this specific page." },
+  "msgNeedsRefresh": { "message": "Page changed. Please click refresh." },
+  "msgSpaDetected": { "message": "SPA detected. Only the main domain is supported." }
 }

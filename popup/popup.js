@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.onMessage.addListener((message) => {
       if (message.type === 'TAB_CHANGED') {
         showState('needs-refresh');
-        disableForm("페이지가 변경되었습니다. 새로고침을 눌러주세요.");
+        disableForm(chrome.i18n.getMessage("msgNeedsRefresh") || "페이지가 변경되었습니다. 새로고침을 눌러주세요.");
         setNormalizedUrl(null);
         elements.urlBar.classList.add('hidden');
       } else if (message.type === 'SPA_DETECTED') {
