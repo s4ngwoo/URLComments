@@ -126,8 +126,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     elements.commentInput.addEventListener('input', (e) => {
-      const length = e.target.value.length;
+      const length = Array.from(e.target.value).length;
       elements.charCount.textContent = `${length} / 1000`;
+    });
+
+    elements.commentList.addEventListener('input', (e) => {
+      if (e.target.tagName === 'TEXTAREA' && e.target.id.startsWith('comment-edit-input-')) {
+        const commentId = e.target.id.replace('comment-edit-input-', '');
+        const countEl = document.getElementById(`comment-edit-count-${commentId}`);
+        if (countEl) {
+          const length = Array.from(e.target.value).length;
+          countEl.textContent = `${length} / 1000`;
+        }
+      }
     });
 
     elements.commentForm.addEventListener('submit', handleCommentSubmit);
@@ -143,6 +154,51 @@ document.addEventListener('DOMContentLoaded', async () => {
           await handleDeleteComment(commentId);
         } else if (action === 'report') {
           await handleReportComment(commentId);
+        } else if (action === 'edit') {
+          const bodyEl = document.getElementById(`comment-body-${commentId}`);
+          const formEl = document.getElementById(`comment-edit-form-${commentId}`);
+          if (bodyEl && formEl) {
+            bodyEl.classList.add('hidden');
+            formEl.classList.remove('hidden');
+            const inputEl = document.getElementById(`comment-edit-input-${commentId}`);
+            if (inputEl) {
+              inputEl.focus();
+              inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length;
+            }
+          }
+        }
+        return;
+      }
+
+      const cancelBtn = e.target.closest('.btn-action-cancel');
+      if (cancelBtn) {
+        const commentId = cancelBtn.getAttribute('data-id');
+        const bodyEl = document.getElementById(`comment-body-${commentId}`);
+        const formEl = document.getElementById(`comment-edit-form-${commentId}`);
+        if (bodyEl && formEl) {
+          formEl.classList.add('hidden');
+          bodyEl.classList.remove('hidden');
+        }
+        return;
+      }
+      
+      const saveBtn = e.target.closest('.btn-action-save');
+      if (saveBtn) {
+        const commentId = saveBtn.getAttribute('data-id');
+        const inputEl = document.getElementById(`comment-edit-input-${commentId}`);
+        if (inputEl) {
+          const newContent = inputEl.value.trim();
+          if (!newContent) {
+            alert(chrome.i18n.getMessage("msgEmptyComment") || '댓글 내용을 입력해주세요.');
+            return;
+          }
+          if (newContent.length > 1000) {
+            alert(chrome.i18n.getMessage("msgCommentTooLong") || '댓글은 1000자를 넘을 수 없습니다.');
+            return;
+          }
+          saveBtn.disabled = true;
+          const { handleEditComment } = await import('./comments.js');
+          await handleEditComment(commentId, newContent);
         }
         return;
       }

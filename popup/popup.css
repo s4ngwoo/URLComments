@@ -431,6 +431,7 @@ body {
   flex-direction: column;
   gap: 4px;
   max-width: 200px;
+  pointer-events: none;
 }
 
 .author-tooltip[hidden] {

@@ -58,5 +58,11 @@
   "save": { "message": "저장" },
   "profileSetupFailed": { "message": "프로필 설정 실패" },
   "publicId": { "message": "사용자 ID" },
-  "authorTooltipPublicId": { "message": "사용자 ID: " }
+  "authorTooltipPublicId": { "message": "사용자 ID: " },
+  "labelEdited": { "message": "수정됨" },
+  "btnCancel": { "message": "취소" },
+  "btnSave": { "message": "저장" },
+  "btnEdit": { "message": "수정" },
+  "msgEditError": { "message": "댓글 수정에 실패했습니다." },
+  "msgReportDuplicate": { "message": "이미 신고한 댓글입니다." }
 }

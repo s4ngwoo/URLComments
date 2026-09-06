@@ -58,5 +58,11 @@
   "save": { "message": "Save" },
   "profileSetupFailed": { "message": "Profile setup failed" },
   "publicId": { "message": "User ID" },
-  "authorTooltipPublicId": { "message": "User ID: " }
+  "authorTooltipPublicId": { "message": "User ID: " },
+  "labelEdited": { "message": "edited" },
+  "btnCancel": { "message": "Cancel" },
+  "btnSave": { "message": "Save" },
+  "btnEdit": { "message": "Edit" },
+  "msgEditError": { "message": "Failed to edit comment." },
+  "msgReportDuplicate": { "message": "You have already reported this comment." }
 }

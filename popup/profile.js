@@ -5,7 +5,7 @@ import { showError } from './ui.js';
 /**
  * Counts code points to correctly handle emojis and complex characters
  */
-function getCodePointLength(str) {
+export function getCodePointLength(str) {
   return Array.from(str).length;
 }
 

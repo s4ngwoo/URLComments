@@ -55,8 +55,12 @@ URLComments/
 ├── content/               # SPA(Single Page App) 감지 등 콘텐츠 스크립트
 ├── lib/                   # Supabase 클라이언트 및 환경 변수 설정
 ├── utils/                 # URL 정규화 등 공통 유틸리티
-└── _locales/              # 다국어(i18n) 지원 파일
+├── _locales/              # 다국어(i18n) 지원 파일
+└── docs/                  # i18n 확장 및 제품 정책(수익화, 아바타) 기획 문서
 ```
+
+**[다국어(i18n) 지원 확장 계획]**
+일본어, 중국어, 스페인어 등 다국어 지원 확장을 위한 i18n 적용 구조 및 fallback 원리에 대한 자세한 내용은 [I18n Expansion Plan](docs/I18N_PLAN.md) 문서를 참고하세요.
 
 ### 테스트 환경 구축 및 실행
 이 프로젝트는 Jest를 활용하여 단위 테스트를 진행하며, GitHub Actions를 통한 CI가 구축되어 있습니다.

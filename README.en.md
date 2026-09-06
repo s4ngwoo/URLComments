@@ -55,8 +55,12 @@ URLComments/
 ├── content/               # Content scripts (e.g., SPA detection)
 ├── lib/                   # Supabase client and environment variables
 ├── utils/                 # Common utilities like URL normalization
-└── _locales/              # Internationalization (i18n) files
+├── _locales/              # Internationalization (i18n) files
+└── docs/                  # Documentation for i18n, monetization, and avatars
 ```
+
+**[I18n Expansion Plan]**
+For details on how the language fallback works and our roadmap for adding Japanese, Chinese, and Spanish support, please read the [I18n Expansion Plan](docs/I18N_PLAN.md).
 
 ### Running Tests
 This project uses Jest for unit testing and has CI configured via GitHub Actions.

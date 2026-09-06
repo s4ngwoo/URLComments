@@ -11,12 +11,61 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-export function renderCommentList(comments, userVotes = {}, profiles = {}) {
+export function canEditComment(comment, user) {
+  if (!user) return false;
+  if (comment.is_deleted) return false;
+  return user.id === comment.author_id;
+}
+
+export function canDeleteComment(comment, user) {
+  return canEditComment(comment, user);
+}
+
+export function canReportComment(comment, user) {
+  if (!user) return false;
+  if (comment.is_deleted) return false;
+  return user.id !== comment.author_id;
+}
+
+export function canVoteComment(comment) {
+  return !comment.is_deleted;
+}
+
+export function trimCommentContent(content) {
+  return (content || '').trim();
+}
+
+export function isValidCommentContent(content) {
+  const trimmed = trimCommentContent(content);
+  return trimmed.length > 0 && trimmed.length <= 1000;
+}
+
+export async function handleEditComment(id, newContent) {
+  try {
+    const { showLoading } = await import('./ui.js');
+    showLoading(chrome.i18n.getMessage("stateLoading"));
+    const supabase = window.supabaseClient;
+    const { error } = await supabase
+      .from('comments')
+      .update({ content: newContent })
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await loadComments(state.normalizedCurrentUrl);
+  } catch (err) {
+    console.error('Edit error:', err);
+    alert(chrome.i18n.getMessage('msgEditError') || '댓글 수정 중 오류가 발생했습니다.');
+    await loadComments(state.normalizedCurrentUrl);
+  }
+}
+
+export function renderCommentList(comments, userVotes = {}, profiles = {}, userReports = {}) {
   elements.commentList.innerHTML = '';
   comments.forEach(item => {
     const li = document.createElement('li');
     li.className = 'comment-item';
-    
+
     const createdDate = new Date(item.created_at).toLocaleDateString(undefined, {
       month: 'short',
       day: 'numeric',
@@ -28,12 +77,19 @@ export function renderCommentList(comments, userVotes = {}, profiles = {}) {
     const displayName = profile?.display_name || item.author_name || chrome.i18n.getMessage("anonymous");
     const publicId = profile?.public_id || '';
 
+    const hasReported = state.currentUser && userReports[item.id];
     let actionsHtml = '';
     if (state.currentUser) {
-      if (state.currentUser.id === item.author_id) {
-        actionsHtml = `<button class="btn-action" data-action="delete" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnDelete') || '삭제')}">🗑️</button>`;
-      } else {
-        actionsHtml = `<button class="btn-action" data-action="report" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnReport') || '신고')}">🚨</button>`;
+      if (canEditComment(item, state.currentUser)) {
+        actionsHtml += `<button class="btn-action" data-action="edit" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnEdit') || '수정')}">✏️</button>`;
+      }
+      if (canDeleteComment(item, state.currentUser)) {
+        actionsHtml += `<button class="btn-action" data-action="delete" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnDelete') || '삭제')}">🗑️</button>`;
+      }
+      if (canReportComment(item, state.currentUser)) {
+        if (!hasReported) {
+          actionsHtml += `<button class="btn-action" data-action="report" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnReport') || '신고')}">🚨</button>`;
+        }
       }
     }
 
@@ -41,22 +97,45 @@ export function renderCommentList(comments, userVotes = {}, profiles = {}) {
     const likeActive = myVote === 'like' ? 'active' : '';
     const dislikeActive = myVote === 'dislike' ? 'active' : '';
 
+    let editLabel = '';
+    if (item.updated_at && item.updated_at !== item.created_at) {
+      editLabel = `<span class="comment-edited" style="font-size:10px; color:var(--text-muted);">(${chrome.i18n.getMessage('labelEdited') || '수정됨'})</span>`;
+    }
+
+    let bodyContent = escapeHtml(item.content);
+    if (hasReported) {
+      bodyContent = `<span style="color: var(--text-muted); font-style: italic;">🚨 ${escapeHtml(chrome.i18n.getMessage('labelReported') || '신고 접수된 댓글입니다.')}</span>`;
+    }
+
     li.innerHTML = `
       <div class="comment-header">
         <div class="author-container" style="position: relative; display: flex; align-items: center;"></div>
         <div style="display:flex; align-items:center; gap:8px;">
+          ${editLabel}
           <span class="comment-date">${createdDate}</span>
           <div class="comment-actions">${actionsHtml}</div>
         </div>
       </div>
-      <div class="comment-body">${escapeHtml(item.content)}</div>
+      <div class="comment-body" id="comment-body-${item.id}">${bodyContent}</div>
+      <div class="comment-edit-form hidden" id="comment-edit-form-${item.id}">
+        <div class="textarea-wrapper">
+          <textarea id="comment-edit-input-${item.id}" maxlength="1000">${escapeHtml(item.content)}</textarea>
+          <div class="form-bottom" style="margin-top: 4px;">
+            <span class="char-count" id="comment-edit-count-${item.id}">${Array.from(item.content).length} / 1000</span>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-sm btn-outline btn-action-cancel" data-id="${item.id}">${chrome.i18n.getMessage('btnCancel') || '취소'}</button>
+              <button class="btn btn-sm btn-primary btn-action-save" data-id="${item.id}">${chrome.i18n.getMessage('btnSave') || '저장'}</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="vote-area">
         <div class="vote-item">
-          <button class="btn-vote btn-like ${likeActive}" data-vote-type="like" data-id="${item.id}">👍</button>
+          <button class="btn-vote btn-like ${likeActive}" data-vote-type="like" data-id="${item.id}" ${canVoteComment(item) ? '' : 'disabled'}>👍</button>
           <span class="vote-count like-count">${item.like_count || 0}</span>
         </div>
         <div class="vote-item">
-          <button class="btn-vote btn-dislike ${dislikeActive}" data-vote-type="dislike" data-id="${item.id}">👎</button>
+          <button class="btn-vote btn-dislike ${dislikeActive}" data-vote-type="dislike" data-id="${item.id}" ${canVoteComment(item) ? '' : 'disabled'}>👎</button>
           <span class="vote-count dislike-count">${item.dislike_count || 0}</span>
         </div>
       </div>
@@ -72,7 +151,7 @@ export function renderCommentList(comments, userVotes = {}, profiles = {}) {
 
     if (publicId) {
       authorBtn.setAttribute('aria-describedby', tooltipId);
-      
+
       const tooltipDiv = document.createElement('div');
       tooltipDiv.className = 'author-tooltip';
       tooltipDiv.id = tooltipId;
@@ -109,7 +188,7 @@ export async function loadComments(url) {
   try {
     const sortType = elements.sortSelect.value;
     let orderCol = 'created_at';
-    let asc = false; 
+    let asc = false;
 
     if (sortType === 'likes') {
       orderCol = 'like_count';
@@ -133,13 +212,13 @@ export async function loadComments(url) {
 
     let profiles = {};
     const authorIds = [...new Set(data.map(c => c.author_id))];
-    
+
     if (authorIds.length > 0) {
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('id, display_name, public_id')
         .in('id', authorIds);
-        
+
       if (!profileError && profileData) {
         profileData.forEach(p => {
           profiles[p.id] = p;
@@ -148,22 +227,36 @@ export async function loadComments(url) {
     }
 
     let userVotes = {};
+    let userReports = {};
     if (state.currentUser && data.length > 0) {
       const commentIds = data.map(c => c.id);
+
       const { data: votesData, error: votesError } = await supabase
         .from('comment_votes')
         .select('comment_id, vote_type')
         .in('comment_id', commentIds)
         .eq('user_id', state.currentUser.id);
-        
+
       if (!votesError && votesData) {
         votesData.forEach(v => {
           userVotes[v.comment_id] = v.vote_type;
         });
       }
+
+      const { data: reportsData, error: reportsError } = await supabase
+        .from('reported_comments')
+        .select('comment_id')
+        .in('comment_id', commentIds)
+        .eq('reporter_id', state.currentUser.id);
+
+      if (!reportsError && reportsData) {
+        reportsData.forEach(r => {
+          userReports[r.comment_id] = true;
+        });
+      }
     }
 
-    renderCommentList(data, userVotes, profiles);
+    renderCommentList(data, userVotes, profiles, userReports);
     showState('list');
 
   } catch (err) {
@@ -202,14 +295,14 @@ export async function handleCommentSubmit(e) {
   try {
     hideError();
     setSubmitButtonLoading(true);
-    
+
     const supabase = window.supabaseClient;
 
     const authorName = state.currentProfile?.display_name ||
-                       state.currentUser.user_metadata?.full_name || 
-                       state.currentUser.user_metadata?.name || 
-                       state.currentUser.email?.split('@')[0] || 
-                       chrome.i18n.getMessage("anonymous");
+      state.currentUser.user_metadata?.full_name ||
+      state.currentUser.user_metadata?.name ||
+      state.currentUser.email?.split('@')[0] ||
+      chrome.i18n.getMessage("anonymous");
 
     const { error } = await supabase
       .from('comments')
@@ -221,15 +314,14 @@ export async function handleCommentSubmit(e) {
       }]);
 
     if (error) throw error;
-    
+
     elements.commentInput.value = '';
     elements.charCount.textContent = '0 / 1000';
     await loadComments(state.normalizedCurrentUrl);
-    
+
   } catch (err) {
     console.error('Comment post exception:', err);
-    const errDetail = err.message || JSON.stringify(err);
-    showError(chrome.i18n.getMessage("msgSubmitError") + " " + errDetail);
+    showError(chrome.i18n.getMessage("msgSubmitError") || "댓글 작성에 실패했습니다.");
   } finally {
     setSubmitButtonLoading(false);
   }
@@ -237,7 +329,7 @@ export async function handleCommentSubmit(e) {
 
 export async function handleDeleteComment(id) {
   if (!confirm(chrome.i18n.getMessage('msgConfirmDelete'))) return;
-  
+
   try {
     showLoading(chrome.i18n.getMessage("stateLoading"));
     const supabase = window.supabaseClient;
@@ -245,35 +337,43 @@ export async function handleDeleteComment(id) {
       .from('comments')
       .update({ is_deleted: true })
       .eq('id', id);
-      
+
     if (error) throw error;
-    
+
     alert(chrome.i18n.getMessage('msgDeleteSuccess'));
     await loadComments(state.normalizedCurrentUrl);
   } catch (err) {
     console.error('Delete error:', err);
-    alert(chrome.i18n.getMessage('msgDeleteError') + "\n" + (err.message || ''));
+    const details = err.message || JSON.stringify(err);
+    alert((chrome.i18n.getMessage('msgDeleteError') || "삭제에 실패했습니다.") + "\n" + details);
     await loadComments(state.normalizedCurrentUrl);
   }
 }
 
 export async function handleReportComment(id) {
   if (!confirm(chrome.i18n.getMessage('msgConfirmReport'))) return;
-  
+
   try {
     showLoading(chrome.i18n.getMessage("stateLoading"));
     const supabase = window.supabaseClient;
     const { error } = await supabase
       .from('reported_comments')
       .insert([{ comment_id: id, reporter_id: state.currentUser.id }]);
-      
-    if (error) throw error;
-    
+
+    if (error) {
+      if (error.code === '23505') {
+        alert(chrome.i18n.getMessage('msgReportDuplicate') || '이미 신고한 댓글입니다.');
+        await loadComments(state.normalizedCurrentUrl);
+        return;
+      }
+      throw error;
+    }
+
     alert(chrome.i18n.getMessage('msgReportSuccess'));
     await loadComments(state.normalizedCurrentUrl);
   } catch (err) {
     console.error('Report error:', err);
-    alert(chrome.i18n.getMessage('msgReportError') + "\n" + (err.message || ''));
+    alert(chrome.i18n.getMessage('msgReportError') || "신고 처리에 실패했습니다.");
     await loadComments(state.normalizedCurrentUrl);
   }
 }

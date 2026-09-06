@@ -1,3 +1,22 @@
+-- ====================================================================
+-- URLComments Unified Schema Reference Snapshot
+-- 
+-- [안내]
+-- 이 파일은 전체 DB 스키마의 최종 통합 레퍼런스 스냅샷입니다.
+-- 실제 Supabase 프로젝트에 스키마를 안전하게 배포하거나 마이그레이션할 때는
+-- 이 파일을 통째로 실행하지 마시고, 아래 디렉터리의 개별 마이그레이션 파일을
+-- 번호 순서대로(001 -> 002 -> 003 -> 004 -> 005) 순차 실행하세요:
+-- 
+--   supabase/migrations/
+--   ├── 001_comments_baseline.sql
+--   ├── 002_profiles_public_identity.sql
+--   ├── 003_comment_votes.sql
+--   ├── 004_comment_moderation.sql
+--   └── 005_verify_schema.sql
+--
+-- 상세 가이드: docs/SUPABASE_MIGRATION_GUIDE.md
+-- ====================================================================
+
 -- ==========================================
 -- 0. User Profiles (스팸 유저 등 관리용)
 -- ==========================================
@@ -86,11 +105,13 @@ create table if not exists comments (
     char_length(content) <= 1000
   ),
   is_deleted boolean not null default false,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 -- (기존 테이블 업데이트용 - 이미 테이블이 있다면 실행)
 alter table comments add column if not exists is_deleted boolean not null default false;
+alter table comments add column if not exists updated_at timestamptz not null default now();
 
 create index if not exists idx_comments_url_created_at on comments(url, created_at asc);
 
@@ -101,12 +122,15 @@ drop policy if exists "comments_select_public" on comments;
 drop policy if exists "comments_insert_auth" on comments;
 drop policy if exists "comments_update_auth" on comments;
 
--- 4. 읽기 정책: 삭제되지 않은 댓글이거나 자신이 작성한 댓글만 보임 (Spammer 제외)
+-- 4. 읽기 정책: 삭제되지 않은 댓글만 보임 (Spammer 제외)
+-- TODO(Future): 대댓글 도입 시, 삭제된 원댓글에 대댓글이 달려있다면
+-- placeholder로 표시하기 위해 is_deleted = true 인 경우에도 
+-- 읽을 수 있도록 정책(RLS)을 재조정해야 함.
 create policy "comments_select_public"
   on comments
   for select
   using (
-    (is_deleted = false or auth.uid() = author_id)
+    is_deleted = false
     and not exists (
       select 1 from user_profiles 
       where id = comments.author_id 
@@ -126,6 +150,62 @@ create policy "comments_update_auth"
   for update
   using (auth.uid() = author_id)
   with check (auth.uid() = author_id);
+
+-- updated_at 자동 갱신 및 보안 방어 트리거 (comments)
+create or replace function public.update_comments_before_update()
+returns trigger as $$
+begin
+  -- 투표 카운트 내부 갱신 예외 처리
+  if current_setting('app.is_vote_count_update', true) = 'true' then
+    new.content = old.content;
+    new.is_deleted = old.is_deleted;
+    new.url = old.url;
+    new.author_id = old.author_id;
+    new.created_at = old.created_at;
+    new.id = old.id;
+    new.updated_at = old.updated_at;
+    return new;
+  end if;
+
+  -- 1. 삭제된 댓글은 어떠한 UPDATE도 불가
+  if old.is_deleted = true then
+    raise exception 'Cannot update a deleted comment.';
+  end if;
+
+  -- 2. is_deleted 상태 전이 (false -> true만 허용, 복구 불가)
+  if new.is_deleted = false and old.is_deleted = true then
+    raise exception 'Cannot undelete a comment.';
+  end if;
+
+  -- 3. 클라이언트가 수정할 수 없는 필드 강제 복원
+  new.url = old.url;
+  new.author_id = old.author_id;
+  new.created_at = old.created_at;
+  new.id = old.id;
+  new.like_count = old.like_count;
+  new.dislike_count = old.dislike_count;
+  
+  -- 4. 일반 수정 (is_deleted = false 상태 유지)인 경우 content 검증
+  if new.is_deleted = false then
+    new.content = trim(new.content);
+    if char_length(new.content) = 0 or char_length(new.content) > 1000 then
+      raise exception 'Content must be between 1 and 1000 characters.';
+    end if;
+    new.updated_at = now();
+  else
+    -- soft delete 인 경우 content 변경 무시 (기존 유지)
+    new.content = old.content;
+    new.updated_at = now();
+  end if;
+  
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists before_update_comments on comments;
+create trigger before_update_comments
+  before update on comments
+  for each row execute function public.update_comments_before_update();
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE comments TO authenticated;
 GRANT SELECT ON TABLE comments TO anon;
@@ -151,6 +231,38 @@ create policy "reported_insert_auth"
   with check (auth.uid() = reporter_id);
 
 GRANT INSERT ON TABLE reported_comments TO authenticated;
+
+-- 신고 테이블 보안 검증 트리거
+create or replace function public.check_reported_comments_before_insert()
+returns trigger as $$
+declare
+  target_author_id uuid;
+  target_is_deleted boolean;
+begin
+  -- 대상 댓글 정보 조회
+  select author_id, is_deleted into target_author_id, target_is_deleted 
+  from comments where id = new.comment_id;
+
+  if not found then
+    raise exception 'Comment not found.';
+  end if;
+
+  if target_is_deleted = true then
+    raise exception 'Cannot report a deleted comment.';
+  end if;
+
+  if target_author_id = new.reporter_id then
+    raise exception 'Cannot report your own comment.';
+  end if;
+
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists before_insert_reported_comments on reported_comments;
+create trigger before_insert_reported_comments
+  before insert on reported_comments
+  for each row execute function public.check_reported_comments_before_insert();
 
 -- ==========================================
 -- 3. 좋아요/싫어요 (Comment Votes) 테이블 및 캐시 갱신 트리거
@@ -200,10 +312,40 @@ create policy "comment_votes_update_auth"
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE comment_votes TO authenticated;
 
+-- 삭제된 댓글에 대한 투표 차단 트리거
+create or replace function public.check_comment_votes_before_modify()
+returns trigger as $$
+declare
+  target_is_deleted boolean;
+begin
+  -- 대상 댓글 상태 확인
+  select is_deleted into target_is_deleted 
+  from comments where id = new.comment_id;
+
+  if not found then
+    raise exception 'Comment not found.';
+  end if;
+
+  if target_is_deleted = true then
+    raise exception 'Cannot vote on a deleted comment.';
+  end if;
+
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists before_insert_update_comment_votes on comment_votes;
+create trigger before_insert_update_comment_votes
+  before insert or update on comment_votes
+  for each row execute function public.check_comment_votes_before_modify();
+
 -- 3-4. 투표 수 자동 갱신을 위한 트리거 함수
 create or replace function update_comment_vote_count()
 returns trigger as $$
 begin
+  -- 트랜잭션 로컬 플래그 설정 (comments BEFORE UPDATE 트리거와 연계)
+  perform set_config('app.is_vote_count_update', 'true', true);
+
   -- 투표 추가 시
   if (TG_OP = 'INSERT') then
     if (new.vote_type = 'like') then
@@ -216,9 +358,9 @@ begin
   -- 투표 삭제(취소) 시
   elsif (TG_OP = 'DELETE') then
     if (old.vote_type = 'like') then
-      update comments set like_count = like_count - 1 where id = old.comment_id;
+      update comments set like_count = greatest(0, like_count - 1) where id = old.comment_id;
     elsif (old.vote_type = 'dislike') then
-      update comments set dislike_count = dislike_count - 1 where id = old.comment_id;
+      update comments set dislike_count = greatest(0, dislike_count - 1) where id = old.comment_id;
     end if;
     return old;
     
@@ -227,9 +369,9 @@ begin
     if (old.vote_type != new.vote_type) then
       -- 기존 타입 -1
       if (old.vote_type = 'like') then
-        update comments set like_count = like_count - 1 where id = old.comment_id;
+        update comments set like_count = greatest(0, like_count - 1) where id = old.comment_id;
       elsif (old.vote_type = 'dislike') then
-        update comments set dislike_count = dislike_count - 1 where id = old.comment_id;
+        update comments set dislike_count = greatest(0, dislike_count - 1) where id = old.comment_id;
       end if;
       
       -- 새 타입 +1
