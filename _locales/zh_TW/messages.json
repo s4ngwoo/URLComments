@@ -1,0 +1,338 @@
+{
+  "accountMenu": {
+    "message": "帳戶選單"
+  },
+  "accountTitle": {
+    "message": "我的帳戶"
+  },
+  "anonymous": {
+    "message": "匿名"
+  },
+  "appDesc": {
+    "message": "在任何網頁上發現並留下隱藏的留言。尋找網頁本身不存在的隱藏對話，宛如一場尋寶之旅！"
+  },
+  "appName": {
+    "message": "URLComments"
+  },
+  "appSubtitle": {
+    "message": "留在該網頁的隱藏留言"
+  },
+  "authNoticeDefault": {
+    "message": "登入後即可發表留言。"
+  },
+  "authorTooltipPublicId": {
+    "message": "使用者ID: "
+  },
+  "btnCancel": {
+    "message": "取消"
+  },
+  "btnClose": {
+    "message": "關閉"
+  },
+  "btnDelete": {
+    "message": "刪除"
+  },
+  "btnDislike": {
+    "message": "倒讚"
+  },
+  "btnEdit": {
+    "message": "編輯"
+  },
+  "btnLike": {
+    "message": "讚"
+  },
+  "btnLogin": {
+    "message": "使用 Google 登入"
+  },
+  "btnLogout": {
+    "message": "登出"
+  },
+  "btnNext": {
+    "message": "下一頁"
+  },
+  "btnNextPage": {
+    "message": "下一頁"
+  },
+  "btnPrev": {
+    "message": "上一頁"
+  },
+  "btnPrevPage": {
+    "message": "上一頁"
+  },
+  "btnReply": {
+    "message": "回覆"
+  },
+  "btnReport": {
+    "message": "檢舉"
+  },
+  "btnRetry": {
+    "message": "重試"
+  },
+  "btnSave": {
+    "message": "儲存"
+  },
+  "btnSubmit": {
+    "message": "發布"
+  },
+  "btnSubmitReply": {
+    "message": "發布回覆"
+  },
+  "btnSubmitting": {
+    "message": "正在發布..."
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "defaultUser": {
+    "message": "使用者"
+  },
+  "deletedComment": {
+    "message": "該留言已被刪除。"
+  },
+  "displayName": {
+    "message": "顯示名稱"
+  },
+  "editDisplayName": {
+    "message": "變更顯示名稱"
+  },
+  "fontSizeDefault": {
+    "message": "標準"
+  },
+  "fontSizeLarge": {
+    "message": "大"
+  },
+  "fontSizeSmall": {
+    "message": "小"
+  },
+  "inputPlaceholder": {
+    "message": "寫下您的留言（最多1000字）"
+  },
+  "labelEdited": {
+    "message": "已編輯"
+  },
+  "labelReply": {
+    "message": "↳ 回覆"
+  },
+  "labelReported": {
+    "message": "已被檢舉的留言。"
+  },
+  "languageEn": {
+    "message": "English"
+  },
+  "languageEs": {
+    "message": "Español"
+  },
+  "languageJa": {
+    "message": "日本語"
+  },
+  "languageKo": {
+    "message": "한국어"
+  },
+  "languageSystem": {
+    "message": "系統預設"
+  },
+  "languageZhCN": {
+    "message": "简体中文"
+  },
+  "languageZhTW": {
+    "message": "繁體中文"
+  },
+  "loginRequired": {
+    "message": "登入後即可發表留言。"
+  },
+  "msgCannotGetUrl": {
+    "message": "無法取得目前URL。"
+  },
+  "msgCheckSupabaseConfig": {
+    "message": "缺少 Supabase 設定。"
+  },
+  "msgCommentTooLong": {
+    "message": "留言不能超過1000個字元。"
+  },
+  "msgConfirmDelete": {
+    "message": "確定要刪除這則留言嗎？"
+  },
+  "msgConfirmReport": {
+    "message": "確定要檢舉這則留言嗎？"
+  },
+  "msgDeleteError": {
+    "message": "刪除留言失敗。"
+  },
+  "msgDeleteSuccess": {
+    "message": "留言已刪除。"
+  },
+  "msgEditError": {
+    "message": "編輯留言失敗。"
+  },
+  "msgEmptyComment": {
+    "message": "請輸入留言內容。"
+  },
+  "msgLoadCommentsError": {
+    "message": "載入留言失敗: "
+  },
+  "msgLoadCommentsFailed": {
+    "message": "載入留言失敗: "
+  },
+  "msgLoginError": {
+    "message": "登入錯誤: "
+  },
+  "msgLoginFailedClosed": {
+    "message": "登入視窗已關閉或登入失敗。"
+  },
+  "msgLoginInProgress": {
+    "message": "正在登入..."
+  },
+  "msgLoginRequiredToVote": {
+    "message": "登入後即可投票。"
+  },
+  "msgLoginRequiredToWrite": {
+    "message": "登入後即可發表留言。"
+  },
+  "msgLogoutError": {
+    "message": "登出時發生錯誤。"
+  },
+  "msgLogoutInProgress": {
+    "message": "正在登出..."
+  },
+  "msgNeedsRefresh": {
+    "message": "網頁已變更。請按一下重新整理。"
+  },
+  "msgNoAuthToken": {
+    "message": "未找到身分驗證權杖。"
+  },
+  "msgReplySubmitError": {
+    "message": "發布回覆失敗。"
+  },
+  "msgReplySubmitSuccess": {
+    "message": "回覆已發布。"
+  },
+  "msgReportDuplicate": {
+    "message": "您已經檢舉過這則留言了。"
+  },
+  "msgReportError": {
+    "message": "檢舉提交失敗。"
+  },
+  "msgReportSuccess": {
+    "message": "檢舉已受理，感謝您的回報。"
+  },
+  "msgSessionSaveFailed": {
+    "message": "儲存工作階段失敗: "
+  },
+  "msgSubmitError": {
+    "message": "發布留言錯誤: "
+  },
+  "msgSubmitFailed": {
+    "message": "發布留言失敗: "
+  },
+  "msgUnsupportedCannotComment": {
+    "message": "無法在此網頁發表留言。"
+  },
+  "msgVoteError": {
+    "message": "投票失敗，請稍後再試。"
+  },
+  "myCommentsEmptyDesc": {
+    "message": "您尚未發表過任何留言。"
+  },
+  "myCommentsEmptyTitle": {
+    "message": "尚未發表過留言"
+  },
+  "myCommentsError": {
+    "message": "載入留言時發生錯誤。"
+  },
+  "myCommentsLoginRequired": {
+    "message": "查看我的留言需要先登入。"
+  },
+  "myCommentsTitle": {
+    "message": "我的留言清單"
+  },
+  "openOriginalPage": {
+    "message": "開啟原網頁"
+  },
+  "paginationAriaLabel": {
+    "message": "留言分頁導覽"
+  },
+  "profileSetupFailed": {
+    "message": "個人資料設定失敗"
+  },
+  "publicId": {
+    "message": "使用者ID"
+  },
+  "refreshPage": {
+    "message": "重新整理目前網頁"
+  },
+  "replyPlaceholder": {
+    "message": "寫下您的回覆（最多1000字）"
+  },
+  "save": {
+    "message": "儲存"
+  },
+  "settingsDeveloper": {
+    "message": "開發者資訊"
+  },
+  "settingsFontSize": {
+    "message": "字型大小"
+  },
+  "settingsFontSizeLabel": {
+    "message": "螢幕字型大小"
+  },
+  "settingsLanguage": {
+    "message": "語言設定"
+  },
+  "settingsLanguageLabel": {
+    "message": "語言"
+  },
+  "settingsTheme": {
+    "message": "主題設定"
+  },
+  "settingsThemeMode": {
+    "message": "顯示模式"
+  },
+  "settingsTitle": {
+    "message": "設定"
+  },
+  "spaNotice": {
+    "message": "該網站的內容可能會動態變更。留言將按目前URL進行連結。"
+  },
+  "stateEmptyDesc": {
+    "message": "成為在此 URL 留下第一則寶藏留言的人吧！"
+  },
+  "stateEmptyTitle": {
+    "message": "尚無留言"
+  },
+  "stateLoading": {
+    "message": "正在載入留言..."
+  },
+  "stateNeedsRefreshDesc": {
+    "message": "請按一下上方的重新整理按鈕以查看此網頁的留言。"
+  },
+  "stateNeedsRefreshTitle": {
+    "message": "網頁已變更"
+  },
+  "stateUnsupportedDesc": {
+    "message": "URLComments 僅可在 HTTP/HTTPS 網頁上使用。"
+  },
+  "stateUnsupportedTitle": {
+    "message": "不支援的網頁"
+  },
+  "tabHome": {
+    "message": "首頁"
+  },
+  "tabMyComments": {
+    "message": "我的留言"
+  },
+  "tabSettings": {
+    "message": "設定"
+  },
+  "themeDark": {
+    "message": "深色模式"
+  },
+  "themeLight": {
+    "message": "淺色模式"
+  },
+  "themeSystem": {
+    "message": "跟隨系統"
+  },
+  "urlLabel": {
+    "message": "目前網頁:"
+  }
+}

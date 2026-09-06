@@ -1,3 +1,5 @@
+import { getMessage } from './i18n.js';
+
 import { state, setCurrentProfile } from './state.js';
 import { generatePublicId } from '../lib/publicId.js';
 import { showError } from './ui.js';
@@ -99,7 +101,7 @@ export async function ensureProfile(user) {
   } catch (error) {
     console.error('Failed to ensure profile:', error);
     // Do not show raw error/UUID to user
-    showError(chrome.i18n.getMessage('profileSetupFailed') || "프로필을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.");
+    showError(getMessage('profileSetupFailed') || "프로필을 준비하지 못했습니다. 잠시 후 다시 시도해 주세요.");
     setCurrentProfile(null);
     return null;
   }

@@ -1,3 +1,5 @@
+import { getMessage } from './i18n.js';
+
 import { state, setCurrentUser } from './state.js';
 import { elements, showLoading, showError, hideError, showState, enableForm, disableForm } from './ui.js';
 import { loadComments } from './comments.js';
@@ -35,8 +37,8 @@ export async function updateAuthUI(user) {
     elements.userProfile.classList.remove('hidden');
     
     if (profile) {
-      const displayNameLabel = chrome.i18n.getMessage("displayName") || "Display Name";
-      const publicIdLabel = chrome.i18n.getMessage("publicId") || "User ID";
+      const displayNameLabel = getMessage("displayName") || "Display Name";
+      const publicIdLabel = getMessage("publicId") || "User ID";
       elements.profileDisplayName.textContent = `${displayNameLabel}: ${profile.display_name}`;
       elements.profilePublicId.textContent = `${publicIdLabel}: ${profile.public_id}`;
       // 지원되는 URL인 경우 폼 활성화
@@ -44,9 +46,9 @@ export async function updateAuthUI(user) {
         enableForm();
       }
     } else {
-      elements.profileDisplayName.textContent = chrome.i18n.getMessage('profileSetupFailed') || "프로필 설정 실패";
+      elements.profileDisplayName.textContent = getMessage('profileSetupFailed') || "프로필 설정 실패";
       elements.profilePublicId.textContent = "";
-      disableForm(chrome.i18n.getMessage('profileSetupFailed'));
+      disableForm(getMessage('profileSetupFailed'));
     }
   } else {
     elements.btnLogin.classList.remove('hidden');
@@ -56,20 +58,20 @@ export async function updateAuthUI(user) {
     elements.btnUserMenu.setAttribute('aria-expanded', 'false');
     elements.userMenuPopover.classList.add('hidden');
     
-    disableForm(chrome.i18n.getMessage("authNoticeDefault"));
+    disableForm(getMessage("authNoticeDefault"));
   }
 }
 
 export async function handleGoogleLogin() {
   const supabase = window.supabaseClient;
   if (!supabase) {
-    showError(chrome.i18n.getMessage("msgCheckSupabaseConfig"));
+    showError(getMessage("msgCheckSupabaseConfig"));
     return;
   }
 
   try {
     hideError();
-    showLoading(chrome.i18n.getMessage("msgLoginInProgress"));
+    showLoading(getMessage("msgLoginInProgress"));
 
     const redirectUrl = chrome.identity.getRedirectURL();
 
@@ -90,7 +92,7 @@ export async function handleGoogleLogin() {
       async (authUrl) => {
         if (chrome.runtime.lastError) {
           console.error('WebAuthFlow Error:', chrome.runtime.lastError);
-          showError(chrome.i18n.getMessage("msgLoginFailedClosed"));
+          showError(getMessage("msgLoginFailedClosed"));
           showState(state.normalizedCurrentUrl ? (elements.commentList.children.length ? 'list' : 'empty') : 'unsupported');
           return;
         }
@@ -108,7 +110,7 @@ export async function handleGoogleLogin() {
             });
 
             if (sessionErr) {
-              showError(chrome.i18n.getMessage("msgSessionSaveFailed") + sessionErr.message);
+              showError(getMessage("msgSessionSaveFailed") + sessionErr.message);
             } else {
               await updateAuthUI(sessionData.session?.user);
               if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
@@ -116,7 +118,7 @@ export async function handleGoogleLogin() {
               }
             }
           } else {
-            showError(chrome.i18n.getMessage("msgNoAuthToken"));
+            showError(getMessage("msgNoAuthToken"));
           }
         }
 
@@ -127,7 +129,7 @@ export async function handleGoogleLogin() {
     );
   } catch (err) {
     console.error('Google login error:', err);
-    showError(chrome.i18n.getMessage("msgLoginError") + err.message);
+    showError(getMessage("msgLoginError") + err.message);
     showState(state.normalizedCurrentUrl ? 'empty' : 'unsupported');
   }
 }
@@ -136,7 +138,7 @@ export async function handleLogout() {
   const supabase = window.supabaseClient;
   if (!supabase) return;
   try {
-    showLoading(chrome.i18n.getMessage("msgLogoutInProgress"));
+    showLoading(getMessage("msgLogoutInProgress"));
     await supabase.auth.signOut();
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
       chrome.storage.local.remove(['userCache']);
@@ -146,6 +148,6 @@ export async function handleLogout() {
       loadComments(state.normalizedCurrentUrl);
     }
   } catch (err) {
-    showError(chrome.i18n.getMessage("msgLogoutError"));
+    showError(getMessage("msgLogoutError"));
   }
 }

@@ -1,6 +1,6 @@
 # 💬 URLComments (어디든 남기는 내 의견)
 
-🌎 [English Version](README.en.md)
+🌍 [🇰🇷 한국어](README.md) | [🇺🇸 English](README.en.md) | [🇯🇵 日本語](README.ja.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇹🇼 繁體中文](README.zh-TW.md) | [🇪🇸 Español](README.es.md)
 
 **URLComments**는 웹상의 모든 정규화된 URL을 하나의 공개 소통 공간으로 만들어주는 프라이버시 우선(Privacy-First) 크롬 확장 프로그램입니다. 기사, 블로그, 쇼핑몰 등 URL이 존재하는 웹페이지라면 어디서든 사람들과 짧은 공개 댓글을 나누고 소통할 수 있습니다.
 
@@ -33,6 +33,9 @@ URLComments는 사용자의 브라우징 기록과 개인정보를 절대적으�
   - 읽기 위치가 보존되어 일반 새로고침이나 대댓글 작성 시 기존에 보고 있던 페이지를 유지합니다.
 - **엄격한 시간순 오름차순 정렬 (Chronological ASC)**:
   - 모든 최상위 댓글과 대댓글은 작성 시간 오름차순(`created_at ASC`)으로 정렬되며, 동일 시점 댓글은 bigint 안전 ID 비교로 안정적인 타이브레이크를 수행합니다. (구 정렬 옵션 및 UI는 완전히 제거됨)
+- **독립적인 다국어(Language) 설정**:
+  - 한국어, 영어, 일본어, 중국어 간체, 중국어 번체, 스페인어 및 시스템 기본값을 지원합니다.
+  - `chrome.i18n`의 브라우저 종속적인 한계를 넘어 커스텀 i18n 모듈을 통해 사용자가 확장 프로그램 내에서 언어를 즉시 오버라이드 할 수 있습니다.
 - **독립적인 글자 크기(Font Size) 설정**:
   - 작게(Small), 보통(Default), 크게(Large) 옵션을 제공하며 `chrome.storage.local`에 테마와 독립적으로 영구 저장됩니다.
   - 루트 `data-font-size` 속성과 CSS 변수를 통해 사이드 패널 전체 UI가 크기에 맞게 자연스럽게 스케일링됩니다.

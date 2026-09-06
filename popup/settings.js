@@ -22,22 +22,38 @@ export function applyFontSize(fontSize) {
 export function initSettings() {
   const themeSelect = document.getElementById('theme-select');
   const fontSizeSelect = document.getElementById('font-size-select');
+  const languageSelect = document.getElementById('language-select');
 
   // Load saved preferences
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-    chrome.storage.local.get(['theme', 'fontSize'], (result) => {
+    chrome.storage.local.get(['theme', 'fontSize', 'language'], (result) => {
       const theme = result.theme || 'system';
       const fontSize = result.fontSize || 'default';
+      const language = result.language || 'system';
 
       if (themeSelect) themeSelect.value = theme;
       applyTheme(theme);
 
       if (fontSizeSelect) fontSizeSelect.value = fontSize;
       applyFontSize(fontSize);
+      
+      if (languageSelect) languageSelect.value = language;
     });
   } else {
     applyTheme('system');
     applyFontSize('default');
+  }
+
+  // Handle language change
+  if (languageSelect) {
+    languageSelect.addEventListener('change', (e) => {
+      const language = e.target.value;
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.set({ language }, () => {
+          window.location.reload();
+        });
+      }
+    });
   }
 
   // Handle theme change

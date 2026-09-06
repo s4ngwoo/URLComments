@@ -1,0 +1,338 @@
+{
+  "accountMenu": {
+    "message": "Menú de cuenta"
+  },
+  "accountTitle": {
+    "message": "Mi cuenta"
+  },
+  "anonymous": {
+    "message": "Anónimo"
+  },
+  "appDesc": {
+    "message": "Descubre y deja comentarios ocultos en cualquier URL. ¡Como una búsqueda del tesoro para conversaciones que no existen en la página!"
+  },
+  "appName": {
+    "message": "URLComments"
+  },
+  "appSubtitle": {
+    "message": "Comentarios ocultos en esta página"
+  },
+  "authNoticeDefault": {
+    "message": "Inicia sesión para escribir un comentario."
+  },
+  "authorTooltipPublicId": {
+    "message": "ID de usuario: "
+  },
+  "btnCancel": {
+    "message": "Cancelar"
+  },
+  "btnClose": {
+    "message": "Cerrar"
+  },
+  "btnDelete": {
+    "message": "Eliminar"
+  },
+  "btnDislike": {
+    "message": "No me gusta"
+  },
+  "btnEdit": {
+    "message": "Editar"
+  },
+  "btnLike": {
+    "message": "Me gusta"
+  },
+  "btnLogin": {
+    "message": "Iniciar sesión con Google"
+  },
+  "btnLogout": {
+    "message": "Cerrar sesión"
+  },
+  "btnNext": {
+    "message": "Siguiente"
+  },
+  "btnNextPage": {
+    "message": "Página siguiente"
+  },
+  "btnPrev": {
+    "message": "Anterior"
+  },
+  "btnPrevPage": {
+    "message": "Página anterior"
+  },
+  "btnReply": {
+    "message": "Responder"
+  },
+  "btnReport": {
+    "message": "Reportar"
+  },
+  "btnRetry": {
+    "message": "Reintentar"
+  },
+  "btnSave": {
+    "message": "Guardar"
+  },
+  "btnSubmit": {
+    "message": "Publicar"
+  },
+  "btnSubmitReply": {
+    "message": "Publicar respuesta"
+  },
+  "btnSubmitting": {
+    "message": "Publicando..."
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "defaultUser": {
+    "message": "Usuario"
+  },
+  "deletedComment": {
+    "message": "Este comentario ha sido eliminado."
+  },
+  "displayName": {
+    "message": "Nombre visible"
+  },
+  "editDisplayName": {
+    "message": "Cambiar nombre visible"
+  },
+  "fontSizeDefault": {
+    "message": "Mediano"
+  },
+  "fontSizeLarge": {
+    "message": "Grande"
+  },
+  "fontSizeSmall": {
+    "message": "Pequeño"
+  },
+  "inputPlaceholder": {
+    "message": "Deja un comentario (máximo 1000 caracteres)"
+  },
+  "labelEdited": {
+    "message": "editado"
+  },
+  "labelReply": {
+    "message": "↳ Respuesta"
+  },
+  "labelReported": {
+    "message": "Este comentario ha sido reportado."
+  },
+  "languageEn": {
+    "message": "English"
+  },
+  "languageEs": {
+    "message": "Español"
+  },
+  "languageJa": {
+    "message": "日本語"
+  },
+  "languageKo": {
+    "message": "한국어"
+  },
+  "languageSystem": {
+    "message": "Por defecto del sistema"
+  },
+  "languageZhCN": {
+    "message": "简体中文"
+  },
+  "languageZhTW": {
+    "message": "繁體中文"
+  },
+  "loginRequired": {
+    "message": "Inicia sesión para escribir un comentario."
+  },
+  "msgCannotGetUrl": {
+    "message": "No se pudo obtener la URL actual."
+  },
+  "msgCheckSupabaseConfig": {
+    "message": "Falta la configuración de Supabase."
+  },
+  "msgCommentTooLong": {
+    "message": "El comentario no puede superar los 1000 caracteres."
+  },
+  "msgConfirmDelete": {
+    "message": "¿Seguro que quieres eliminar este comentario?"
+  },
+  "msgConfirmReport": {
+    "message": "¿Estás seguro de que deseas reportar este comentario?"
+  },
+  "msgDeleteError": {
+    "message": "Error al eliminar el comentario."
+  },
+  "msgDeleteSuccess": {
+    "message": "Comentario eliminado."
+  },
+  "msgEditError": {
+    "message": "Error al editar el comentario."
+  },
+  "msgEmptyComment": {
+    "message": "Por favor, introduce un comentario."
+  },
+  "msgLoadCommentsError": {
+    "message": "Error al cargar los comentarios: "
+  },
+  "msgLoadCommentsFailed": {
+    "message": "Fallo al cargar comentarios: "
+  },
+  "msgLoginError": {
+    "message": "Error de inicio de sesión: "
+  },
+  "msgLoginFailedClosed": {
+    "message": "El inicio de sesión se canceló o la ventana se cerró."
+  },
+  "msgLoginInProgress": {
+    "message": "Iniciando sesión..."
+  },
+  "msgLoginRequiredToVote": {
+    "message": "Inicia sesión para votar."
+  },
+  "msgLoginRequiredToWrite": {
+    "message": "Es necesario iniciar sesión para publicar un comentario."
+  },
+  "msgLogoutError": {
+    "message": "Ocurrió un error al cerrar sesión."
+  },
+  "msgLogoutInProgress": {
+    "message": "Cerrando sesión..."
+  },
+  "msgNeedsRefresh": {
+    "message": "La página ha cambiado. Por favor, haz clic en actualizar."
+  },
+  "msgNoAuthToken": {
+    "message": "No se encontró el token de autenticación."
+  },
+  "msgReplySubmitError": {
+    "message": "Error al publicar la respuesta."
+  },
+  "msgReplySubmitSuccess": {
+    "message": "Respuesta publicada con éxito."
+  },
+  "msgReportDuplicate": {
+    "message": "Ya has reportado este comentario."
+  },
+  "msgReportError": {
+    "message": "Error al enviar el reporte."
+  },
+  "msgReportSuccess": {
+    "message": "Comentario reportado. Gracias."
+  },
+  "msgSessionSaveFailed": {
+    "message": "Error al guardar la sesión: "
+  },
+  "msgSubmitError": {
+    "message": "Error al publicar el comentario: "
+  },
+  "msgSubmitFailed": {
+    "message": "Fallo al publicar el comentario: "
+  },
+  "msgUnsupportedCannotComment": {
+    "message": "No se pueden escribir comentarios en esta página."
+  },
+  "msgVoteError": {
+    "message": "Error al votar. Por favor, inténtalo de nuevo más tarde."
+  },
+  "myCommentsEmptyDesc": {
+    "message": "Todavía no has publicado ningún comentario."
+  },
+  "myCommentsEmptyTitle": {
+    "message": "Aún no has publicado comentarios"
+  },
+  "myCommentsError": {
+    "message": "Ocurrió un error al cargar tus comentarios."
+  },
+  "myCommentsLoginRequired": {
+    "message": "Debes iniciar sesión para ver tus comentarios."
+  },
+  "myCommentsTitle": {
+    "message": "Mis comentarios"
+  },
+  "openOriginalPage": {
+    "message": "Abrir página original"
+  },
+  "paginationAriaLabel": {
+    "message": "Navegación de paginación de comentarios"
+  },
+  "profileSetupFailed": {
+    "message": "Error al configurar el perfil"
+  },
+  "publicId": {
+    "message": "ID de usuario"
+  },
+  "refreshPage": {
+    "message": "Actualizar página actual"
+  },
+  "replyPlaceholder": {
+    "message": "Escribe una respuesta (máximo 1000 caracteres)"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "settingsDeveloper": {
+    "message": "Información del desarrollador"
+  },
+  "settingsFontSize": {
+    "message": "Tamaño de fuente"
+  },
+  "settingsFontSizeLabel": {
+    "message": "Tamaño de texto en pantalla"
+  },
+  "settingsLanguage": {
+    "message": "Configuración de idioma"
+  },
+  "settingsLanguageLabel": {
+    "message": "Idioma"
+  },
+  "settingsTheme": {
+    "message": "Tema"
+  },
+  "settingsThemeMode": {
+    "message": "Modo de visualización"
+  },
+  "settingsTitle": {
+    "message": "Configuración"
+  },
+  "spaNotice": {
+    "message": "Este sitio web puede cambiar su contenido dinámicamente. Los comentarios están vinculados a la URL actual."
+  },
+  "stateEmptyDesc": {
+    "message": "¡Sé el primero en dejar un comentario del tesoro en esta URL!"
+  },
+  "stateEmptyTitle": {
+    "message": "Aún no hay comentarios"
+  },
+  "stateLoading": {
+    "message": "Cargando comentarios..."
+  },
+  "stateNeedsRefreshDesc": {
+    "message": "Haz clic en el botón de actualizar arriba para ver los comentarios de esta página."
+  },
+  "stateNeedsRefreshTitle": {
+    "message": "La página ha cambiado"
+  },
+  "stateUnsupportedDesc": {
+    "message": "URLComments solo se puede usar en páginas web HTTP/HTTPS."
+  },
+  "stateUnsupportedTitle": {
+    "message": "Página no compatible"
+  },
+  "tabHome": {
+    "message": "Inicio"
+  },
+  "tabMyComments": {
+    "message": "Mis comentarios"
+  },
+  "tabSettings": {
+    "message": "Configuración"
+  },
+  "themeDark": {
+    "message": "Modo oscuro"
+  },
+  "themeLight": {
+    "message": "Modo claro"
+  },
+  "themeSystem": {
+    "message": "Predeterminado del sistema"
+  },
+  "urlLabel": {
+    "message": "Página actual:"
+  }
+}

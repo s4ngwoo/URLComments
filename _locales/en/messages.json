@@ -1,99 +1,338 @@
 {
-  "appName": { "message": "URLComments" },
-  "appSubtitle": { "message": "Hidden comments on this page" },
-  "appDesc": { "message": "Discover and leave hidden comments on any URL. Like a treasure hunt for conversations that don't exist on the page itself." },
-  "btnLogin": { "message": "Sign in with Google" },
-  "btnLogout": { "message": "Sign out" },
-  "btnSubmit": { "message": "Post" },
-  "btnSubmitting": { "message": "Posting..." },
-  "urlLabel": { "message": "Current Page:" },
-  "stateLoading": { "message": "Loading comments..." },
-  "stateUnsupportedTitle": { "message": "Unsupported Page" },
-  "stateUnsupportedDesc": { "message": "URLComments can only be used on HTTP/HTTPS webpages." },
-  "stateEmptyTitle": { "message": "No comments yet" },
-  "stateEmptyDesc": { "message": "Be the first to leave a treasure comment on this URL!" },
-  "inputPlaceholder": { "message": "Leave a comment (max 1000 chars)" },
-  "authNoticeDefault": { "message": "Please sign in to write a comment." },
-  "loginRequired": { "message": "Please sign in to write a comment." },
-  "msgCheckSupabaseConfig": { "message": "Supabase configuration is missing." },
-  "msgLoginInProgress": { "message": "Signing in..." },
-  "msgLoginFailedClosed": { "message": "Sign-in was cancelled or closed." },
-  "msgSessionSaveFailed": { "message": "Failed to save session: " },
-  "msgNoAuthToken": { "message": "Authentication token not found." },
-  "msgLoginError": { "message": "Sign in error: " },
-  "msgLogoutInProgress": { "message": "Signing out..." },
-  "msgLogoutError": { "message": "Sign out error." },
-  "msgUnsupportedCannotComment": { "message": "Comments cannot be written on this page." },
-  "msgLoadCommentsFailed": { "message": "Failed to load comments: " },
-  "msgLoadCommentsError": { "message": "Error loading comments: " },
-  "msgLoginRequiredToWrite": { "message": "Login required to post a comment." },
-  "msgCannotGetUrl": { "message": "Could not determine the current URL." },
-  "msgEmptyComment": { "message": "Please enter a comment." },
-  "msgCommentTooLong": { "message": "Comment exceeds 1000 characters." },
-  "anonymous": { "message": "Anonymous" },
-  "msgSubmitFailed": { "message": "Failed to post comment: " },
-  "msgSubmitError": { "message": "Error posting comment: " },
-  "msgConfirmDelete": { "message": "Are you sure you want to delete this comment?" },
-  "msgDeleteSuccess": { "message": "Comment deleted." },
-  "msgDeleteError": { "message": "Failed to delete comment." },
-  "msgConfirmReport": { "message": "Are you sure you want to report this comment?" },
-  "msgReportSuccess": { "message": "Comment reported. Thank you." },
-  "msgReportError": { "message": "Failed to report comment." },
-  "btnDelete": { "message": "Delete" },
-  "btnReport": { "message": "Report" },
-  "defaultUser": { "message": "User" },
-  "stateNeedsRefreshTitle": { "message": "Page Changed" },
-  "stateNeedsRefreshDesc": { "message": "Please click the refresh button above to view comments for this page." },
-  "msgNeedsRefresh": { "message": "Page changed. Please click refresh." },
-  "refreshPage": { "message": "Refresh Current Page" },
-  "accountMenu": { "message": "Account Menu" },
-  "spaNotice": { "message": "This site might change its content dynamically. Comments are tied to the current URL." },
-  "accountTitle": { "message": "My Account" },
-  "editDisplayName": { "message": "Change Display Name" },
-  "displayName": { "message": "Display Name" },
-  "cancel": { "message": "Cancel" },
-  "save": { "message": "Save" },
-  "profileSetupFailed": { "message": "Profile setup failed" },
-  "publicId": { "message": "User ID" },
-  "authorTooltipPublicId": { "message": "User ID: " },
-  "labelEdited": { "message": "edited" },
-  "btnCancel": { "message": "Cancel" },
-  "btnSave": { "message": "Save" },
-  "btnEdit": { "message": "Edit" },
-  "msgEditError": { "message": "Failed to edit comment." },
-  "msgReportDuplicate": { "message": "You have already reported this comment." },
-  "tabHome": { "message": "Home" },
-  "tabMyComments": { "message": "My Comments" },
-  "tabSettings": { "message": "Settings" },
-  "myCommentsTitle": { "message": "My Comments" },
-  "myCommentsEmptyTitle": { "message": "No comments yet" },
-  "myCommentsEmptyDesc": { "message": "You haven't posted any comments yet." },
-  "myCommentsLoginRequired": { "message": "Please sign in to view your comments." },
-  "myCommentsError": { "message": "An error occurred while loading your comments." },
-  "btnRetry": { "message": "Retry" },
-  "openOriginalPage": { "message": "Open original page" },
-  "settingsTitle": { "message": "Settings" },
-  "settingsTheme": { "message": "Theme Settings" },
-  "settingsThemeMode": { "message": "Theme Mode" },
-  "themeSystem": { "message": "System Default" },
-  "themeLight": { "message": "Light Mode" },
-  "themeDark": { "message": "Dark Mode" },
-  "settingsDeveloper": { "message": "Developer Info" },
-  "btnReply": { "message": "Reply" },
-  "btnSubmitReply": { "message": "Post Reply" },
-  "replyPlaceholder": { "message": "Write a reply (max 1000 chars)" },
-  "deletedComment": { "message": "This comment was deleted." },
-  "msgReplySubmitSuccess": { "message": "Reply posted successfully." },
-  "msgReplySubmitError": { "message": "Failed to post reply." },
-  "labelReply": { "message": "↳ Reply" },
-  "settingsFontSize": { "message": "Font Size" },
-  "settingsFontSizeLabel": { "message": "Screen Font Size" },
-  "fontSizeSmall": { "message": "Small" },
-  "fontSizeDefault": { "message": "Default" },
-  "fontSizeLarge": { "message": "Large" },
-  "btnPrev": { "message": "Previous" },
-  "btnNext": { "message": "Next" },
-  "btnPrevPage": { "message": "Previous Page" },
-  "btnNextPage": { "message": "Next Page" },
-  "paginationAriaLabel": { "message": "Comment pagination navigation" }
+  "accountMenu": {
+    "message": "Account Menu"
+  },
+  "accountTitle": {
+    "message": "My Account"
+  },
+  "anonymous": {
+    "message": "Anonymous"
+  },
+  "appDesc": {
+    "message": "Discover and leave hidden comments on any URL. Like a treasure hunt for conversations that don't exist on the page itself."
+  },
+  "appName": {
+    "message": "URLComments"
+  },
+  "appSubtitle": {
+    "message": "Hidden comments on this page"
+  },
+  "authNoticeDefault": {
+    "message": "Please sign in to write a comment."
+  },
+  "authorTooltipPublicId": {
+    "message": "User ID: "
+  },
+  "btnCancel": {
+    "message": "Cancel"
+  },
+  "btnClose": {
+    "message": "Close"
+  },
+  "btnDelete": {
+    "message": "Delete"
+  },
+  "btnDislike": {
+    "message": "Dislike"
+  },
+  "btnEdit": {
+    "message": "Edit"
+  },
+  "btnLike": {
+    "message": "Like"
+  },
+  "btnLogin": {
+    "message": "Sign in with Google"
+  },
+  "btnLogout": {
+    "message": "Sign out"
+  },
+  "btnNext": {
+    "message": "Next"
+  },
+  "btnNextPage": {
+    "message": "Next Page"
+  },
+  "btnPrev": {
+    "message": "Previous"
+  },
+  "btnPrevPage": {
+    "message": "Previous Page"
+  },
+  "btnReply": {
+    "message": "Reply"
+  },
+  "btnReport": {
+    "message": "Report"
+  },
+  "btnRetry": {
+    "message": "Retry"
+  },
+  "btnSave": {
+    "message": "Save"
+  },
+  "btnSubmit": {
+    "message": "Post"
+  },
+  "btnSubmitReply": {
+    "message": "Post Reply"
+  },
+  "btnSubmitting": {
+    "message": "Posting..."
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "defaultUser": {
+    "message": "User"
+  },
+  "deletedComment": {
+    "message": "This comment was deleted."
+  },
+  "displayName": {
+    "message": "Display Name"
+  },
+  "editDisplayName": {
+    "message": "Change Display Name"
+  },
+  "fontSizeDefault": {
+    "message": "Default"
+  },
+  "fontSizeLarge": {
+    "message": "Large"
+  },
+  "fontSizeSmall": {
+    "message": "Small"
+  },
+  "inputPlaceholder": {
+    "message": "Leave a comment (max 1000 chars)"
+  },
+  "labelEdited": {
+    "message": "edited"
+  },
+  "labelReply": {
+    "message": "↳ Reply"
+  },
+  "labelReported": {
+    "message": "This comment was reported."
+  },
+  "languageEn": {
+    "message": "English"
+  },
+  "languageEs": {
+    "message": "Español"
+  },
+  "languageJa": {
+    "message": "日本語"
+  },
+  "languageKo": {
+    "message": "한국어"
+  },
+  "languageSystem": {
+    "message": "System Default"
+  },
+  "languageZhCN": {
+    "message": "简体中文"
+  },
+  "languageZhTW": {
+    "message": "繁體中文"
+  },
+  "loginRequired": {
+    "message": "Please sign in to write a comment."
+  },
+  "msgCannotGetUrl": {
+    "message": "Could not determine the current URL."
+  },
+  "msgCheckSupabaseConfig": {
+    "message": "Supabase configuration is missing."
+  },
+  "msgCommentTooLong": {
+    "message": "Comment exceeds 1000 characters."
+  },
+  "msgConfirmDelete": {
+    "message": "Are you sure you want to delete this comment?"
+  },
+  "msgConfirmReport": {
+    "message": "Are you sure you want to report this comment?"
+  },
+  "msgDeleteError": {
+    "message": "Failed to delete comment."
+  },
+  "msgDeleteSuccess": {
+    "message": "Comment deleted."
+  },
+  "msgEditError": {
+    "message": "Failed to edit comment."
+  },
+  "msgEmptyComment": {
+    "message": "Please enter a comment."
+  },
+  "msgLoadCommentsError": {
+    "message": "Error loading comments: "
+  },
+  "msgLoadCommentsFailed": {
+    "message": "Failed to load comments: "
+  },
+  "msgLoginError": {
+    "message": "Sign in error: "
+  },
+  "msgLoginFailedClosed": {
+    "message": "Sign-in was cancelled or closed."
+  },
+  "msgLoginInProgress": {
+    "message": "Signing in..."
+  },
+  "msgLoginRequiredToVote": {
+    "message": "Please sign in to vote."
+  },
+  "msgLoginRequiredToWrite": {
+    "message": "Login required to post a comment."
+  },
+  "msgLogoutError": {
+    "message": "Sign out error."
+  },
+  "msgLogoutInProgress": {
+    "message": "Signing out..."
+  },
+  "msgNeedsRefresh": {
+    "message": "Page changed. Please click refresh."
+  },
+  "msgNoAuthToken": {
+    "message": "Authentication token not found."
+  },
+  "msgReplySubmitError": {
+    "message": "Failed to post reply."
+  },
+  "msgReplySubmitSuccess": {
+    "message": "Reply posted successfully."
+  },
+  "msgReportDuplicate": {
+    "message": "You have already reported this comment."
+  },
+  "msgReportError": {
+    "message": "Failed to report comment."
+  },
+  "msgReportSuccess": {
+    "message": "Comment reported. Thank you."
+  },
+  "msgSessionSaveFailed": {
+    "message": "Failed to save session: "
+  },
+  "msgSubmitError": {
+    "message": "Error posting comment: "
+  },
+  "msgSubmitFailed": {
+    "message": "Failed to post comment: "
+  },
+  "msgUnsupportedCannotComment": {
+    "message": "Comments cannot be written on this page."
+  },
+  "msgVoteError": {
+    "message": "Failed to vote. Please try again later."
+  },
+  "myCommentsEmptyDesc": {
+    "message": "You haven't posted any comments yet."
+  },
+  "myCommentsEmptyTitle": {
+    "message": "No comments yet"
+  },
+  "myCommentsError": {
+    "message": "An error occurred while loading your comments."
+  },
+  "myCommentsLoginRequired": {
+    "message": "Please sign in to view your comments."
+  },
+  "myCommentsTitle": {
+    "message": "My Comments"
+  },
+  "openOriginalPage": {
+    "message": "Open original page"
+  },
+  "paginationAriaLabel": {
+    "message": "Comment pagination navigation"
+  },
+  "profileSetupFailed": {
+    "message": "Profile setup failed"
+  },
+  "publicId": {
+    "message": "User ID"
+  },
+  "refreshPage": {
+    "message": "Refresh Current Page"
+  },
+  "replyPlaceholder": {
+    "message": "Write a reply (max 1000 chars)"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "settingsDeveloper": {
+    "message": "Developer Info"
+  },
+  "settingsFontSize": {
+    "message": "Font Size"
+  },
+  "settingsFontSizeLabel": {
+    "message": "Screen Font Size"
+  },
+  "settingsLanguage": {
+    "message": "Language Settings"
+  },
+  "settingsLanguageLabel": {
+    "message": "Language"
+  },
+  "settingsTheme": {
+    "message": "Theme Settings"
+  },
+  "settingsThemeMode": {
+    "message": "Theme Mode"
+  },
+  "settingsTitle": {
+    "message": "Settings"
+  },
+  "spaNotice": {
+    "message": "This site might change its content dynamically. Comments are tied to the current URL."
+  },
+  "stateEmptyDesc": {
+    "message": "Be the first to leave a treasure comment on this URL!"
+  },
+  "stateEmptyTitle": {
+    "message": "No comments yet"
+  },
+  "stateLoading": {
+    "message": "Loading comments..."
+  },
+  "stateNeedsRefreshDesc": {
+    "message": "Please click the refresh button above to view comments for this page."
+  },
+  "stateNeedsRefreshTitle": {
+    "message": "Page Changed"
+  },
+  "stateUnsupportedDesc": {
+    "message": "URLComments can only be used on HTTP/HTTPS webpages."
+  },
+  "stateUnsupportedTitle": {
+    "message": "Unsupported Page"
+  },
+  "tabHome": {
+    "message": "Home"
+  },
+  "tabMyComments": {
+    "message": "My Comments"
+  },
+  "tabSettings": {
+    "message": "Settings"
+  },
+  "themeDark": {
+    "message": "Dark Mode"
+  },
+  "themeLight": {
+    "message": "Light Mode"
+  },
+  "themeSystem": {
+    "message": "System Default"
+  },
+  "urlLabel": {
+    "message": "Current Page:"
+  }
 }

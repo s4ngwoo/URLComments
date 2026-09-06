@@ -1,3 +1,5 @@
+import { getMessage } from './i18n.js';
+
 import { setSpaDetected, setNormalizedUrl, state } from './state.js';
 import { elements, showLoading, showState, disableForm, enableForm } from './ui.js';
 import { loadComments } from './comments.js';
@@ -9,7 +11,7 @@ const KNOWN_SPA_DOMAINS = [
 
 export async function initTabUrl() {
   try {
-    showLoading(chrome.i18n.getMessage("stateLoading"));
+    showLoading(getMessage("stateLoading"));
 
     if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.query) {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -26,7 +28,7 @@ export async function initTabUrl() {
         processUrl(tab.url);
       } else {
         showState('unsupported');
-        disableForm(chrome.i18n.getMessage("msgUnsupportedCannotComment"));
+        disableForm(getMessage("msgUnsupportedCannotComment"));
       }
     } else {
       processUrl(window.location.href);
@@ -58,7 +60,7 @@ export function processUrl(rawUrl) {
     elements.spaNotice.classList.add('hidden');
     
     showState('unsupported');
-    disableForm(chrome.i18n.getMessage("msgUnsupportedCannotComment") || "지원하지 않는 페이지입니다.");
+    disableForm(getMessage("msgUnsupportedCannotComment") || "지원하지 않는 페이지입니다.");
     return;
   }
 
@@ -75,7 +77,7 @@ export function processUrl(rawUrl) {
   if (state.currentUser) {
     enableForm();
   } else {
-    disableForm(chrome.i18n.getMessage("authNoticeDefault"));
+    disableForm(getMessage("authNoticeDefault"));
   }
 
   loadComments(state.normalizedCurrentUrl);

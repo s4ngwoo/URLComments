@@ -1,3 +1,5 @@
+import { getMessage } from './i18n.js';
+
 export const elements = {};
 
 export function initElements() {
@@ -141,7 +143,7 @@ export function disableForm(noticeText) {
 
 export function setSubmitButtonLoading(isLoading) {
   elements.btnSubmit.disabled = isLoading;
-  elements.btnSubmit.textContent = isLoading ? (chrome.i18n.getMessage("btnSubmitting") || '등록 중...') : (chrome.i18n.getMessage("btnSubmit") || '등록');
+  elements.btnSubmit.textContent = isLoading ? (getMessage("btnSubmitting") || '등록 중...') : (getMessage("btnSubmit") || '등록');
 }
 
 export function showProfileModal() {
@@ -162,19 +164,19 @@ export function showProfileError(msg) {
 
 export function setupI18n() {
   document.querySelectorAll('[data-i18n]').forEach(elem => {
-    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n'));
+    const msg = getMessage(elem.getAttribute('data-i18n'));
     if (msg) elem.textContent = msg;
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
-    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-placeholder'));
+    const msg = getMessage(elem.getAttribute('data-i18n-placeholder'));
     if (msg) elem.placeholder = msg;
   });
   document.querySelectorAll('[data-i18n-title]').forEach(elem => {
-    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-title'));
+    const msg = getMessage(elem.getAttribute('data-i18n-title'));
     if (msg) elem.title = msg;
   });
   document.querySelectorAll('[data-i18n-aria-label]').forEach(elem => {
-    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-aria-label'));
+    const msg = getMessage(elem.getAttribute('data-i18n-aria-label'));
     if (msg) elem.setAttribute('aria-label', msg);
   });
 }

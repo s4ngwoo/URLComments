@@ -1,6 +1,6 @@
 # 💬 URLComments (Leave your opinion anywhere)
 
-🇰🇷 [한국어 버전](README.md)
+🌍 [🇰🇷 한국어](README.md) | [🇺🇸 English](README.en.md) | [🇯🇵 日本語](README.ja.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇹🇼 繁體中文](README.zh-TW.md) | [🇪🇸 Español](README.es.md)
 
 **URLComments** is a privacy-first Chrome extension that turns every normalized web URL into a public discussion space. Leave and discover short public comments on articles, blog posts, documentation, and shopping sites wherever a URL exists.
 
@@ -33,6 +33,9 @@ URLComments strictly protects your browsing privacy and personal history:
   - Preserves reading position on refresh and reply creation, clamping safely on deletions.
 - **Strict Chronological ASC Ordering**:
   - All parent comments and replies are consistently ordered oldest-first (`created_at ASC`), using bigint-safe numeric string ID tie-breaking on identical timestamps. Obsolete sort selection has been completely removed.
+- **Independent Language Settings (i18n)**:
+  - Supports English, Korean, Japanese, Simplified Chinese, Traditional Chinese, Spanish, and System Default.
+  - Overcomes `chrome.i18n` browser limitations via a custom i18n module, allowing users to override the extension language instantly from settings.
 - **Independent Persistent Font Size Preferences**:
   - Choose between Small, Default, and Large font sizes, persisted in `chrome.storage.local` independently of theme.
   - Scaled across the popup UI using root `data-font-size` attribute and CSS custom properties.

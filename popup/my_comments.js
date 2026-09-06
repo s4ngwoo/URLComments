@@ -1,3 +1,5 @@
+import { getMessage } from './i18n.js';
+
 /**
   * popup/my_comments.js
   * Phase 2 Step 2: 내가 작성한 댓글 목록 조회 및 관리 모듈
@@ -104,9 +106,9 @@ export function renderMyComments(comments) {
     });
 
     const displayUrl = formatDisplayUrl(item.url);
-    const openLabel = (typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage('openOriginalPage')) || '원문 보기';
+    const openLabel = (typeof chrome !== 'undefined' && chrome.i18n && getMessage('openOriginalPage')) || '원문 보기';
     const replyBadge = item.parent_id
-      ? `<span class="badge-reply">${escapeHtml((typeof chrome !== 'undefined' && chrome.i18n && chrome.i18n.getMessage('labelReply')) || '↳ 답글')}</span>`
+      ? `<span class="badge-reply">${escapeHtml((typeof chrome !== 'undefined' && chrome.i18n && getMessage('labelReply')) || '↳ 답글')}</span>`
       : '';
 
     li.innerHTML = `

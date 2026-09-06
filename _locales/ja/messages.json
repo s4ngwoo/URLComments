@@ -1,0 +1,338 @@
+{
+  "accountMenu": {
+    "message": "アカウントメニュー"
+  },
+  "accountTitle": {
+    "message": "マイアカウント"
+  },
+  "anonymous": {
+    "message": "匿名"
+  },
+  "appDesc": {
+    "message": "どのWebページでも隠されたコメントを発見し、残してみましょう。ページ自体にはない隠れた会話を見つける宝探し！"
+  },
+  "appName": {
+    "message": "URLComments"
+  },
+  "appSubtitle": {
+    "message": "このページに残された隠れたコメント"
+  },
+  "authNoticeDefault": {
+    "message": "ログイン後にコメントを投稿できます。"
+  },
+  "authorTooltipPublicId": {
+    "message": "ユーザーID: "
+  },
+  "btnCancel": {
+    "message": "キャンセル"
+  },
+  "btnClose": {
+    "message": "閉じる"
+  },
+  "btnDelete": {
+    "message": "削除"
+  },
+  "btnDislike": {
+    "message": "いまいち"
+  },
+  "btnEdit": {
+    "message": "編集"
+  },
+  "btnLike": {
+    "message": "いいね"
+  },
+  "btnLogin": {
+    "message": "Googleでログイン"
+  },
+  "btnLogout": {
+    "message": "ログアウト"
+  },
+  "btnNext": {
+    "message": "次へ"
+  },
+  "btnNextPage": {
+    "message": "次のページ"
+  },
+  "btnPrev": {
+    "message": "前へ"
+  },
+  "btnPrevPage": {
+    "message": "前のページ"
+  },
+  "btnReply": {
+    "message": "返信"
+  },
+  "btnReport": {
+    "message": "報告"
+  },
+  "btnRetry": {
+    "message": "再試行"
+  },
+  "btnSave": {
+    "message": "保存"
+  },
+  "btnSubmit": {
+    "message": "投稿"
+  },
+  "btnSubmitReply": {
+    "message": "返信を投稿"
+  },
+  "btnSubmitting": {
+    "message": "投稿中..."
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "defaultUser": {
+    "message": "ユーザー"
+  },
+  "deletedComment": {
+    "message": "削除されたコメントです。"
+  },
+  "displayName": {
+    "message": "表示名"
+  },
+  "editDisplayName": {
+    "message": "表示名の変更"
+  },
+  "fontSizeDefault": {
+    "message": "標準"
+  },
+  "fontSizeLarge": {
+    "message": "大"
+  },
+  "fontSizeSmall": {
+    "message": "小"
+  },
+  "inputPlaceholder": {
+    "message": "コメントを入力してください（最大1000文字）"
+  },
+  "labelEdited": {
+    "message": "編集済み"
+  },
+  "labelReply": {
+    "message": "↳ 返信"
+  },
+  "labelReported": {
+    "message": "通報されたコメントです。"
+  },
+  "languageEn": {
+    "message": "English"
+  },
+  "languageEs": {
+    "message": "Español"
+  },
+  "languageJa": {
+    "message": "日本語"
+  },
+  "languageKo": {
+    "message": "한국어"
+  },
+  "languageSystem": {
+    "message": "システムデフォルト"
+  },
+  "languageZhCN": {
+    "message": "简体中文"
+  },
+  "languageZhTW": {
+    "message": "繁體中文"
+  },
+  "loginRequired": {
+    "message": "ログイン後にコメントを投稿できます。"
+  },
+  "msgCannotGetUrl": {
+    "message": "現在のURLを取得できませんでした。"
+  },
+  "msgCheckSupabaseConfig": {
+    "message": "Supabase設定が見つかりません。"
+  },
+  "msgCommentTooLong": {
+    "message": "コメントは1000文字を超えることはできません。"
+  },
+  "msgConfirmDelete": {
+    "message": "本当にこのコメントを削除しますか？"
+  },
+  "msgConfirmReport": {
+    "message": "このコメントを通報しますか？"
+  },
+  "msgDeleteError": {
+    "message": "コメントの削除に失敗しました。"
+  },
+  "msgDeleteSuccess": {
+    "message": "コメントを削除しました。"
+  },
+  "msgEditError": {
+    "message": "コメントの編集に失敗しました。"
+  },
+  "msgEmptyComment": {
+    "message": "コメント内容を入力してください。"
+  },
+  "msgLoadCommentsError": {
+    "message": "コメントの読み込みエラー: "
+  },
+  "msgLoadCommentsFailed": {
+    "message": "コメントの読み込みに失敗しました: "
+  },
+  "msgLoginError": {
+    "message": "ログインエラー: "
+  },
+  "msgLoginFailedClosed": {
+    "message": "ログインウィンドウが閉じられたか、失敗しました。"
+  },
+  "msgLoginInProgress": {
+    "message": "ログイン処理中..."
+  },
+  "msgLoginRequiredToVote": {
+    "message": "ログイン後に投票できます。"
+  },
+  "msgLoginRequiredToWrite": {
+    "message": "ログイン後にコメントを投稿できます。"
+  },
+  "msgLogoutError": {
+    "message": "ログアウト中にエラーが発生しました。"
+  },
+  "msgLogoutInProgress": {
+    "message": "ログアウト処理中..."
+  },
+  "msgNeedsRefresh": {
+    "message": "ページが変更されました。更新ボタンを押してください。"
+  },
+  "msgNoAuthToken": {
+    "message": "認証トークンがありません。"
+  },
+  "msgReplySubmitError": {
+    "message": "返信の投稿に失敗しました。"
+  },
+  "msgReplySubmitSuccess": {
+    "message": "返信が投稿されました。"
+  },
+  "msgReportDuplicate": {
+    "message": "すでに通報済みのコメントです。"
+  },
+  "msgReportError": {
+    "message": "通報の受付に失敗しました。"
+  },
+  "msgReportSuccess": {
+    "message": "通報を受け付けました。ありがとうございます。"
+  },
+  "msgSessionSaveFailed": {
+    "message": "セッションの保存に失敗しました: "
+  },
+  "msgSubmitError": {
+    "message": "コメントの投稿エラー: "
+  },
+  "msgSubmitFailed": {
+    "message": "コメントの投稿に失敗しました: "
+  },
+  "msgUnsupportedCannotComment": {
+    "message": "このページにはコメントを投稿できません。"
+  },
+  "msgVoteError": {
+    "message": "投票に失敗しました。しばらくしてからもう一度お試しください。"
+  },
+  "myCommentsEmptyDesc": {
+    "message": "まだ投稿したコメントがありません。"
+  },
+  "myCommentsEmptyTitle": {
+    "message": "投稿したコメントがありません"
+  },
+  "myCommentsError": {
+    "message": "コメントの読み込み中にエラーが発生しました。"
+  },
+  "myCommentsLoginRequired": {
+    "message": "マイコメントを確認するにはログインが必要です。"
+  },
+  "myCommentsTitle": {
+    "message": "マイコメント一覧"
+  },
+  "openOriginalPage": {
+    "message": "元のページを開く"
+  },
+  "paginationAriaLabel": {
+    "message": "コメントページのナビゲーション"
+  },
+  "profileSetupFailed": {
+    "message": "プロフィール設定に失敗しました"
+  },
+  "publicId": {
+    "message": "ユーザーID"
+  },
+  "refreshPage": {
+    "message": "現在のページを更新"
+  },
+  "replyPlaceholder": {
+    "message": "返信を入力してください（最大1000文字）"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "settingsDeveloper": {
+    "message": "開発者情報"
+  },
+  "settingsFontSize": {
+    "message": "フォントサイズ"
+  },
+  "settingsFontSizeLabel": {
+    "message": "画面の文字サイズ"
+  },
+  "settingsLanguage": {
+    "message": "言語設定"
+  },
+  "settingsLanguageLabel": {
+    "message": "言語"
+  },
+  "settingsTheme": {
+    "message": "テーマ設定"
+  },
+  "settingsThemeMode": {
+    "message": "画面モード"
+  },
+  "settingsTitle": {
+    "message": "設定"
+  },
+  "spaNotice": {
+    "message": "ページの内容が動的に変わるサイトの可能性があります。コメントは現在のURLに基づいて接続されます。"
+  },
+  "stateEmptyDesc": {
+    "message": "このURLに最初の宝物コメントを残してみましょう！"
+  },
+  "stateEmptyTitle": {
+    "message": "まだコメントがありません"
+  },
+  "stateLoading": {
+    "message": "コメントを読み込み中..."
+  },
+  "stateNeedsRefreshDesc": {
+    "message": "このページのコメントを見るには、上部の更新ボタンをクリックしてください。"
+  },
+  "stateNeedsRefreshTitle": {
+    "message": "ページが変更されました"
+  },
+  "stateUnsupportedDesc": {
+    "message": "HTTP/HTTPSウェブページでのみURLCommentsを使用できます。"
+  },
+  "stateUnsupportedTitle": {
+    "message": "サポートされていないページです"
+  },
+  "tabHome": {
+    "message": "ホーム"
+  },
+  "tabMyComments": {
+    "message": "マイコメント"
+  },
+  "tabSettings": {
+    "message": "設定"
+  },
+  "themeDark": {
+    "message": "ダークモード"
+  },
+  "themeLight": {
+    "message": "ライトモード"
+  },
+  "themeSystem": {
+    "message": "システム設定に従う"
+  },
+  "urlLabel": {
+    "message": "現在のページ:"
+  }
+}

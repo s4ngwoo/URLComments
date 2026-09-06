@@ -1,9 +1,11 @@
+import { getMessage } from './i18n.js';
+
 import { state } from './state.js';
 import { showError } from './ui.js';
 
 export async function handleVoteClick(commentId, requestedVoteType, btnElem) {
   if (!state.currentUser) {
-    alert("로그인 후 투표할 수 있습니다.");
+    showError(getMessage("msgLoginRequiredToVote") || "Please sign in to vote.");
     return;
   }
   
@@ -80,7 +82,7 @@ export async function handleVoteClick(commentId, requestedVoteType, btnElem) {
     }
   } catch (err) {
     console.error('Vote error:', err);
-    showError("투표에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    showError(getMessage("msgVoteError") || "Failed to vote. Please try again later.");
     // 롤백
     if (originalState.isLikeActive) likeBtn.classList.add('active'); else likeBtn.classList.remove('active');
     if (originalState.isDislikeActive) dislikeBtn.classList.add('active'); else dislikeBtn.classList.remove('active');

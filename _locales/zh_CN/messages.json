@@ -1,0 +1,338 @@
+{
+  "accountMenu": {
+    "message": "账户菜单"
+  },
+  "accountTitle": {
+    "message": "我的账户"
+  },
+  "anonymous": {
+    "message": "匿名"
+  },
+  "appDesc": {
+    "message": "在任何网页上发现并留下隐藏的评论。探索页面本身不存在的隐藏对话，宛如一场寻宝之旅！"
+  },
+  "appName": {
+    "message": "URLComments"
+  },
+  "appSubtitle": {
+    "message": "留在该页面的隐藏评论"
+  },
+  "authNoticeDefault": {
+    "message": "登录后即可发表评论。"
+  },
+  "authorTooltipPublicId": {
+    "message": "用户ID: "
+  },
+  "btnCancel": {
+    "message": "取消"
+  },
+  "btnClose": {
+    "message": "关闭"
+  },
+  "btnDelete": {
+    "message": "删除"
+  },
+  "btnDislike": {
+    "message": "踩"
+  },
+  "btnEdit": {
+    "message": "编辑"
+  },
+  "btnLike": {
+    "message": "赞"
+  },
+  "btnLogin": {
+    "message": "使用 Google 登录"
+  },
+  "btnLogout": {
+    "message": "退出登录"
+  },
+  "btnNext": {
+    "message": "下一页"
+  },
+  "btnNextPage": {
+    "message": "下一页"
+  },
+  "btnPrev": {
+    "message": "上一页"
+  },
+  "btnPrevPage": {
+    "message": "上一页"
+  },
+  "btnReply": {
+    "message": "回复"
+  },
+  "btnReport": {
+    "message": "举报"
+  },
+  "btnRetry": {
+    "message": "重试"
+  },
+  "btnSave": {
+    "message": "保存"
+  },
+  "btnSubmit": {
+    "message": "发布"
+  },
+  "btnSubmitReply": {
+    "message": "发布回复"
+  },
+  "btnSubmitting": {
+    "message": "正在发布..."
+  },
+  "cancel": {
+    "message": "取消"
+  },
+  "defaultUser": {
+    "message": "用户"
+  },
+  "deletedComment": {
+    "message": "该评论已被删除。"
+  },
+  "displayName": {
+    "message": "显示名称"
+  },
+  "editDisplayName": {
+    "message": "修改显示名称"
+  },
+  "fontSizeDefault": {
+    "message": "标准"
+  },
+  "fontSizeLarge": {
+    "message": "大"
+  },
+  "fontSizeSmall": {
+    "message": "小"
+  },
+  "inputPlaceholder": {
+    "message": "写下你的评论（最多1000字）"
+  },
+  "labelEdited": {
+    "message": "已编辑"
+  },
+  "labelReply": {
+    "message": "↳ 回复"
+  },
+  "labelReported": {
+    "message": "已被举报的评论。"
+  },
+  "languageEn": {
+    "message": "English"
+  },
+  "languageEs": {
+    "message": "Español"
+  },
+  "languageJa": {
+    "message": "日本語"
+  },
+  "languageKo": {
+    "message": "한국어"
+  },
+  "languageSystem": {
+    "message": "系统默认"
+  },
+  "languageZhCN": {
+    "message": "简体中文"
+  },
+  "languageZhTW": {
+    "message": "繁體中文"
+  },
+  "loginRequired": {
+    "message": "登录后即可发表评论。"
+  },
+  "msgCannotGetUrl": {
+    "message": "无法获取当前URL。"
+  },
+  "msgCheckSupabaseConfig": {
+    "message": "缺少 Supabase 配置。"
+  },
+  "msgCommentTooLong": {
+    "message": "评论不能超过1000个字符。"
+  },
+  "msgConfirmDelete": {
+    "message": "确定要删除这条评论吗？"
+  },
+  "msgConfirmReport": {
+    "message": "确定要举报这条评论吗？"
+  },
+  "msgDeleteError": {
+    "message": "删除评论失败。"
+  },
+  "msgDeleteSuccess": {
+    "message": "评论已删除。"
+  },
+  "msgEditError": {
+    "message": "编辑评论失败。"
+  },
+  "msgEmptyComment": {
+    "message": "请输入评论内容。"
+  },
+  "msgLoadCommentsError": {
+    "message": "加载评论出错: "
+  },
+  "msgLoadCommentsFailed": {
+    "message": "加载评论失败: "
+  },
+  "msgLoginError": {
+    "message": "登录错误: "
+  },
+  "msgLoginFailedClosed": {
+    "message": "登录窗口已关闭或登录失败。"
+  },
+  "msgLoginInProgress": {
+    "message": "正在登录..."
+  },
+  "msgLoginRequiredToVote": {
+    "message": "登录后即可投票。"
+  },
+  "msgLoginRequiredToWrite": {
+    "message": "登录后即可发表评论。"
+  },
+  "msgLogoutError": {
+    "message": "退出登录时发生错误。"
+  },
+  "msgLogoutInProgress": {
+    "message": "正在退出..."
+  },
+  "msgNeedsRefresh": {
+    "message": "页面已更改。请点击刷新。"
+  },
+  "msgNoAuthToken": {
+    "message": "未找到身份验证令牌。"
+  },
+  "msgReplySubmitError": {
+    "message": "发布回复失败。"
+  },
+  "msgReplySubmitSuccess": {
+    "message": "回复已发布。"
+  },
+  "msgReportDuplicate": {
+    "message": "你已经举报过这条评论了。"
+  },
+  "msgReportError": {
+    "message": "举报提交失败。"
+  },
+  "msgReportSuccess": {
+    "message": "举报已收到，感谢你的反馈。"
+  },
+  "msgSessionSaveFailed": {
+    "message": "保存会话失败: "
+  },
+  "msgSubmitError": {
+    "message": "发表评论错误: "
+  },
+  "msgSubmitFailed": {
+    "message": "发表评论失败: "
+  },
+  "msgUnsupportedCannotComment": {
+    "message": "无法在此页面发表评论。"
+  },
+  "msgVoteError": {
+    "message": "投票失败，请稍后重试。"
+  },
+  "myCommentsEmptyDesc": {
+    "message": "你还没有发表过任何评论。"
+  },
+  "myCommentsEmptyTitle": {
+    "message": "还没有发表过评论"
+  },
+  "myCommentsError": {
+    "message": "加载评论时发生错误。"
+  },
+  "myCommentsLoginRequired": {
+    "message": "查看我的评论需要先登录。"
+  },
+  "myCommentsTitle": {
+    "message": "我的评论列表"
+  },
+  "openOriginalPage": {
+    "message": "打开原网页"
+  },
+  "paginationAriaLabel": {
+    "message": "评论分页导航"
+  },
+  "profileSetupFailed": {
+    "message": "个人资料设置失败"
+  },
+  "publicId": {
+    "message": "用户ID"
+  },
+  "refreshPage": {
+    "message": "刷新当前页面"
+  },
+  "replyPlaceholder": {
+    "message": "写下你的回复（最多1000字）"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "settingsDeveloper": {
+    "message": "开发者信息"
+  },
+  "settingsFontSize": {
+    "message": "字号大小"
+  },
+  "settingsFontSizeLabel": {
+    "message": "屏幕字号"
+  },
+  "settingsLanguage": {
+    "message": "语言设置"
+  },
+  "settingsLanguageLabel": {
+    "message": "语言"
+  },
+  "settingsTheme": {
+    "message": "主题设置"
+  },
+  "settingsThemeMode": {
+    "message": "显示模式"
+  },
+  "settingsTitle": {
+    "message": "设置"
+  },
+  "spaNotice": {
+    "message": "该网站的内容可能会动态变化。评论将按当前URL进行关联。"
+  },
+  "stateEmptyDesc": {
+    "message": "成为在此 URL 留下第一条宝藏评论的人吧！"
+  },
+  "stateEmptyTitle": {
+    "message": "暂无评论"
+  },
+  "stateLoading": {
+    "message": "正在加载评论..."
+  },
+  "stateNeedsRefreshDesc": {
+    "message": "请点击上方的刷新按钮以查看此页面的评论。"
+  },
+  "stateNeedsRefreshTitle": {
+    "message": "页面已更改"
+  },
+  "stateUnsupportedDesc": {
+    "message": "URLComments 仅可在 HTTP/HTTPS 网页上使用。"
+  },
+  "stateUnsupportedTitle": {
+    "message": "不受支持的页面"
+  },
+  "tabHome": {
+    "message": "首页"
+  },
+  "tabMyComments": {
+    "message": "我的评论"
+  },
+  "tabSettings": {
+    "message": "设置"
+  },
+  "themeDark": {
+    "message": "深色模式"
+  },
+  "themeLight": {
+    "message": "浅色模式"
+  },
+  "themeSystem": {
+    "message": "系统默认"
+  },
+  "urlLabel": {
+    "message": "当前页面:"
+  }
+}

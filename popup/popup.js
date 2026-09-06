@@ -1,9 +1,12 @@
+import { getMessage } from './i18n.js';
+
 /**
  * URLComments 팝업 메인 스크립트 - Supabase Auth & Database 연동 및 i18n 적용
  */
 
 import { state, setSpaDetected, setNormalizedUrl } from './state.js';
 import { elements, initElements, showState, setupI18n, disableForm, hideError, showProfileModal, hideProfileModal, showProfileError } from './ui.js';
+import { initI18n } from './i18n.js';
 import { checkAuthSession, handleGoogleLogin, handleLogout, updateAuthUI } from './auth.js';
 import { 
   loadComments, 
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 1. 앱 초기화
   async function init() {
+    await initI18n();
     setupI18n();
     initSettings();
     initMyComments();
@@ -44,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.onMessage.addListener((message) => {
       if (message.type === 'TAB_CHANGED') {
         showState('needs-refresh');
-        disableForm(chrome.i18n.getMessage("msgNeedsRefresh") || "페이지가 변경되었습니다. 새로고침을 눌러주세요.");
+        disableForm(getMessage("msgNeedsRefresh") || "페이지가 변경되었습니다. 새로고침을 눌러주세요.");
         setNormalizedUrl(null);
         setSpaDetected(false);
         elements.pageToolbar.classList.add('hidden');
@@ -145,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       } catch (err) {
         console.error('Failed to update profile:', err);
-        showProfileError(chrome.i18n.getMessage('profileSetupFailed') || '표시 이름을 변경할 수 없습니다.');
+        showProfileError(getMessage('profileSetupFailed') || '표시 이름을 변경할 수 없습니다.');
       } finally {
         elements.btnSaveProfile.disabled = false;
       }
@@ -312,11 +316,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (inputEl) {
           const newContent = inputEl.value.trim();
           if (!newContent) {
-            alert(chrome.i18n.getMessage("msgEmptyComment") || '댓글 내용을 입력해주세요.');
+            alert(getMessage("msgEmptyComment") || '댓글 내용을 입력해주세요.');
             return;
           }
           if (newContent.length > 1000) {
-            alert(chrome.i18n.getMessage("msgCommentTooLong") || '댓글은 1000자를 넘을 수 없습니다.');
+            alert(getMessage("msgCommentTooLong") || '댓글은 1000자를 넘을 수 없습니다.');
             return;
           }
           saveBtn.disabled = true;
