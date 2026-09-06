@@ -23,10 +23,20 @@
 ```text
 URLComments/
 ├── manifest.json          # Chrome Extension 설정 (권한, 버전, 백그라운드 스크립트 등)
+├── background.js          # 백그라운드 서비스 워커 (탭 감지 등)
 ├── popup/
 │   ├── popup.html         # 확장 프로그램 클릭 시 나타나는 메인 UI
 │   ├── popup.css          # 팝업 UI 스타일링
-│   └── popup.js           # 팝업의 핵심 비즈니스 로직 (DOM 제어, Supabase 통신)
+│   ├── popup.js           # 팝업의 진입점 (Entry Point)
+│   ├── state.js           # 전역 상태 관리 모듈
+│   ├── ui.js              # DOM 조작 및 UI 관련 유틸
+│   ├── auth.js            # 로그인/로그아웃 및 세션 관리
+│   ├── comments.js        # 댓글 조회/작성/삭제/신고 로직
+│   ├── votes.js           # 좋아요/싫어요 투표 로직
+│   └── spa.js             # SPA 감지 및 URL 처리 로직
+├── content/
+│   ├── spaDetector.js     # SPA 환경 감지 콘텐츠 스크립트
+│   └── config.js          # SPA 감지용 설정 (KNOWN_SPA_DOMAINS)
 ├── lib/
 │   ├── supabase.js        # Supabase 공식 UMD 번들 라이브러리 (로컬 캐싱)
 │   ├── supabaseClient.js  # Supabase 초기화 및 Chrome Storage 어댑터 설정
@@ -60,13 +70,23 @@ URLComments/
 2. 프로젝트의 `lib/config.example.js`를 복사하여 `lib/config.js`를 만듭니다.
 3. Supabase 대시보드(Project Settings -> API)에서 **Project URL**과 **anon key**를 복사해 `lib/config.js`에 입력합니다.
 
-## 5. 테스트 체크리스트
+## 5. 테스트 가이드 및 체크리스트
 
+프로젝트는 Jest를 활용하여 단위 테스트를 구성하고 있으며, GitHub Actions를 통해 CI 환경을 제공합니다.
+
+### 5.1 로컬 테스트 실행
+```bash
+npm install
+npm test
+```
+
+### 5.2 수동 테스트 체크리스트
 - [ ] **확장 프로그램 로드:** `chrome://extensions`에서 오류 없이 로드되었는가?
 - [ ] **미지원 페이지 처리:** `chrome://`이나 빈 탭에서 팝업을 열었을 때 "지원을 안 하는 페이지입니다" 문구가 뜨는가?
 - [ ] **로그인:** 구글 로그인 버튼 클릭 시 팝업이 뜨고 성공적으로 프로필(이메일)이 렌더링되는가?
 - [ ] **댓글 작성/조회:** 특정 웹사이트(예: google.com)에서 댓글을 작성하면 즉시 리스트에 반영되고, 브라우저를 껐다 켜도 데이터가 유지되는가?
 - [ ] **URL 정규화:** 끝에 슬래시(`/`)가 붙은 주소와 안 붙은 주소가 동일한 페이지로 취급되는가?
+- [ ] **SPA 환경 차단:** `instagram.com` 등 SPA 페이지에서 댓글 작성을 차단하고 루트 도메인에서만 허용하는가?
 
 ## 6. 에러 진단 가이드
 

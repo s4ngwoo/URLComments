@@ -181,6 +181,10 @@ body {
   line-height: 1.4;
 }
 
+#state-unsupported-spa .state-icon {
+  color: #f59e0b; /* SPA 전용 경고 아이콘 색상 */
+}
+
 .state-message {
   margin-top: 12px;
   font-size: 13px;
@@ -362,4 +366,104 @@ textarea:disabled {
 .btn-submit:disabled {
   background-color: var(--primary-disabled);
   cursor: not-allowed;
+}
+
+/* 댓글 액션 버튼 (삭제/신고) */
+.comment-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-action[data-action="delete"]:hover {
+  color: var(--danger-color);
+}
+
+/* Sort Select */
+.sort-select {
+  font-size: 11px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.sort-select:focus {
+  border-color: var(--primary-color);
+}
+
+/* 투표 영역 */
+.vote-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.vote-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-vote {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.btn-vote:hover:not(:disabled) {
+  background-color: var(--surface-color);
+  border-color: var(--border-color);
+}
+
+.btn-vote:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.btn-vote.active.btn-like {
+  background-color: #e0e7ff;
+  border-color: #a5b4fc;
+}
+
+.btn-vote.active.btn-dislike {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.vote-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 14px;
 }

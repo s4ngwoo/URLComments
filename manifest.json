@@ -12,14 +12,35 @@
   "permissions": [
     "activeTab",
     "storage",
-    "identity"
+    "identity",
+    "sidePanel",
+    "tabs"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "popup/popup.html"
+  },
   "action": {
-    "default_popup": "popup/popup.html",
+    "default_title": "__MSG_appName__",
     "default_icon": {
       "16": "assets/icons/16.png",
       "48": "assets/icons/48.png",
       "128": "assets/icons/128.png"
     }
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content/spaDetector.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
