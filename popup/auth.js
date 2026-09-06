@@ -1,6 +1,7 @@
 import { state, setCurrentUser } from './state.js';
 import { elements, showLoading, showError, hideError, showState, enableForm, disableForm } from './ui.js';
 import { loadComments } from './comments.js';
+import { ensureProfile } from './profile.js';
 
 export async function checkAuthSession() {
   const supabase = window.supabaseClient;
@@ -22,23 +23,34 @@ export async function checkAuthSession() {
   }
 }
 
-export function updateAuthUI(user) {
+export async function updateAuthUI(user) {
   setCurrentUser(user);
 
   if (user) {
+    const profile = await ensureProfile(user);
+    
     elements.btnLogin.classList.add('hidden');
     elements.userProfile.classList.remove('hidden');
-    elements.userEmail.textContent = user.email || chrome.i18n.getMessage("defaultUser");
-    elements.userEmail.title = user.email || '';
-
-    // 지원되는 URL인 경우 폼 활성화
-    if (state.normalizedCurrentUrl) {
-      enableForm();
+    
+    if (profile) {
+      elements.profileDisplayName.textContent = profile.display_name;
+      elements.profilePublicId.textContent = profile.public_id;
+      // 지원되는 URL인 경우 폼 활성화
+      if (state.normalizedCurrentUrl) {
+        enableForm();
+      }
+    } else {
+      elements.profileDisplayName.textContent = chrome.i18n.getMessage('profileSetupFailed') || "프로필 설정 실패";
+      elements.profilePublicId.textContent = "";
+      disableForm(chrome.i18n.getMessage('profileSetupFailed'));
     }
   } else {
     elements.btnLogin.classList.remove('hidden');
     elements.userProfile.classList.add('hidden');
-    elements.userEmail.textContent = '';
+    elements.profileDisplayName.textContent = '';
+    elements.profilePublicId.textContent = '';
+    elements.btnUserMenu.setAttribute('aria-expanded', 'false');
+    elements.userMenuPopover.classList.add('hidden');
     
     disableForm(chrome.i18n.getMessage("authNoticeDefault"));
   }
@@ -94,7 +106,7 @@ export async function handleGoogleLogin() {
             if (sessionErr) {
               showError(chrome.i18n.getMessage("msgSessionSaveFailed") + sessionErr.message);
             } else {
-              updateAuthUI(sessionData.session?.user);
+              await updateAuthUI(sessionData.session?.user);
               if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
                 chrome.storage.local.set({ userCache: sessionData.session?.user });
               }
@@ -125,7 +137,7 @@ export async function handleLogout() {
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
       chrome.storage.local.remove(['userCache']);
     }
-    updateAuthUI(null);
+    await updateAuthUI(null);
     if (state.normalizedCurrentUrl) {
       loadComments(state.normalizedCurrentUrl);
     }

@@ -1,5 +1,6 @@
 {
   "appName": { "message": "URLComments" },
+  "appSubtitle": { "message": "이 페이지에 남겨진 숨은 댓글" },
   "appDesc": { "message": "어떤 웹페이지든 숨겨진 댓글을 발견하고 남겨보세요. 페이지 자체에는 없는 숨은 대화를 찾는 보물찾기!" },
   "btnLogin": { "message": "Google 로그인" },
   "btnLogout": { "message": "로그아웃" },
@@ -13,6 +14,7 @@
   "stateEmptyDesc": { "message": "이 URL의 첫 번째 보물 댓글을 남겨보세요!" },
   "inputPlaceholder": { "message": "댓글을 작성해 보세요 (최대 1000자)" },
   "authNoticeDefault": { "message": "로그인 후 댓글을 작성할 수 있습니다." },
+  "loginRequired": { "message": "로그인 후 댓글을 작성할 수 있습니다." },
   "msgCheckSupabaseConfig": { "message": "Supabase 설정이 누락되었습니다." },
   "msgLoginInProgress": { "message": "로그인 진행 중..." },
   "msgLoginFailedClosed": { "message": "로그인 창이 닫혔거나 실패했습니다." },
@@ -45,8 +47,14 @@
   "sortDislikes": { "message": "싫어요순" },
   "stateNeedsRefreshTitle": { "message": "페이지가 변경되었습니다" },
   "stateNeedsRefreshDesc": { "message": "이 페이지의 댓글을 보려면 상단의 새로고침 버튼을 눌러주세요." },
-  "stateUnsupportedSpaTitle": { "message": "이 사이트는 지원하지 않습니다" },
-  "stateUnsupportedSpaDesc": { "message": "인스타그램, 트위터 같은 JS 기반 사이트에서는 메인 도메인 (루트) 에 대해서만 댓글을 허용합니다. 해당 페이지에서는 이용할 수 없습니다." },
   "msgNeedsRefresh": { "message": "페이지가 변경되었습니다. 새로고침을 눌러주세요." },
-  "msgSpaDetected": { "message": "SPA가 감지되었습니다. 메인 도메인만 지원합니다." }
+  "refreshPage": { "message": "현재 페이지 새로고침" },
+  "accountMenu": { "message": "계정 메뉴" },
+  "spaNotice": { "message": "페이지 내용이 동적으로 바뀌는 사이트일 수 있습니다. 댓글은 현재 URL 기준으로 연결됩니다." },
+  "accountTitle": { "message": "내 계정" },
+  "editDisplayName": { "message": "표시 이름 변경" },
+  "displayName": { "message": "표시 이름" },
+  "cancel": { "message": "취소" },
+  "save": { "message": "저장" },
+  "profileSetupFailed": { "message": "프로필 설정 실패" }
 }

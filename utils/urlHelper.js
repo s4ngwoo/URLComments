@@ -54,13 +54,8 @@ function normalizeUrl(rawUrl) {
       pathname = pathname.slice(0, -1);
     }
     
-    // SPA 방어 로직: 요구사항에 따라 메인 도메인이 아니면 null 처리
-    // 단, 팝업 스크립트에서 SPA 도메인인지 여부에 따라 분기할 수 있도록
-    // 기본 정규화 기능에 탑재할지, 팝업에서 판단할지 결정.
-    // 지시사항 4: "메인 도메인이 아닌 경우 -> null 반환"
-    if (pathname !== '/' && pathname !== '') {
-      return null;
-    }
+    // SPA 방어 로직 (팝업에서 SPA 도메인인지 여부에 따라 경고만 보여주도록 변경)
+    // 따라서 기존의 pathname 체크 후 null 반환 로직은 제거합니다.
 
     return `${parsed.protocol}//${parsed.host}${pathname}`;
   } catch (e) {

@@ -1,11 +1,12 @@
 export const state = {
   normalizedCurrentUrl: null,
   currentUser: null,
-  isSpaDomain: false,
+  currentProfile: null,
+  isSpaDetected: false,
 };
 
-export function setSpaDomain(value) {
-  state.isSpaDomain = value;
+export function setSpaDetected(value) {
+  state.isSpaDetected = value;
 }
 
 export function setNormalizedUrl(url) {
@@ -16,8 +17,13 @@ export function setCurrentUser(user) {
   state.currentUser = user;
 }
 
+export function setCurrentProfile(profile) {
+  state.currentProfile = profile;
+}
+
 export function resetState() {
   state.normalizedCurrentUrl = null;
   state.currentUser = null;
-  state.isSpaDomain = false;
+  state.currentProfile = null;
+  state.isSpaDetected = false;
 }

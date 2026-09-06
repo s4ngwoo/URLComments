@@ -1,5 +1,6 @@
 {
   "appName": { "message": "URLComments" },
+  "appSubtitle": { "message": "Hidden comments on this page" },
   "appDesc": { "message": "Discover and leave hidden comments on any URL. Like a treasure hunt for conversations that don't exist on the page itself." },
   "btnLogin": { "message": "Sign in with Google" },
   "btnLogout": { "message": "Sign out" },
@@ -13,6 +14,7 @@
   "stateEmptyDesc": { "message": "Be the first to leave a treasure comment on this URL!" },
   "inputPlaceholder": { "message": "Leave a comment (max 1000 chars)" },
   "authNoticeDefault": { "message": "Please sign in to write a comment." },
+  "loginRequired": { "message": "Please sign in to write a comment." },
   "msgCheckSupabaseConfig": { "message": "Supabase configuration is missing." },
   "msgLoginInProgress": { "message": "Signing in..." },
   "msgLoginFailedClosed": { "message": "Sign-in was cancelled or closed." },
@@ -45,8 +47,14 @@
   "sortDislikes": { "message": "Most Disliked" },
   "stateNeedsRefreshTitle": { "message": "Page Changed" },
   "stateNeedsRefreshDesc": { "message": "Please click the refresh button above to view comments for this page." },
-  "stateUnsupportedSpaTitle": { "message": "Site Not Supported" },
-  "stateUnsupportedSpaDesc": { "message": "For JS-heavy sites like Instagram or Twitter, comments are only allowed on the main domain (root). They are not available on this specific page." },
   "msgNeedsRefresh": { "message": "Page changed. Please click refresh." },
-  "msgSpaDetected": { "message": "SPA detected. Only the main domain is supported." }
+  "refreshPage": { "message": "Refresh Current Page" },
+  "accountMenu": { "message": "Account Menu" },
+  "spaNotice": { "message": "This site might change its content dynamically. Comments are tied to the current URL." },
+  "accountTitle": { "message": "My Account" },
+  "editDisplayName": { "message": "Change Display Name" },
+  "displayName": { "message": "Display Name" },
+  "cancel": { "message": "Cancel" },
+  "save": { "message": "Save" },
+  "profileSetupFailed": { "message": "Profile setup failed" }
 }

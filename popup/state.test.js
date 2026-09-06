@@ -1,4 +1,4 @@
-import { state, setSpaDomain, setNormalizedUrl, setCurrentUser, resetState } from './state';
+import { state, setSpaDetected, setNormalizedUrl, setCurrentUser, resetState } from './state';
 
 describe('Popup State', () => {
   beforeEach(() => {
@@ -6,14 +6,14 @@ describe('Popup State', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(state.isSpaDomain).toBe(false);
+    expect(state.isSpaDetected).toBe(false);
     expect(state.normalizedCurrentUrl).toBeNull();
     expect(state.currentUser).toBeNull();
   });
 
   it('should set SPA domain correctly', () => {
-    setSpaDomain(true);
-    expect(state.isSpaDomain).toBe(true);
+    setSpaDetected(true);
+    expect(state.isSpaDetected).toBe(true);
   });
 
   it('should set normalized URL correctly', () => {
@@ -28,13 +28,13 @@ describe('Popup State', () => {
   });
 
   it('should reset state correctly', () => {
-    setSpaDomain(true);
+    setSpaDetected(true);
     setNormalizedUrl('https://example.com');
     setCurrentUser({ id: 1 });
     
     resetState();
     
-    expect(state.isSpaDomain).toBe(false);
+    expect(state.isSpaDetected).toBe(false);
     expect(state.normalizedCurrentUrl).toBeNull();
     expect(state.currentUser).toBeNull();
   });

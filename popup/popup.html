@@ -11,36 +11,68 @@
     <!-- Header 영역 -->
     <header class="app-header">
       <div class="brand">
-        <span class="logo-icon">💬</span>
-        <h1 class="app-title" data-i18n="appName">URLComments</h1>
+        <span class="logo-icon" aria-hidden="true">💬</span>
+        <div>
+          <h1 class="app-title" data-i18n="appName">URLComments</h1>
+          <p class="app-subtitle" data-i18n="appSubtitle">이 페이지에 남겨진 숨은 댓글</p>
+        </div>
       </div>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <select id="sort-select" class="sort-select">
-          <option value="latest">최신순</option>
-          <option value="likes">좋아요순</option>
-          <option value="dislikes">싫어요순</option>
-        </select>
-        <button id="btn-refresh" class="btn btn-outline btn-sm hidden">🔄 새로고침</button>
+
+      <div class="header-actions">
+        <button id="btn-refresh" class="icon-button refresh-button hidden" type="button" title="현재 페이지 새로고침" aria-label="현재 페이지 새로고침" data-i18n-title="refreshPage" data-i18n-aria-label="refreshPage">↻</button>
+
         <div id="auth-status" class="auth-status">
-          <button id="btn-login" class="btn btn-primary btn-sm" data-i18n="btnLogin">Google 로그인</button>
+          <button id="btn-login" class="btn btn-primary btn-sm hidden" data-i18n="btnLogin">Google 로그인</button>
           <div id="user-profile" class="user-profile hidden">
-            <span id="user-email" class="user-email" title=""></span>
-            <button id="btn-logout" class="btn btn-outline btn-xs" data-i18n="btnLogout">로그아웃</button>
+            <button id="btn-user-menu" class="avatar-button" type="button" aria-expanded="false" aria-controls="user-menu-popover" title="계정 메뉴" data-i18n-title="accountMenu">
+              <span id="user-avatar">👤</span>
+            </button>
+            <div id="user-menu-popover" class="user-menu-popover hidden">
+              <div class="user-menu-header">
+                <span class="user-menu-title" data-i18n="accountTitle">내 계정</span>
+              </div>
+              <div class="user-menu-info">
+                <span id="profile-display-name" class="profile-display-name"></span>
+                <span id="profile-public-id" class="profile-public-id"></span>
+              </div>
+              <div class="user-menu-actions">
+                <button id="btn-edit-profile" type="button" class="menu-item" data-i18n="editDisplayName">표시 이름 변경</button>
+                <button id="btn-logout" type="button" class="menu-item" data-i18n="btnLogout">로그아웃</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </header>
 
+    <!-- Toolbar 영역 (현재 URL + 정렬) -->
+    <section id="page-toolbar" class="page-toolbar hidden">
+      <div class="url-info">
+        <span class="toolbar-label" data-i18n="urlLabel">현재 페이지</span>
+        <span id="current-url" class="url-text" title="">-</span>
+      </div>
+      <label class="sort-control">
+        <span class="sr-only" data-i18n="sortLabel">댓글 정렬</span>
+        <select id="sort-select" class="sort-select">
+          <option value="latest" data-i18n="sortLatest">최신순</option>
+          <option value="likes" data-i18n="sortLikes">좋아요순</option>
+          <option value="dislikes" data-i18n="sortDislikes">싫어요순</option>
+        </select>
+      </label>
+    </section>
+
+    <!-- SPA Notice 영역 -->
+    <div id="spa-notice" class="spa-notice hidden" role="status">
+      <span class="notice-icon" aria-hidden="true">ⓘ</span>
+      <span id="spa-notice-text" data-i18n="spaNotice">
+        페이지 내용이 동적으로 바뀌는 사이트일 수 있습니다. 댓글은 현재 URL 기준으로 연결됩니다.
+      </span>
+    </div>
+
     <!-- 에러 알림 배너 -->
     <div id="error-banner" class="error-banner hidden">
       <span id="error-message" class="error-message"></span>
       <button id="btn-close-error" class="btn-close-error">&times;</button>
-    </div>
-
-    <!-- 현재 정규화된 URL 표시 바 -->
-    <div id="url-bar" class="url-bar hidden">
-      <span class="url-label" data-i18n="urlLabel">현재 페이지:</span>
-      <span id="current-url" class="url-text" title="">-</span>
     </div>
 
     <!-- Content Area 영역 -->
@@ -65,13 +97,6 @@
         <p class="state-desc" data-i18n="stateUnsupportedDesc">HTTP/HTTPS 웹 페이지에서만 URLComments를 사용할 수 있습니다.</p>
       </div>
 
-      <!-- 2-1. SPA 미지원 페이지 안내 -->
-      <div id="state-unsupported-spa" class="state-view hidden">
-        <div class="state-icon">⚠️</div>
-        <p class="state-title" data-i18n="stateUnsupportedSpaTitle">이 사이트는 지원하지 않습니다</p>
-        <p class="state-desc" data-i18n="stateUnsupportedSpaDesc">인스타그램, 트위터 같은 JS 기반 사이트에서는 메인 도메인 (루트) 에 대해서만 댓글을 허용합니다. 해당 페이지에서는 이용할 수 없습니다.</p>
-      </div>
-
       <!-- 3. 빈 댓글 상태 -->
       <div id="state-empty" class="state-view hidden">
         <div class="state-icon">🎁</div>
@@ -88,7 +113,7 @@
     </main>
 
     <!-- Footer 영역 (댓글 작성) -->
-    <footer id="app-footer" class="app-footer">
+    <footer id="app-footer" class="app-footer hidden">
       <form id="comment-form" class="comment-form">
         <div class="textarea-wrapper">
           <textarea 
@@ -99,14 +124,33 @@
             rows="3"
             disabled
           ></textarea>
-          <span id="char-count" class="char-count">0 / 1000</span>
         </div>
         <div class="form-bottom">
-          <span id="form-auth-notice" class="auth-notice" data-i18n="authNoticeDefault">로그인 후 댓글을 작성할 수 있습니다.</span>
+          <span id="char-count" class="char-count">0 / 1000</span>
+          <span id="form-auth-notice" class="auth-notice hidden" data-i18n="loginRequired">로그인 후 댓글을 작성할 수 있습니다.</span>
           <button type="submit" id="btn-submit" class="btn btn-submit" data-i18n="btnSubmit" disabled>등록</button>
         </div>
       </form>
     </footer>
+  </div>
+
+  <!-- Modal for Editing Display Name -->
+  <div id="modal-edit-profile" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-edit-profile-title">
+    <div class="modal-content">
+      <h2 id="modal-edit-profile-title" class="modal-title" data-i18n="editDisplayName">표시 이름 변경</h2>
+      <form id="form-edit-profile" class="modal-form">
+        <label for="input-display-name" class="modal-label" data-i18n="displayName">표시 이름</label>
+        <input type="text" id="input-display-name" class="modal-input" />
+        <div class="modal-hint">
+          <span id="display-name-count" class="char-count">0 / 30</span>
+        </div>
+        <div id="modal-error" class="modal-error hidden"></div>
+        <div class="modal-actions">
+          <button type="button" id="btn-cancel-profile" class="btn btn-secondary" data-i18n="cancel">취소</button>
+          <button type="submit" id="btn-save-profile" class="btn btn-primary" data-i18n="save">저장</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- 라이브러리 및 스크립트 로드 순서 준수 -->

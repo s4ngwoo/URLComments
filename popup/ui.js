@@ -6,33 +6,47 @@ export function initElements() {
     authStatus: document.getElementById('auth-status'),
     btnLogin: document.getElementById('btn-login'),
     userProfile: document.getElementById('user-profile'),
-    userEmail: document.getElementById('user-email'),
+    btnUserMenu: document.getElementById('btn-user-menu'),
+    userMenuPopover: document.getElementById('user-menu-popover'),
+    profileDisplayName: document.getElementById('profile-display-name'),
+    profilePublicId: document.getElementById('profile-public-id'),
+    btnEditProfile: document.getElementById('btn-edit-profile'),
     btnLogout: document.getElementById('btn-logout'),
 
-    // Top Bar (Refresh, Sort)
+    // Profile Edit Modal
+    modalEditProfile: document.getElementById('modal-edit-profile'),
+    formEditProfile: document.getElementById('form-edit-profile'),
+    inputDisplayName: document.getElementById('input-display-name'),
+    displayNameCount: document.getElementById('display-name-count'),
+    btnCancelProfile: document.getElementById('btn-cancel-profile'),
+    btnSaveProfile: document.getElementById('btn-save-profile'),
+    modalError: document.getElementById('modal-error'),
+
+    // Top Bar (Refresh, Sort, Toolbar)
     btnRefresh: document.getElementById('btn-refresh'),
     sortSelect: document.getElementById('sort-select'),
+    pageToolbar: document.getElementById('page-toolbar'),
+    currentUrlText: document.getElementById('current-url'),
+
+    // SPA Notice
+    spaNotice: document.getElementById('spa-notice'),
 
     // Error Banner
     errorBanner: document.getElementById('error-banner'),
     errorMessage: document.getElementById('error-message'),
     btnCloseError: document.getElementById('btn-close-error'),
 
-    // URL Bar
-    urlBar: document.getElementById('url-bar'),
-    currentUrlText: document.getElementById('current-url'),
-
     // State Views
     stateNeedsRefresh: document.getElementById('state-needs-refresh'),
     stateLoading: document.getElementById('state-loading'),
     loadingText: document.getElementById('loading-text'),
     stateUnsupported: document.getElementById('state-unsupported'),
-    stateUnsupportedSpa: document.getElementById('state-unsupported-spa'),
     stateEmpty: document.getElementById('state-empty'),
     stateList: document.getElementById('state-list'),
     commentList: document.getElementById('comment-list'),
 
     // Form
+    appFooter: document.getElementById('app-footer'),
     commentForm: document.getElementById('comment-form'),
     commentInput: document.getElementById('comment-input'),
     charCount: document.getElementById('char-count'),
@@ -42,7 +56,7 @@ export function initElements() {
 }
 
 export function showState(targetState) {
-  const states = ['needs-refresh', 'loading', 'unsupported', 'unsupported-spa', 'empty', 'list'];
+  const states = ['needs-refresh', 'loading', 'unsupported', 'empty', 'list'];
   states.forEach(s => {
     // needs-refresh -> stateNeedsRefresh
     const elName = 'state' + s.split('-').map(x => x.charAt(0).toUpperCase() + x.slice(1)).join('');
@@ -53,6 +67,13 @@ export function showState(targetState) {
   const targetElName = 'state' + targetState.split('-').map(x => x.charAt(0).toUpperCase() + x.slice(1)).join('');
   const targetEl = elements[targetElName];
   if (targetEl) targetEl.classList.remove('hidden');
+
+  // Show/Hide footer based on state
+  if (targetState === 'list' || targetState === 'empty') {
+    elements.appFooter.classList.remove('hidden');
+  } else {
+    elements.appFooter.classList.add('hidden');
+  }
 }
 
 export function showLoading(msg) {
@@ -74,7 +95,7 @@ export function hideError() {
 export function enableForm() {
   elements.commentInput.disabled = false;
   elements.btnSubmit.disabled = false;
-  elements.formAuthNotice.textContent = '';
+  elements.formAuthNotice.classList.add('hidden');
 }
 
 export function disableForm(noticeText) {
@@ -82,12 +103,31 @@ export function disableForm(noticeText) {
   elements.btnSubmit.disabled = true;
   if (noticeText) {
     elements.formAuthNotice.textContent = noticeText;
+    elements.formAuthNotice.classList.remove('hidden');
+  } else {
+    elements.formAuthNotice.classList.add('hidden');
   }
 }
 
 export function setSubmitButtonLoading(isLoading) {
   elements.btnSubmit.disabled = isLoading;
   elements.btnSubmit.textContent = isLoading ? (chrome.i18n.getMessage("btnSubmitting") || '등록 중...') : (chrome.i18n.getMessage("btnSubmit") || '등록');
+}
+
+export function showProfileModal() {
+  elements.modalError.classList.add('hidden');
+  elements.modalError.textContent = '';
+  elements.modalEditProfile.classList.remove('hidden');
+  elements.inputDisplayName.focus();
+}
+
+export function hideProfileModal() {
+  elements.modalEditProfile.classList.add('hidden');
+}
+
+export function showProfileError(msg) {
+  elements.modalError.textContent = msg;
+  elements.modalError.classList.remove('hidden');
 }
 
 export function setupI18n() {
@@ -98,5 +138,13 @@ export function setupI18n() {
   document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
     const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-placeholder'));
     if (msg) elem.placeholder = msg;
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(elem => {
+    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-title'));
+    if (msg) elem.title = msg;
+  });
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(elem => {
+    const msg = chrome.i18n.getMessage(elem.getAttribute('data-i18n-aria-label'));
+    if (msg) elem.setAttribute('aria-label', msg);
   });
 }

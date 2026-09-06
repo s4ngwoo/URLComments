@@ -11,7 +11,7 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-export function renderCommentList(comments, userVotes = {}) {
+export function renderCommentList(comments, userVotes = {}, profiles = {}) {
   elements.commentList.innerHTML = '';
   comments.forEach(item => {
     const li = document.createElement('li');
@@ -24,12 +24,16 @@ export function renderCommentList(comments, userVotes = {}) {
       minute: '2-digit'
     });
 
+    const profile = profiles[item.author_id];
+    const displayName = profile?.display_name || item.author_name || chrome.i18n.getMessage("anonymous");
+    const publicId = profile?.public_id || '';
+
     let actionsHtml = '';
     if (state.currentUser) {
       if (state.currentUser.id === item.author_id) {
-        actionsHtml = `<button class="btn-action" data-action="delete" data-id="${item.id}" title="${chrome.i18n.getMessage('btnDelete') || '삭제'}">🗑️</button>`;
+        actionsHtml = `<button class="btn-action" data-action="delete" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnDelete') || '삭제')}">🗑️</button>`;
       } else {
-        actionsHtml = `<button class="btn-action" data-action="report" data-id="${item.id}" title="${chrome.i18n.getMessage('btnReport') || '신고'}">🚨</button>`;
+        actionsHtml = `<button class="btn-action" data-action="report" data-id="${item.id}" title="${escapeHtml(chrome.i18n.getMessage('btnReport') || '신고')}">🚨</button>`;
       }
     }
 
@@ -39,7 +43,7 @@ export function renderCommentList(comments, userVotes = {}) {
 
     li.innerHTML = `
       <div class="comment-header">
-        <span class="comment-author">${escapeHtml(item.author_name)}</span>
+        <div class="author-container" style="position: relative; display: flex; align-items: center;"></div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span class="comment-date">${createdDate}</span>
           <div class="comment-actions">${actionsHtml}</div>
@@ -57,6 +61,36 @@ export function renderCommentList(comments, userVotes = {}) {
         </div>
       </div>
     `;
+
+    const authorContainer = li.querySelector('.author-container');
+    const tooltipId = 'tooltip-' + item.id;
+
+    const authorBtn = document.createElement('button');
+    authorBtn.className = 'comment-author';
+    authorBtn.type = 'button';
+    authorBtn.textContent = displayName;
+
+    if (publicId) {
+      authorBtn.setAttribute('aria-describedby', tooltipId);
+      
+      const tooltipDiv = document.createElement('div');
+      tooltipDiv.className = 'author-tooltip';
+      tooltipDiv.id = tooltipId;
+      tooltipDiv.setAttribute('role', 'tooltip');
+      tooltipDiv.hidden = true;
+      tooltipDiv.textContent = publicId;
+
+      authorBtn.addEventListener('mouseenter', () => tooltipDiv.hidden = false);
+      authorBtn.addEventListener('mouseleave', () => tooltipDiv.hidden = true);
+      authorBtn.addEventListener('focus', () => tooltipDiv.hidden = false);
+      authorBtn.addEventListener('blur', () => tooltipDiv.hidden = true);
+
+      authorContainer.appendChild(authorBtn);
+      authorContainer.appendChild(tooltipDiv);
+    } else {
+      authorContainer.appendChild(authorBtn);
+    }
+
     elements.commentList.appendChild(li);
   });
 }
@@ -96,6 +130,22 @@ export async function loadComments(url) {
       return;
     }
 
+    let profiles = {};
+    const authorIds = [...new Set(data.map(c => c.author_id))];
+    
+    if (authorIds.length > 0) {
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, display_name, public_id')
+        .in('id', authorIds);
+        
+      if (!profileError && profileData) {
+        profileData.forEach(p => {
+          profiles[p.id] = p;
+        });
+      }
+    }
+
     let userVotes = {};
     if (state.currentUser && data.length > 0) {
       const commentIds = data.map(c => c.id);
@@ -112,7 +162,7 @@ export async function loadComments(url) {
       }
     }
 
-    renderCommentList(data, userVotes);
+    renderCommentList(data, userVotes, profiles);
     showState('list');
 
   } catch (err) {
@@ -154,7 +204,8 @@ export async function handleCommentSubmit(e) {
     
     const supabase = window.supabaseClient;
 
-    const authorName = state.currentUser.user_metadata?.full_name || 
+    const authorName = state.currentProfile?.display_name ||
+                       state.currentUser.user_metadata?.full_name || 
                        state.currentUser.user_metadata?.name || 
                        state.currentUser.email?.split('@')[0] || 
                        chrome.i18n.getMessage("anonymous");

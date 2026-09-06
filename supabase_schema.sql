@@ -19,6 +19,61 @@ GRANT SELECT ON TABLE user_profiles TO anon, authenticated;
 
 
 -- ==========================================
+-- 0.5 Profiles (사용자 표시 이름 및 Public ID)
+-- ==========================================
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  display_name text not null,
+  public_id text not null unique,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  check (
+    char_length(trim(display_name)) between 1 and 30
+  ),
+  check (
+    public_id ~ '^@[a-z]+-[a-z]+-[a-z]+-[a-z]+-[0-9A-HJKMNPQRSTVWXYZ]{5}$'
+  )
+);
+
+alter table public.profiles enable row level security;
+
+-- 누구나 프로필 조회 가능
+drop policy if exists "profiles_select" on public.profiles;
+create policy "profiles_select" on public.profiles for select using (true);
+
+-- 본인 프로필 삽입 가능
+drop policy if exists "profiles_insert_auth" on public.profiles;
+create policy "profiles_insert_auth" on public.profiles
+  for insert
+  with check (auth.uid() = id);
+
+-- 본인 프로필 수정 가능
+drop policy if exists "profiles_update_auth" on public.profiles;
+create policy "profiles_update_auth" on public.profiles
+  for update
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
+
+-- 프로필 삭제는 현재 불가능하게 설정 (기본 DENY)
+
+GRANT SELECT ON TABLE public.profiles TO anon, authenticated;
+GRANT INSERT, UPDATE ON TABLE public.profiles TO authenticated;
+
+-- updated_at 자동 갱신 트리거
+create or replace function public.update_profiles_updated_at()
+returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists set_profiles_updated_at on public.profiles;
+create trigger set_profiles_updated_at
+  before update on public.profiles
+  for each row execute function public.update_profiles_updated_at();
+
+-- ==========================================
 -- 1. Comments 테이블
 -- ==========================================
 create table if not exists comments (

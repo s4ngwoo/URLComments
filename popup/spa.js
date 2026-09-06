@@ -1,4 +1,4 @@
-import { setSpaDomain, setNormalizedUrl, state } from './state.js';
+import { setSpaDetected, setNormalizedUrl, state } from './state.js';
 import { elements, showLoading, showState, disableForm, enableForm } from './ui.js';
 import { loadComments } from './comments.js';
 
@@ -19,8 +19,8 @@ export async function initTabUrl() {
           hostname = new URL(tab.url).hostname;
         } catch(e) {}
         
-        if (KNOWN_SPA_DOMAINS.some(d => hostname.includes(d))) {
-          setSpaDomain(true);
+        if (KNOWN_SPA_DOMAINS.some(d => hostname === d || hostname.endsWith('.' + d))) {
+          setSpaDetected(true);
         }
         
         processUrl(tab.url);
@@ -54,16 +54,23 @@ export function processUrl(rawUrl) {
   setNormalizedUrl(normalized);
 
   if (!state.normalizedCurrentUrl) {
-    elements.urlBar.classList.add('hidden');
+    elements.pageToolbar.classList.add('hidden');
+    elements.spaNotice.classList.add('hidden');
     
-    showState('unsupported-spa');
-    disableForm(chrome.i18n.getMessage("stateUnsupportedSpaDesc") || "이 사이트는 JS 로 내용만 바뀌는 페이지이거나, 메인 도메인이 아닙니다.");
+    showState('unsupported');
+    disableForm(chrome.i18n.getMessage("msgUnsupportedCannotComment") || "지원하지 않는 페이지입니다.");
     return;
   }
 
-  elements.urlBar.classList.remove('hidden');
+  elements.pageToolbar.classList.remove('hidden');
   elements.currentUrlText.textContent = state.normalizedCurrentUrl;
   elements.currentUrlText.title = state.normalizedCurrentUrl;
+
+  if (state.isSpaDetected) {
+    elements.spaNotice.classList.remove('hidden');
+  } else {
+    elements.spaNotice.classList.add('hidden');
+  }
 
   if (state.currentUser) {
     enableForm();

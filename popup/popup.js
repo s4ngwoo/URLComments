@@ -2,12 +2,13 @@
  * URLComments 팝업 메인 스크립트 - Supabase Auth & Database 연동 및 i18n 적용
  */
 
-import { state, setSpaDomain, setNormalizedUrl } from './state.js';
-import { elements, initElements, showState, setupI18n, disableForm, hideError } from './ui.js';
-import { checkAuthSession, handleGoogleLogin, handleLogout } from './auth.js';
+import { state, setSpaDetected, setNormalizedUrl } from './state.js';
+import { elements, initElements, showState, setupI18n, disableForm, hideError, showProfileModal, hideProfileModal, showProfileError } from './ui.js';
+import { checkAuthSession, handleGoogleLogin, handleLogout, updateAuthUI } from './auth.js';
 import { loadComments, handleCommentSubmit, handleDeleteComment, handleReportComment } from './comments.js';
 import { handleVoteClick } from './votes.js';
 import { initTabUrl } from './spa.js';
+import { updateDisplayName, normalizeDisplayName, getCodePointLength } from './profile.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initElements();
@@ -30,9 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         showState('needs-refresh');
         disableForm(chrome.i18n.getMessage("msgNeedsRefresh") || "페이지가 변경되었습니다. 새로고침을 눌러주세요.");
         setNormalizedUrl(null);
-        elements.urlBar.classList.add('hidden');
+        setSpaDetected(false);
+        elements.pageToolbar.classList.add('hidden');
+        elements.spaNotice.classList.add('hidden');
       } else if (message.type === 'SPA_DETECTED') {
-        setSpaDomain(true);
+        setSpaDetected(true);
       }
     });
   }
@@ -42,6 +45,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     elements.btnLogin.addEventListener('click', handleGoogleLogin);
     elements.btnLogout.addEventListener('click', handleLogout);
     elements.btnCloseError.addEventListener('click', hideError);
+
+    // User Menu Popover toggle
+    elements.btnUserMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = elements.btnUserMenu.getAttribute('aria-expanded') === 'true';
+      elements.btnUserMenu.setAttribute('aria-expanded', !isExpanded);
+      elements.userMenuPopover.classList.toggle('hidden');
+    });
+
+    // Close popover when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!elements.userProfile.contains(e.target)) {
+        elements.btnUserMenu.setAttribute('aria-expanded', 'false');
+        elements.userMenuPopover.classList.add('hidden');
+      }
+    });
+
+    // Close popover on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        elements.btnUserMenu.setAttribute('aria-expanded', 'false');
+        elements.userMenuPopover.classList.add('hidden');
+        if (!elements.modalEditProfile.classList.contains('hidden')) {
+          hideProfileModal();
+        }
+      }
+    });
+
+    // Profile Edit Modal
+    elements.btnEditProfile.addEventListener('click', () => {
+      elements.btnUserMenu.setAttribute('aria-expanded', 'false');
+      elements.userMenuPopover.classList.add('hidden');
+      if (state.currentProfile) {
+        elements.inputDisplayName.value = state.currentProfile.display_name;
+        // The length calculation logic uses Array.from as code points
+        const length = Array.from(state.currentProfile.display_name).length;
+        elements.displayNameCount.textContent = `${length} / 30`;
+      }
+      showProfileModal();
+    });
+
+    elements.btnCancelProfile.addEventListener('click', hideProfileModal);
+
+    elements.inputDisplayName.addEventListener('input', (e) => {
+      const length = Array.from(normalizeDisplayName(e.target.value)).length;
+      elements.displayNameCount.textContent = `${length} / 30`;
+    });
+
+    elements.formEditProfile.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newName = elements.inputDisplayName.value;
+      elements.btnSaveProfile.disabled = true;
+      try {
+        await updateDisplayName(newName);
+        hideProfileModal();
+        updateAuthUI(state.currentUser);
+        // Refresh comments to show new display name
+        if (state.normalizedCurrentUrl) {
+          loadComments(state.normalizedCurrentUrl);
+        }
+      } catch (err) {
+        console.error('Failed to update profile:', err);
+        showProfileError(chrome.i18n.getMessage('profileSetupFailed') || '표시 이름을 변경할 수 없습니다.');
+      } finally {
+        elements.btnSaveProfile.disabled = false;
+      }
+    });
 
     // 수동 새로고침
     elements.btnRefresh.addEventListener('click', async () => {
