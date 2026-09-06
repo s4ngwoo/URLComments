@@ -9,6 +9,7 @@ import { loadComments, handleCommentSubmit, handleDeleteComment, handleReportCom
 import { handleVoteClick } from './votes.js';
 import { initTabUrl } from './spa.js';
 import { updateDisplayName, normalizeDisplayName, getCodePointLength } from './profile.js';
+import { initSettings } from './settings.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initElements();
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. 앱 초기화
   async function init() {
     setupI18n();
+    initSettings();
     setupEventListeners();
     await checkAuthSession();
     
@@ -45,6 +47,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     elements.btnLogin.addEventListener('click', handleGoogleLogin);
     elements.btnLogout.addEventListener('click', handleLogout);
     elements.btnCloseError.addEventListener('click', hideError);
+
+    // 탭 전환 이벤트
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.add('hidden'));
+
+        button.classList.add('active');
+        const tabId = button.getAttribute('data-tab');
+        const content = document.getElementById(`tab-${tabId}`);
+        if (content) {
+          content.classList.remove('hidden');
+          content.classList.add('active'); // active for styling if needed
+        }
+      });
+    });
 
     // User Menu Popover toggle
     elements.btnUserMenu.addEventListener('click', (e) => {

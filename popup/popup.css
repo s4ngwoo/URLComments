@@ -14,6 +14,18 @@
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --surface-color: #1e1e1e;
+  --border-color: #333333;
+  --text-primary: #f8f9fa;
+  --text-secondary: #adb5bd;
+  --text-muted: #6c757d;
+  --primary-color: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-disabled: #3730a3;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,7 +35,7 @@
 body {
   width: 100%;
   min-width: 280px;
-  height: 520px;
+  height: 100vh;
   font-family: var(--font-family);
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -430,8 +442,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 200px;
+  width: max-content;
+  max-width: min(320px, calc(100vw - 24px));
+  overflow: hidden;
   pointer-events: none;
+}
+
+.author-tooltip .profile-public-id {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .author-tooltip[hidden] {
@@ -448,6 +470,7 @@ body {
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.4;
+  text-align: left;
 }
 
 /* Footer (댓글 작성) */
@@ -479,6 +502,7 @@ textarea {
   resize: none;
   outline: none;
   transition: border-color 0.15s ease;
+  text-align: left;
 }
 
 textarea:focus:not(:disabled) {
@@ -737,4 +761,101 @@ textarea:disabled {
   justify-content: flex-end;
   gap: 8px;
   margin-top: 8px;
+}
+
+/* Tab Navigation */
+.app-tabs {
+  display: flex;
+  background-color: var(--bg-color);
+  flex-shrink: 0;
+}
+
+.app-tabs:not(.bottom-nav) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.bottom-nav {
+  border-top: 1px solid var(--border-color);
+}
+
+.tab-button {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 12px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.bottom-nav .tab-button {
+  border-bottom: none;
+  border-top: 2px solid transparent;
+}
+
+.tab-button:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-color);
+}
+
+.tab-button.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.app-tabs:not(.bottom-nav) .tab-button.active {
+  border-bottom-color: var(--primary-color);
+}
+
+.bottom-nav .tab-button.active {
+  border-top-color: var(--primary-color);
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tab-content.hidden {
+  display: none !important;
+}
+
+/* Settings Tab */
+.settings-content {
+  padding: 16px;
+  gap: 16px;
+}
+
+.settings-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-group-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--surface-color);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
 }

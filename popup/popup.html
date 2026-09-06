@@ -13,8 +13,7 @@
       <div class="brand">
         <span class="logo-icon" aria-hidden="true">💬</span>
         <div>
-          <h1 class="app-title" data-i18n="appName">URLComments</h1>
-          <p class="app-subtitle" data-i18n="appSubtitle">이 페이지에 남겨진 숨은 댓글</p>
+          <h1 class="app-title sr-only" data-i18n="appName">URLComments</h1>
         </div>
       </div>
 
@@ -45,22 +44,6 @@
       </div>
     </header>
 
-    <!-- Toolbar 영역 (현재 URL + 정렬) -->
-    <section id="page-toolbar" class="page-toolbar hidden">
-      <div class="url-info">
-        <span class="toolbar-label" data-i18n="urlLabel">현재 페이지</span>
-        <span id="current-url" class="url-text" title="">-</span>
-      </div>
-      <label class="sort-control">
-        <span class="sr-only" data-i18n="sortLabel">댓글 정렬</span>
-        <select id="sort-select" class="sort-select">
-          <option value="latest" data-i18n="sortLatest">최신순</option>
-          <option value="likes" data-i18n="sortLikes">좋아요순</option>
-          <option value="dislikes" data-i18n="sortDislikes">싫어요순</option>
-        </select>
-      </label>
-    </section>
-
     <!-- SPA Notice 영역 -->
     <div id="spa-notice" class="spa-notice hidden" role="status">
       <span class="notice-icon" aria-hidden="true">ⓘ</span>
@@ -75,63 +58,142 @@
       <button id="btn-close-error" class="btn-close-error">&times;</button>
     </div>
 
-    <!-- Content Area 영역 -->
-    <main class="app-content">
-      <!-- 0. 새로고침 필요 상태 (사이드 패널 용) -->
-      <div id="state-needs-refresh" class="state-view hidden">
-        <div class="state-icon">🔄</div>
-        <p class="state-title" data-i18n="stateNeedsRefreshTitle">페이지가 변경되었습니다</p>
-        <p class="state-desc" data-i18n="stateNeedsRefreshDesc">이 페이지의 댓글을 보려면 상단의 새로고침 버튼을 눌러주세요.</p>
-      </div>
-
-      <!-- 1. 로딩 상태 -->
-      <div id="state-loading" class="state-view">
-        <div class="spinner"></div>
-        <p id="loading-text" class="state-message" data-i18n="stateLoading">댓글을 불러오는 중...</p>
-      </div>
-
-      <!-- 2. 미지원 페이지 안내 -->
-      <div id="state-unsupported" class="state-view hidden">
-        <div class="state-icon">⚠️</div>
-        <p class="state-title" data-i18n="stateUnsupportedTitle">지원을 안 하는 페이지입니다</p>
-        <p class="state-desc" data-i18n="stateUnsupportedDesc">HTTP/HTTPS 웹 페이지에서만 URLComments를 사용할 수 있습니다.</p>
-      </div>
-
-      <!-- 3. 빈 댓글 상태 -->
-      <div id="state-empty" class="state-view hidden">
-        <div class="state-icon">🎁</div>
-        <p class="state-title" data-i18n="stateEmptyTitle">아직 작성된 댓글이 없습니다</p>
-        <p class="state-desc" data-i18n="stateEmptyDesc">이 URL의 첫 번째 보물 댓글을 남겨보세요!</p>
-      </div>
-
-      <!-- 4. 댓글 목록 상태 -->
-      <div id="state-list" class="state-view hidden">
-        <ul id="comment-list" class="comment-list">
-          <!-- JS로 동적 댓글 아이템 삽입 -->
-        </ul>
-      </div>
-    </main>
-
-    <!-- Footer 영역 (댓글 작성) -->
-    <footer id="app-footer" class="app-footer hidden">
-      <form id="comment-form" class="comment-form">
-        <div class="textarea-wrapper">
-          <textarea 
-            id="comment-input" 
-            data-i18n-placeholder="inputPlaceholder"
-            placeholder="댓글을 작성해 보세요 (최대 1000자)" 
-            maxlength="1000"
-            rows="3"
-            disabled
-          ></textarea>
+    <!-- ==================== HOME TAB ==================== -->
+    <section id="tab-home" class="tab-content active">
+      <!-- Toolbar 영역 (현재 URL + 정렬) -->
+      <div id="page-toolbar" class="page-toolbar hidden">
+        <div class="url-info">
+          <span class="toolbar-label" data-i18n="urlLabel">현재 페이지</span>
+          <span id="current-url" class="url-text" title="">-</span>
         </div>
-        <div class="form-bottom">
-          <span id="char-count" class="char-count">0 / 1000</span>
-          <span id="form-auth-notice" class="auth-notice hidden" data-i18n="loginRequired">로그인 후 댓글을 작성할 수 있습니다.</span>
-          <button type="submit" id="btn-submit" class="btn btn-submit" data-i18n="btnSubmit" disabled>등록</button>
+        <label class="sort-control">
+          <span class="sr-only" data-i18n="sortLabel">댓글 정렬</span>
+          <select id="sort-select" class="sort-select">
+            <option value="latest" data-i18n="sortLatest">최신순</option>
+            <option value="likes" data-i18n="sortLikes">좋아요순</option>
+            <option value="dislikes" data-i18n="sortDislikes">싫어요순</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Content Area 영역 -->
+      <main class="app-content">
+        <!-- 0. 새로고침 필요 상태 (사이드 패널 용) -->
+        <div id="state-needs-refresh" class="state-view hidden">
+          <div class="state-icon">🔄</div>
+          <p class="state-title" data-i18n="stateNeedsRefreshTitle">페이지가 변경되었습니다</p>
+          <p class="state-desc" data-i18n="stateNeedsRefreshDesc">이 페이지의 댓글을 보려면 상단의 새로고침 버튼을 눌러주세요.</p>
         </div>
-      </form>
-    </footer>
+
+        <!-- 1. 로딩 상태 -->
+        <div id="state-loading" class="state-view">
+          <div class="spinner"></div>
+          <p id="loading-text" class="state-message" data-i18n="stateLoading">댓글을 불러오는 중...</p>
+        </div>
+
+        <!-- 2. 미지원 페이지 안내 -->
+        <div id="state-unsupported" class="state-view hidden">
+          <div class="state-icon">⚠️</div>
+          <p class="state-title" data-i18n="stateUnsupportedTitle">지원을 안 하는 페이지입니다</p>
+          <p class="state-desc" data-i18n="stateUnsupportedDesc">HTTP/HTTPS 웹 페이지에서만 URLComments를 사용할 수 있습니다.</p>
+        </div>
+
+        <!-- 3. 빈 댓글 상태 -->
+        <div id="state-empty" class="state-view hidden">
+          <div class="state-icon">🎁</div>
+          <p class="state-title" data-i18n="stateEmptyTitle">아직 작성된 댓글이 없습니다</p>
+          <p class="state-desc" data-i18n="stateEmptyDesc">이 URL의 첫 번째 보물 댓글을 남겨보세요!</p>
+        </div>
+
+        <!-- 4. 댓글 목록 상태 -->
+        <div id="state-list" class="state-view hidden">
+          <ul id="comment-list" class="comment-list">
+            <!-- JS로 동적 댓글 아이템 삽입 -->
+          </ul>
+        </div>
+      </main>
+
+      <!-- Footer 영역 (댓글 작성) -->
+      <footer id="app-footer" class="app-footer hidden">
+        <form id="comment-form" class="comment-form">
+          <div class="textarea-wrapper">
+            <textarea 
+              id="comment-input" 
+              data-i18n-placeholder="inputPlaceholder"
+              placeholder="댓글을 작성해 보세요 (최대 1000자)" 
+              maxlength="1000"
+              rows="3"
+              disabled
+            ></textarea>
+          </div>
+          <div class="form-bottom">
+            <span id="char-count" class="char-count">0 / 1000</span>
+            <span id="form-auth-notice" class="auth-notice hidden" data-i18n="loginRequired">로그인 후 댓글을 작성할 수 있습니다.</span>
+            <button type="submit" id="btn-submit" class="btn btn-submit" data-i18n="btnSubmit" disabled>등록</button>
+          </div>
+        </form>
+      </footer>
+    </section>
+
+    <!-- ==================== MY COMMENTS TAB ==================== -->
+    <section id="tab-my-comments" class="tab-content hidden">
+      <main class="app-content" style="flex: 1;">
+        <div id="my-comments-loading" class="state-view">
+          <div class="spinner"></div>
+          <p class="state-message" data-i18n="stateLoading">내 댓글을 불러오는 중...</p>
+        </div>
+        <div id="my-comments-empty" class="state-view hidden">
+          <div class="state-icon">📝</div>
+          <p class="state-title" data-i18n="myCommentsEmptyTitle">작성한 댓글이 없습니다</p>
+          <p class="state-desc" data-i18n="myCommentsEmptyDesc">여러 사이트를 돌아다니며 첫 번째 댓글을 남겨보세요.</p>
+        </div>
+        <div id="my-comments-list-container" class="state-view hidden">
+          <ul id="my-comment-list" class="comment-list">
+            <!-- JS로 동적 댓글 아이템 삽입 -->
+          </ul>
+        </div>
+      </main>
+    </section>
+
+    <!-- ==================== SETTINGS TAB ==================== -->
+    <section id="tab-settings" class="tab-content hidden">
+      <main class="app-content settings-content">
+        <h2 class="settings-title" data-i18n="settingsTitle">설정</h2>
+        
+        <div class="settings-group">
+          <h3 class="settings-group-title" data-i18n="settingsTheme">테마 설정</h3>
+          <div class="settings-item">
+            <label for="theme-select" data-i18n="settingsThemeMode">화면 모드</label>
+            <select id="theme-select" class="sort-select">
+              <option value="system" data-i18n="themeSystem">시스템 기본값</option>
+              <option value="light" data-i18n="themeLight">라이트 모드</option>
+              <option value="dark" data-i18n="themeDark">다크 모드</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-group" style="margin-top: 16px;">
+          <h3 class="settings-group-title" data-i18n="settingsDeveloper">개발자 정보</h3>
+          <div style="display: flex; flex-direction: column; gap: 12px; padding: 12px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 6px;">
+            <a href="https://github.com/s4ngwoo/URLComments" target="_blank" style="text-decoration: none; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; font-size: 13px;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-secondary)'">
+              <svg height="18" width="18" viewBox="0 0 16 16" version="1.1" aria-hidden="true" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+              </svg>
+              s4ngwoo/URLComments
+            </a>
+            <a href="mailto:s4ngwoo@users.noreply.github.com" style="text-decoration: none; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; font-size: 13px;" onmouseover="this.style.color='var(--primary-color)'" onmouseout="this.style.color='var(--text-secondary)'">
+              <span style="font-size: 16px;">✉️</span> s4ngwoo@users.noreply.github.com
+            </a>
+          </div>
+        </div>
+      </main>
+    </section>
+    <!-- Tab Navigation (Bottom) -->
+    <nav class="app-tabs bottom-nav">
+      <button class="tab-button active" data-tab="home" data-i18n="tabHome">홈</button>
+      <button class="tab-button" data-tab="my-comments" data-i18n="tabMyComments">내 댓글</button>
+      <button class="tab-button" data-tab="settings" data-i18n="tabSettings">설정</button>
+    </nav>
   </div>
 
   <!-- Modal for Editing Display Name -->
@@ -158,6 +220,7 @@
   <script src="../lib/supabase.js"></script>
   <script src="../lib/supabaseClient.js"></script>
   <script src="../utils/urlHelper.js"></script>
+  <script type="module" src="settings.js"></script>
   <script type="module" src="popup.js"></script>
 </body>
 </html>
