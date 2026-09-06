@@ -69,10 +69,12 @@ export function showState(targetState) {
   if (targetEl) targetEl.classList.remove('hidden');
 
   // Show/Hide footer based on state
-  if (targetState === 'list' || targetState === 'empty') {
-    elements.appFooter.classList.remove('hidden');
-  } else {
-    elements.appFooter.classList.add('hidden');
+  if (elements.appFooter) {
+    if (targetState === 'list' || targetState === 'empty') {
+      elements.appFooter.classList.remove('hidden');
+    } else {
+      elements.appFooter.classList.add('hidden');
+    }
   }
 }
 

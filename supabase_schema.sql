@@ -105,15 +105,70 @@ create table if not exists comments (
     char_length(content) <= 1000
   ),
   is_deleted boolean not null default false,
+  parent_id bigint references comments(id) on delete cascade,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
 
 -- (기존 테이블 업데이트용 - 이미 테이블이 있다면 실행)
 alter table comments add column if not exists is_deleted boolean not null default false;
+alter table comments add column if not exists parent_id bigint references comments(id) on delete cascade;
 alter table comments add column if not exists updated_at timestamptz not null default now();
 
 create index if not exists idx_comments_url_created_at on comments(url, created_at asc);
+create index if not exists idx_comments_parent_id_created_at on comments(parent_id, created_at asc);
+
+-- 1-Depth 제한 트리거 함수
+create or replace function public.check_comment_one_depth()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  v_parent_parent_id bigint;
+  v_parent_url text;
+  v_parent_exists boolean;
+begin
+  if new.parent_id is null then
+    return new;
+  end if;
+
+  if new.id is not null and new.parent_id = new.id then
+    raise exception 'Self-parenting is not allowed: comment cannot be its own parent (id: %, parent_id: %)', 
+      new.id, new.parent_id;
+  end if;
+
+  select parent_id, url, true 
+  into v_parent_parent_id, v_parent_url, v_parent_exists
+  from public.comments
+  where id = new.parent_id;
+
+  if not found or v_parent_exists is not true then
+    raise exception 'Referenced parent comment does not exist (parent_id: %)', new.parent_id;
+  end if;
+
+  if v_parent_parent_id is not null then
+    raise exception 'Nested replies are not allowed: maximum depth is 1 (attempted reply to reply id: %, which belongs to parent id: %)', 
+      new.parent_id, v_parent_parent_id;
+  end if;
+
+  if new.url <> v_parent_url then
+    raise exception 'Reply URL (%) does not match parent comment URL (%)', new.url, v_parent_url;
+  end if;
+
+  return new;
+end;
+$$;
+
+revoke execute on function public.check_comment_one_depth() from public, anon, authenticated;
+
+drop trigger if exists before_insert_update_comments_one_depth on comments;
+create trigger before_insert_update_comments_one_depth
+  before insert or update of parent_id
+  on comments
+  for each row
+  execute function public.check_comment_one_depth();
 
 alter table comments enable row level security;
 
@@ -122,15 +177,19 @@ drop policy if exists "comments_select_public" on comments;
 drop policy if exists "comments_insert_auth" on comments;
 drop policy if exists "comments_update_auth" on comments;
 
--- 4. 읽기 정책: 삭제되지 않은 댓글만 보임 (Spammer 제외)
--- TODO(Future): 대댓글 도입 시, 삭제된 원댓글에 대댓글이 달려있다면
--- placeholder로 표시하기 위해 is_deleted = true 인 경우에도 
--- 읽을 수 있도록 정책(RLS)을 재조정해야 함.
+-- 4. 읽기 정책: 삭제되지 않은 댓글 또는 활성 대댓글이 달린 부모 댓글 조회 허용
 create policy "comments_select_public"
   on comments
   for select
   using (
-    is_deleted = false
+    (
+      is_deleted = false
+      or exists (
+        select 1 from comments replies
+        where replies.parent_id = comments.id
+          and replies.is_deleted = false
+      )
+    )
     and not exists (
       select 1 from user_profiles 
       where id = comments.author_id 

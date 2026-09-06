@@ -5,11 +5,20 @@
 import { state, setSpaDetected, setNormalizedUrl } from './state.js';
 import { elements, initElements, showState, setupI18n, disableForm, hideError, showProfileModal, hideProfileModal, showProfileError } from './ui.js';
 import { checkAuthSession, handleGoogleLogin, handleLogout, updateAuthUI } from './auth.js';
-import { loadComments, handleCommentSubmit, handleDeleteComment, handleReportComment } from './comments.js';
+import { 
+  loadComments, 
+  handleCommentSubmit, 
+  handleDeleteComment, 
+  handleReportComment, 
+  handleReplySubmit,
+  autoResizeTextarea,
+  resetTextareaSize
+} from './comments.js';
 import { handleVoteClick } from './votes.js';
 import { initTabUrl } from './spa.js';
 import { updateDisplayName, normalizeDisplayName, getCodePointLength } from './profile.js';
 import { initSettings } from './settings.js';
+import { initMyComments, loadMyCommentsIfNeeded } from './my_comments.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   initElements();
@@ -18,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function init() {
     setupI18n();
     initSettings();
+    initMyComments();
     setupEventListeners();
     await checkAuthSession();
     
@@ -63,6 +73,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (content) {
           content.classList.remove('hidden');
           content.classList.add('active'); // active for styling if needed
+        }
+
+        if (tabId === 'my-comments') {
+          loadMyCommentsIfNeeded();
         }
       });
     });
@@ -149,29 +163,98 @@ document.addEventListener('DOMContentLoaded', async () => {
     elements.commentInput.addEventListener('input', (e) => {
       const length = Array.from(e.target.value).length;
       elements.charCount.textContent = `${length} / 1000`;
+      autoResizeTextarea(e.target);
     });
 
     elements.commentList.addEventListener('input', (e) => {
-      if (e.target.tagName === 'TEXTAREA' && e.target.id.startsWith('comment-edit-input-')) {
-        const commentId = e.target.id.replace('comment-edit-input-', '');
-        const countEl = document.getElementById(`comment-edit-count-${commentId}`);
-        if (countEl) {
-          const length = Array.from(e.target.value).length;
-          countEl.textContent = `${length} / 1000`;
+      if (e.target.tagName === 'TEXTAREA') {
+        autoResizeTextarea(e.target);
+        if (e.target.id.startsWith('comment-edit-input-')) {
+          const commentId = e.target.id.replace('comment-edit-input-', '');
+          const countEl = document.getElementById(`comment-edit-count-${commentId}`);
+          if (countEl) {
+            countEl.textContent = `${Array.from(e.target.value).length} / 1000`;
+          }
+        } else if (e.target.id.startsWith('reply-input-')) {
+          const parentId = e.target.id.replace('reply-input-', '');
+          const countEl = document.getElementById(`reply-char-count-${parentId}`);
+          if (countEl) {
+            countEl.textContent = `${Array.from(e.target.value).length} / 1000`;
+          }
         }
       }
     });
 
     elements.commentForm.addEventListener('submit', handleCommentSubmit);
 
-    // 댓글 액션(삭제/신고/투표) 이벤트 위임
+    // 댓글/대댓글 툴팁 이벤트 위임 (호버 및 키보드 포커스)
+    elements.commentList.addEventListener('mouseover', (e) => {
+      const authorBtn = e.target.closest('.comment-author');
+      if (authorBtn && authorBtn.parentElement) {
+        const tooltip = authorBtn.parentElement.querySelector('.author-tooltip');
+        if (tooltip) tooltip.hidden = false;
+      }
+    });
+
+    elements.commentList.addEventListener('mouseout', (e) => {
+      const authorBtn = e.target.closest('.comment-author');
+      if (authorBtn && authorBtn.parentElement) {
+        const tooltip = authorBtn.parentElement.querySelector('.author-tooltip');
+        if (tooltip) tooltip.hidden = true;
+      }
+    });
+
+    elements.commentList.addEventListener('focusin', (e) => {
+      const authorBtn = e.target.closest('.comment-author');
+      if (authorBtn && authorBtn.parentElement) {
+        const tooltip = authorBtn.parentElement.querySelector('.author-tooltip');
+        if (tooltip) tooltip.hidden = false;
+      }
+    });
+
+    elements.commentList.addEventListener('focusout', (e) => {
+      const authorBtn = e.target.closest('.comment-author');
+      if (authorBtn && authorBtn.parentElement) {
+        const tooltip = authorBtn.parentElement.querySelector('.author-tooltip');
+        if (tooltip) tooltip.hidden = true;
+      }
+    });
+
+    // 폼 제출 이벤트 위임 (대댓글 인라인 폼)
+    elements.commentList.addEventListener('submit', async (e) => {
+      const replyForm = e.target.closest('.reply-form');
+      if (replyForm) {
+        e.preventDefault();
+        const parentId = replyForm.getAttribute('data-parent-id');
+        if (parentId) {
+          await handleReplySubmit(parentId);
+        }
+      }
+    });
+
+    // 댓글 액션(답글/수정/삭제/신고/투표) 이벤트 위임
     elements.commentList.addEventListener('click', async (e) => {
       const actionBtn = e.target.closest('.btn-action');
       if (actionBtn) {
         const action = actionBtn.getAttribute('data-action');
         const commentId = actionBtn.getAttribute('data-id');
         
-        if (action === 'delete') {
+        if (action === 'reply') {
+          const formContainer = document.getElementById(`reply-form-container-${commentId}`);
+          if (formContainer) {
+            const isCurrentlyOpen = !formContainer.classList.contains('hidden');
+            // 단일 활성 답글 작성창 원칙: 다른 모든 열린 답글창 닫기
+            document.querySelectorAll('.reply-form-container').forEach(el => el.classList.add('hidden'));
+            if (!isCurrentlyOpen) {
+              formContainer.classList.remove('hidden');
+              const inputEl = document.getElementById(`reply-input-${commentId}`);
+              if (inputEl) {
+                inputEl.focus();
+                autoResizeTextarea(inputEl);
+              }
+            }
+          }
+        } else if (action === 'delete') {
           await handleDeleteComment(commentId);
         } else if (action === 'report') {
           await handleReportComment(commentId);
@@ -185,8 +268,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (inputEl) {
               inputEl.focus();
               inputEl.selectionStart = inputEl.selectionEnd = inputEl.value.length;
+              autoResizeTextarea(inputEl);
             }
           }
+        }
+        return;
+      }
+
+      // 대댓글 취소 버튼
+      const cancelReplyBtn = e.target.closest('.btn-action-cancel-reply');
+      if (cancelReplyBtn) {
+        const parentId = cancelReplyBtn.getAttribute('data-parent-id');
+        const formContainer = document.getElementById(`reply-form-container-${parentId}`);
+        if (formContainer) {
+          formContainer.classList.add('hidden');
         }
         return;
       }

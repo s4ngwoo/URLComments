@@ -2,6 +2,7 @@ import { state, setCurrentUser } from './state.js';
 import { elements, showLoading, showError, hideError, showState, enableForm, disableForm } from './ui.js';
 import { loadComments } from './comments.js';
 import { ensureProfile } from './profile.js';
+import { invalidateMyCommentsCache } from './my_comments.js';
 
 export async function checkAuthSession() {
   const supabase = window.supabaseClient;
@@ -25,6 +26,7 @@ export async function checkAuthSession() {
 
 export async function updateAuthUI(user) {
   setCurrentUser(user);
+  invalidateMyCommentsCache();
 
   if (user) {
     const profile = await ensureProfile(user);

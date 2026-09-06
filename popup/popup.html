@@ -138,15 +138,35 @@
     <!-- ==================== MY COMMENTS TAB ==================== -->
     <section id="tab-my-comments" class="tab-content hidden">
       <main class="app-content" style="flex: 1;">
+        <!-- Loading State -->
         <div id="my-comments-loading" class="state-view">
           <div class="spinner"></div>
           <p class="state-message" data-i18n="stateLoading">내 댓글을 불러오는 중...</p>
         </div>
+
+        <!-- Unauthenticated State -->
+        <div id="my-comments-unauth" class="state-view hidden">
+          <div class="state-icon">🔒</div>
+          <p class="state-title" data-i18n="loginRequired">로그인이 필요합니다</p>
+          <p class="state-desc" data-i18n="myCommentsLoginRequired">내 댓글을 확인하려면 로그인이 필요합니다.</p>
+          <button id="btn-my-comments-login" type="button" class="btn btn-primary btn-sm" style="margin-top: 12px;" data-i18n="btnLogin">Google 로그인</button>
+        </div>
+
+        <!-- Empty State -->
         <div id="my-comments-empty" class="state-view hidden">
           <div class="state-icon">📝</div>
           <p class="state-title" data-i18n="myCommentsEmptyTitle">작성한 댓글이 없습니다</p>
-          <p class="state-desc" data-i18n="myCommentsEmptyDesc">여러 사이트를 돌아다니며 첫 번째 댓글을 남겨보세요.</p>
+          <p class="state-desc" data-i18n="myCommentsEmptyDesc">아직 작성한 댓글이 없습니다.</p>
         </div>
+
+        <!-- Error State -->
+        <div id="my-comments-error" class="state-view hidden">
+          <div class="state-icon">⚠️</div>
+          <p class="state-title" data-i18n="myCommentsError">댓글을 불러오는 중 오류가 발생했습니다.</p>
+          <button id="btn-my-comments-retry" type="button" class="btn btn-outline btn-sm" style="margin-top: 12px;" data-i18n="btnRetry">다시 시도</button>
+        </div>
+
+        <!-- Comments List Container -->
         <div id="my-comments-list-container" class="state-view hidden">
           <ul id="my-comment-list" class="comment-list">
             <!-- JS로 동적 댓글 아이템 삽입 -->
