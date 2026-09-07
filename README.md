@@ -202,3 +202,19 @@ Apply migrations sequentially in the Supabase **SQL Editor**:
 7. **Font Size & Compact Header Verification**:
    - Switch font size between Small, Default, and Large in Settings, confirming the UI scales properly across the extension.
    - Confirm Like and Dislike reactions are rendered directly beside author names in `.comment-header-left` without wrapping, and long usernames are cleanly truncated with an ellipsis.
+
+---
+
+## 🤝 Contributing
+
+Contributions, bug reports, and pull requests are warmly welcomed!
+
+- **Contributing Guide**: Check out [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for local development setup, coding standards, and PR workflows.
+- **Architecture Overview**: Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) to understand system design and privacy guarantees.
+- **Quick Start**:
+  ```bash
+  npm install              # Install development dependencies
+  npm test                 # Run automated test suites (Jest)
+  npm test test/locales    # Run i18n key parity tests across all 6 locales
+  ```
+- **Privacy-First Reminder**: All contributions must strictly preserve our privacy-first guarantees (no background tab tracking, explicit user triggers only, and strict URL normalization).

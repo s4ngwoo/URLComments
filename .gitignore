@@ -3,6 +3,5 @@ node_modules/
 .env.*
 lib/config.js
 .DS_Store
-*.md
-!README.md
-!README.*.md
+notes/
+scratch/
