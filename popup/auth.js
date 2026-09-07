@@ -87,16 +87,17 @@ export async function handleGoogleLogin() {
       throw new Error(error?.message || 'Google OAuth URL generation failed');
     }
 
-    chrome.identity.launchWebAuthFlow(
-      { url: data.url, interactive: true },
-      async (authUrl) => {
-        if (chrome.runtime.lastError) {
-          console.error('WebAuthFlow Error:', chrome.runtime.lastError);
+    chrome.runtime.sendMessage(
+      { type: 'LAUNCH_WEB_AUTH_FLOW', url: data.url, interactive: true },
+      async (response) => {
+        if (chrome.runtime.lastError || response?.error) {
+          console.error('WebAuthFlow Error:', chrome.runtime.lastError?.message || response?.error);
           showError(getMessage("msgLoginFailedClosed"));
           showState(state.normalizedCurrentUrl ? (elements.commentList.children.length ? 'list' : 'empty') : 'unsupported');
           return;
         }
 
+        const authUrl = response?.authUrl;
         if (authUrl) {
           const urlObj = new URL(authUrl);
           const hashParams = new URLSearchParams(urlObj.hash.substring(1));
