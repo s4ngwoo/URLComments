@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_appName__",
   "version": "1.0.1",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1uBmUJTrfB/tUctYSMsnT6zPtveFtyQo2ltj498KnRQgkj6S1MlPyNfsemywvWKcDyS2MkXXDl6Y0XpuPV3jOpVptn1rTUYgeRiYoqiVGAnhVTJWmh6YNK/iDMAaUC1wU08sxouDvOrOs6kkk9s/UXi+HFwFatb1vt3oLkk8Q0a+Sr+JSKrg+7Gz+zYtcy7TWPWyiUXD6oQSZNAGDZ0ZIogYRYK5u+J7+14sEiKJWylngSmfE/SoP88FVyBb6e6A5du84RlWh4QG58zk7HmA28HOMsKHQFj+Mwbbye6B9WBxgNaWuusOVkvZo0bOuL+W8Ov6VT1uxOK0go2ObSTxQwIDAQAB",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
   "icons": {

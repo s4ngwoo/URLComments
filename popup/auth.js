@@ -87,6 +87,8 @@ export async function handleGoogleLogin() {
       throw new Error(error?.message || 'Google OAuth URL generation failed');
     }
 
+    console.log('[Auth] Generated OAuth URL:', data.url, 'Redirect URL:', redirectUrl);
+
     chrome.runtime.sendMessage(
       { type: 'LAUNCH_WEB_AUTH_FLOW', url: data.url, interactive: true },
       async (response) => {
