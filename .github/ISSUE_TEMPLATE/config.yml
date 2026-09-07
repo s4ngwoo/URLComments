@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: "🔒 Report a Security Vulnerability"
+    url: "https://github.com/s4ngwoo/URLComments/security/advisories/new"
+    about: "Please report security vulnerabilities privately rather than opening a public issue."
+  - name: "📖 Documentation & Guides"
+    url: "https://github.com/s4ngwoo/URLComments/wiki"
+    about: "Check out project guides and documentation before opening an issue."
