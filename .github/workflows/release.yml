@@ -38,10 +38,17 @@ jobs:
             cp lib/config.example.js lib/config.js
           fi
 
-      - name: Extract version from manifest.json
+      - name: Extract version
         id: get_version
         run: |
-          VERSION=$(node -p "require('./manifest.json').version")
+          if [ "${{ github.event_name }}" = "release" ] && [ -n "${{ github.event.release.tag_name }}" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+            VERSION="${TAG#v}"
+          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION=$(node -p "require('./manifest.json').version")
+          fi
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
           echo "Building URLComments extension version v${VERSION}"
 
