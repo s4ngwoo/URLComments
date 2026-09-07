@@ -1,6 +1,6 @@
 {
   "name": "urlcomments",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Privacy-first Chrome extension for public comments on any normalized URL",
   "main": "index.js",
   "directories": {

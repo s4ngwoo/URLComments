@@ -5,6 +5,7 @@ import { elements, showLoading, showError, hideError, showState, enableForm, dis
 import { loadComments } from './comments.js';
 import { ensureProfile } from './profile.js';
 import { invalidateMyCommentsCache } from './my_comments.js';
+import { initTabUrl } from './spa.js';
 
 export async function checkAuthSession() {
   const supabase = window.supabaseClient;
@@ -95,45 +96,53 @@ export async function handleGoogleLogin() {
         if (chrome.runtime.lastError || response?.error) {
           console.error('WebAuthFlow Error:', chrome.runtime.lastError?.message || response?.error);
           showError(getMessage("msgLoginFailedClosed"));
-          showState(state.normalizedCurrentUrl ? (elements.commentList.children.length ? 'list' : 'empty') : 'unsupported');
+          showState(state.normalizedCurrentUrl ? (elements.commentList?.children?.length ? 'list' : 'empty') : 'needs-refresh');
           return;
         }
 
         const authUrl = response?.authUrl;
         if (authUrl) {
-          const urlObj = new URL(authUrl);
-          const hashParams = new URLSearchParams(urlObj.hash.substring(1));
-          const accessToken = hashParams.get('access_token');
-          const refreshToken = hashParams.get('refresh_token');
+          try {
+            const urlObj = new URL(authUrl);
+            const hashParams = new URLSearchParams(urlObj.hash.substring(1));
+            const accessToken = hashParams.get('access_token');
+            const refreshToken = hashParams.get('refresh_token');
 
-          if (accessToken && refreshToken) {
-            const { data: sessionData, error: sessionErr } = await supabase.auth.setSession({
-              access_token: accessToken,
-              refresh_token: refreshToken
-            });
+            if (accessToken && refreshToken) {
+              const { data: sessionData, error: sessionErr } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken
+              });
 
-            if (sessionErr) {
-              showError(getMessage("msgSessionSaveFailed") + sessionErr.message);
-            } else {
-              await updateAuthUI(sessionData.session?.user);
-              if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-                chrome.storage.local.set({ userCache: sessionData.session?.user });
+              if (sessionErr) {
+                showError(getMessage("msgSessionSaveFailed") + sessionErr.message);
+              } else {
+                await updateAuthUI(sessionData.session?.user);
+                if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+                  chrome.storage.local.set({ userCache: sessionData.session?.user });
+                }
               }
+            } else {
+              showError(getMessage("msgNoAuthToken"));
             }
-          } else {
-            showError(getMessage("msgNoAuthToken"));
+          } catch (err) {
+            console.error('Session setup exception:', err);
+            showError(getMessage("msgLoginError") + (err.message || ''));
           }
         }
 
+        // 로그인 완료 후 URL이 이미 있으면 댓글 로드, 없으면 탭 URL을 감지하여 자동 로드
         if (state.normalizedCurrentUrl) {
           loadComments(state.normalizedCurrentUrl);
+        } else {
+          await initTabUrl();
         }
       }
     );
   } catch (err) {
     console.error('Google login error:', err);
     showError(getMessage("msgLoginError") + err.message);
-    showState(state.normalizedCurrentUrl ? 'empty' : 'unsupported');
+    showState(state.normalizedCurrentUrl ? (elements.commentList?.children?.length ? 'list' : 'empty') : 'needs-refresh');
   }
 }
 
@@ -149,8 +158,11 @@ export async function handleLogout() {
     await updateAuthUI(null);
     if (state.normalizedCurrentUrl) {
       loadComments(state.normalizedCurrentUrl);
+    } else {
+      showState('needs-refresh');
     }
   } catch (err) {
     showError(getMessage("msgLogoutError"));
+    showState(state.normalizedCurrentUrl ? (elements.commentList?.children?.length ? 'list' : 'empty') : 'needs-refresh');
   }
 }
