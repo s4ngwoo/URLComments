@@ -1,88 +1,88 @@
-# 💬 URLComments (어디든 남기는 내 의견)
+# 💬 URLComments (Leave your opinion anywhere)
 
 🌍 [🇰🇷 한국어](README.md) | [🇺🇸 English](README.en.md) | [🇯🇵 日本語](README.ja.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇹🇼 繁體中文](README.zh-TW.md) | [🇪🇸 Español](README.es.md)
 
-**URLComments**는 웹상의 모든 정규화된 URL을 하나의 공개 소통 공간으로 만들어주는 프라이버시 우선(Privacy-First) 크롬 확장 프로그램입니다. 기사, 블로그, 쇼핑몰 등 URL이 존재하는 웹페이지라면 어디서든 사람들과 짧은 공개 댓글을 나누고 소통할 수 있습니다.
+**URLComments** is a privacy-first Chrome extension that turns every normalized web URL into a public discussion space. Leave and discover short public comments on articles, blog posts, documentation, and shopping sites wherever a URL exists.
 
 ---
 
-## 🛡️ 프라이버시 최우선 원칙 (Privacy-First Principle)
+## 🛡️ Privacy-First Principle
 
-URLComments는 사용자의 브라우징 기록과 개인정보를 절대적으로 보호합니다.
+URLComments strictly protects your browsing privacy and personal history:
 
-- **페이지 이동 시 자동 URL 전송 금지**: 사용자가 탭을 전환하거나 웹사이트를 서핑하는 동안 현재 URL을 Supabase나 외부 서버로 자동 전송하지 않습니다.
-- **명시적 팝업 실행 시에만 조회**: 사용자가 확장 프로그램 팝업(또는 사이드 패널)을 명시적으로 열고 새로고침을 요청할 때만 현재 탭의 활성 URL을 읽고 해당 페이지의 댓글을 서버에 요청합니다.
-- **URL 정규화**: 쿼리 파라미터(`?query=...`)와 해시 프래그먼트(`#section`)를 완전히 제외한 기본 경로(`origin + pathname`)로 댓글을 연결하여 개인 추적 식별자(UTM, 세션 토큰 등)의 유출을 원천 방지합니다.
-- **백그라운드 감시 및 트래킹 부재**: 백그라운드 폴링, 분석(Analytics), 텔레메트리, 원격 코드 실행을 일체 포함하지 않습니다.
-
----
-
-## ✨ 현재 지원 기능
-
-- **Google 간편 로그인**: Supabase Auth 및 Chrome Identity WebAuthFlow를 통한 안전한 로그인/로그아웃.
-- **정규화 URL 기반 공개 댓글**: 쿼리스트링과 해시가 제거된 정규화 URL에 최대 1000자의 댓글 작성.
-- **컴팩트 인라인 댓글 반응 (좋아요/싫어요)**: 작성자 닉네임 바로 옆 비-줄바꿈 인라인 반응 그룹으로 배치되어 여백을 절약하며 키보드 접근성 완벽 보장.
-- **댓글 수정 및 소프트 삭제**: 작성자 본인 댓글 수정 및 소프트 삭제(`is_deleted = true`) 지원.
-- **1단계 대댓글 (1-Depth Multi-Sibling Replies)**:
-  - 활성 상태의 최상위 댓글은 여러 개의 형제 대댓글(Sibling Replies)을 받을 수 있습니다.
-  - 대댓글은 부모 댓글 하단에 작성일시 오름차순(`created_at ASC`)으로 렌더링됩니다.
-  - 활성 최상위 댓글에는 일관된 `↳ 답글` 버튼이 제공되며, 대댓글에는 추가 답글 버튼이 제공되지 않습니다 (1단계 깊이 제한).
-- **스레드 단위 인메모리 페이지네이션**:
-  - 최상위 댓글 스레드를 페이지당 10개(`THREADS_PER_PAGE = 10`) 단위로 분할 렌더링하며, 부모와 하위 대댓글이 한 스레드로 함께 묶여 표시됩니다.
-  - 페이지 이동 시 추가 Supabase 네트워크 요청 없이 현재 메모리 데이터에서 즉시 슬라이스 렌더링됩니다.
-  - 읽기 위치가 보존되어 일반 새로고침이나 대댓글 작성 시 기존에 보고 있던 페이지를 유지합니다.
-- **엄격한 시간순 오름차순 정렬 (Chronological ASC)**:
-  - 모든 최상위 댓글과 대댓글은 작성 시간 오름차순(`created_at ASC`)으로 정렬되며, 동일 시점 댓글은 bigint 안전 ID 비교로 안정적인 타이브레이크를 수행합니다. (구 정렬 옵션 및 UI는 완전히 제거됨)
-- **독립적인 다국어(Language) 설정**:
-  - 한국어, 영어, 일본어, 중국어 간체, 중국어 번체, 스페인어 및 시스템 기본값을 지원합니다.
-  - `chrome.i18n`의 브라우저 종속적인 한계를 넘어 커스텀 i18n 모듈을 통해 사용자가 확장 프로그램 내에서 언어를 즉시 오버라이드 할 수 있습니다.
-- **독립적인 글자 크기(Font Size) 설정**:
-  - 작게(Small), 보통(Default), 크게(Large) 옵션을 제공하며 `chrome.storage.local`에 테마와 독립적으로 영구 저장됩니다.
-  - 루트 `data-font-size` 속성과 CSS 변수를 통해 사이드 패널 전체 UI가 크기에 맞게 자연스럽게 스케일링됩니다.
-- **작성자 표시 이름 안전 말줄임표(Ellipsis)**:
-  - 긴 닉네임은 시각적으로 말줄임표 처리되어 반응 버튼 및 액션을 밀어내지 않으며, `title` 및 `aria-label`로 전체 이름이 온전히 보존됩니다.
-- **삭제된 부모 댓글 보존 정책**:
-  - 활성 대댓글이 존재하는 최상위 댓글이 삭제될 경우, 맥락 보존을 위해 "삭제된 댓글입니다" 안내 플레이스홀더와 기존 대댓글을 계속 표시합니다.
-  - 삭제된 부모 댓글에는 새로운 답글 작성 버튼이 표시되지 않으며 답글 작성이 차단됩니다.
-- **내 댓글 (My Comments) 지연 로딩 & 캐시 무효화**: 하단 네비게이션의 '내 댓글' 탭을 클릭할 때만 서버에서 로드하며, 댓글 작성/수정/삭제 시 자동으로 캐시가 무효화되어 최신 상태를 반영합니다.
-- **테마 설정 및 지속성**: 시스템 기본값 / 라이트 모드 / 다크 모드를 지원하며 `chrome.storage.local`에 영구 저장됩니다.
-- **퍼블릭 ID 툴팁**: 작성자 이름을 호버하거나 키보드로 포커스할 때 안전한 가로형 고유 ID 툴팁 제공.
-- **자동 높이 조절 Textarea**: 최소 48px ~ 최대 140px 범위 내에서 입력 길이에 맞게 높이가 자연스럽게 늘어납니다.
+- **No URL Transmission on Page Navigation**: URLs are never automatically sent to Supabase or any external server while you browse the web or switch tabs.
+- **Explicit User Interaction Only**: The extension reads the active tab's URL and fetches page-specific comments only after you explicitly open the extension popup/side panel and request a refresh.
+- **Strict URL Normalization**: Query parameters (`?query=...`) and hash fragments (`#section`) are excluded, anchoring comments strictly to `origin + pathname`. This prevents leakage of personal identifiers, UTM tracking tags, or session tokens.
+- **Zero Surveillance & Telemetry**: Contains no background polling, analytics, telemetry, or remote code execution.
 
 ---
 
-## 🏗️ 아키텍처 및 파일 구조
+## ✨ Key Features
+
+- **Google Sign-In**: Quick and secure authentication via Supabase Auth and Chrome Identity `launchWebAuthFlow`.
+- **Normalized URL Comments**: Post comments up to 1,000 characters tied to normalized webpage URLs.
+- **Compact Inline Comment Reactions (Like/Dislike)**: Compact, non-wrapping inline reaction group located directly beside author names for efficient space usage and keyboard accessibility.
+- **Comment Editing & Soft Deletion**: Edit your own comments or soft-delete them (`is_deleted = true`).
+- **1-Depth Multi-Sibling Replies**:
+  - An active top-level parent comment can receive multiple sibling replies.
+  - Sibling replies render beneath their parent in chronological ascending order (`created_at ASC`).
+  - Active parent comments feature an accessible `↳ Reply` control; replies cannot receive further nested replies (strictly 1-depth).
+- **Thread-Based In-Memory Pagination**:
+  - Top-level comment threads are paginated in chunks of 10 (`THREADS_PER_PAGE = 10`), keeping parents and all their replies together.
+  - Page switching renders from in-memory cached threads without making additional Supabase network queries.
+  - Preserves reading position on refresh and reply creation, clamping safely on deletions.
+- **Strict Chronological ASC Ordering**:
+  - All parent comments and replies are consistently ordered oldest-first (`created_at ASC`), using bigint-safe numeric string ID tie-breaking on identical timestamps. Obsolete sort selection has been completely removed.
+- **Independent Language Settings (i18n)**:
+  - Supports English, Korean, Japanese, Simplified Chinese, Traditional Chinese, Spanish, and System Default.
+  - Overcomes `chrome.i18n` browser limitations via a custom i18n module, allowing users to override the extension language instantly from settings.
+- **Independent Persistent Font Size Preferences**:
+  - Choose between Small, Default, and Large font sizes, persisted in `chrome.storage.local` independently of theme.
+  - Scaled across the popup UI using root `data-font-size` attribute and CSS custom properties.
+- **Display-Only Username Truncation**:
+  - Long usernames are safely truncated visually with CSS ellipsis without mutating data, preserving full names via `title` and `aria-label` separately from public ID tooltips.
+- **Deleted-Parent Context Preservation**:
+  - Soft-deleted parent comments with active replies display a placeholder (`"This comment was deleted."`) to preserve discussion context.
+  - Deleted parents display no Reply action and do not accept new replies.
+- **My Comments Lazy Loading & Invalidation**: Loads personal comment history only when opening the My Comments tab. Cache is invalidated on comment/reply creation, edit, or deletion.
+- **Theme Persistence**: Supports System Default, Light Mode, and Dark Mode, persisted in `chrome.storage.local`.
+- **Public ID Tooltip**: Accessible horizontal tooltip revealing user public IDs on hover and keyboard focus.
+- **Auto-Growing Bounded Textarea**: Smoothly resizes between 48px min-height and 140px max-height.
+
+---
+
+## 🏗️ Architecture & Directory Structure
 
 ```text
 URLComments/
-├── manifest.json              # Manifest V3 확장 프로그램 매니페스트
-├── background.js              # 사이드 패널 동작 및 탭 전환 알림 관리 서비스 워커
-├── popup/                     # 팝업 및 사이드 패널 프론트엔드 모듈
-│   ├── popup.html             # 홈, 내 댓글, 설정 탭 및 프로필 모달 마크업
-│   ├── popup.css              # 테마 변수, 레이아웃, 컴포넌트 스타일 (Vanilla CSS)
-│   ├── popup.js               # 초기화, 탭 라우팅, 이벤트 위임 등록
-│   ├── comments.js            # 댓글 조회, 스레드 그룹화, 작성/수정/삭제/답글 로직
-│   ├── auth.js                # Google OAuth 세션 확인 및 로그인/로그아웃 핸들러
-│   ├── my_comments.js         # 내 댓글 지연 조회, 렌더링 및 캐시 관리
-│   ├── settings.js            # 테마 및 환경 설정 로드/저장/적용
-│   ├── ui.js                  # DOM 엘리먼트 캐시 및 상태 뷰(로딩/빈 화면/목록 등) 전환
-│   ├── state.js               # 전역 반응형 메모리 상태 저장소
-│   ├── profile.js             # 표시 이름 및 고유 Public ID 관리
-│   ├── votes.js               # 좋아요/싫어요 투표 핸들러
-│   └── spa.js                 # 현재 탭 URL 정규화 및 SPA 감지 연동
+├── manifest.json              # Manifest V3 extension configuration
+├── background.js              # Background service worker for side panel and tab event dispatch
+├── popup/                     # Frontend popup and side panel modules
+│   ├── popup.html             # Markup for Home, My Comments, Settings tabs, and Profile Modal
+│   ├── popup.css              # Vanilla CSS theme variables, layouts, and component styles
+│   ├── popup.js               # Lifecycle initialization, tab switching, and event delegation
+│   ├── comments.js            # Comments fetch, thread grouping, CRUD, replies, and textarea sizing
+│   ├── auth.js                # Google OAuth session check and sign-in/sign-out handlers
+│   ├── my_comments.js         # Lazy-loaded My Comments view and cache management
+│   ├── settings.js            # Theme and preference management
+│   ├── ui.js                  # DOM cache and state transitions (loading, empty, list, etc.)
+│   ├── state.js               # Global in-memory reactive state store
+│   ├── profile.js             # Display name and Public ID management
+│   ├── votes.js               # Like/dislike reaction handler
+│   └── spa.js                 # Current tab URL extraction and SPA detection
 ├── content/
-│   ├── spaDetector.js         # 클라이언트 사이드 라우팅(SPA) 감지 콘텐츠 스크립트
-│   └── config.js              # SPA 감지 설정 파일
+│   ├── spaDetector.js         # Content script detecting client-side routing
+│   └── config.js              # SPA detector configuration
 ├── lib/
-│   ├── config.js              # Supabase 접속 설정 (URL & Anon Key)
-│   ├── supabaseClient.js      # Supabase JS 클라이언트 래퍼 및 스토리지 어댑터
-│   ├── publicId.js            # Base62 기반 공개 고유 ID 생성 유틸리티
-│   └── utils.js               # 순수 공통 헬퍼 함수
+│   ├── config.js              # Supabase project URL and anon key configuration
+│   ├── supabaseClient.js      # Supabase JS client wrapper and Chrome storage adapter
+│   ├── publicId.js            # Base62 public user ID generator
+│   └── utils.js               # Pure utility helpers
 ├── utils/
-│   └── urlHelper.js           # URL 정규화(쿼리/해시 제거) 유틸리티
-├── _locales/                  # 다국어(i18n) 번역 리소스 (ko, en)
+│   └── urlHelper.js           # URL normalization utility (strips query/hash)
+├── _locales/                  # Internationalization resources (ko, en)
 └── supabase/
-    └── migrations/            # 데이터베이스 DDL, RLS 정책 및 트리거
+    └── migrations/            # Database schema, RLS policies, and database triggers
         ├── 001_comments_baseline.sql
         ├── 002_profiles_public_identity.sql
         ├── 003_comment_votes.sql
@@ -94,41 +94,41 @@ URLComments/
 
 ---
 
-## 🔑 확장 프로그램 권한 (Permissions Audit)
+## 🔑 Extension Permissions Audit
 
-`manifest.json`에 정의된 모든 권한은 최소 권한 원칙에 따라 실제 사용 목적에 한해서만 구성되었습니다.
+All permissions defined in `manifest.json` adhere to the principle of least privilege:
 
-| 권한 | 사용 목적 |
+| Permission | Real Purpose in Codebase |
 | :--- | :--- |
-| `sidePanel` | 확장 프로그램 아이콘 클릭 시 브라우징을 방해하지 않는 Chrome 사이드 패널로 UI를 엽니다. |
-| `storage` | 사용자 테마 설정, Supabase 인증 토큰 및 탭별 SPA 감지 플래그를 `chrome.storage.local`에 안전하게 보관합니다. |
-| `identity` | `chrome.identity.launchWebAuthFlow`를 통해 외부 브라우저 창 없이 안전하게 Google OAuth 로그인을 수행합니다. |
-| `tabs` | 1) `background.js`에서 탭 활성화/업데이트 이벤트를 감지하여 열려 있는 사이드 패널에 수동 새로고침 안내를 보냅니다. 2) '내 댓글'에서 원본 URL을 새 탭으로 열기 위해 `chrome.tabs.create`를 호출합니다. |
-| `activeTab` | 사용자가 팝업을 연 순간에만 활성 탭의 URL을 일시적으로 읽어올 수 있도록 허용합니다. 광범위한 `<all_urls>` 권한 없이 동작합니다. |
+| `sidePanel` | Configures and opens the extension UI within Chrome's native side panel via `chrome.sidePanel.setPanelBehavior`. |
+| `storage` | Stores theme preferences, cached authentication state, and per-tab SPA detection flags in `chrome.storage.local`. |
+| `identity` | Launches Google OAuth web authentication via `chrome.identity.launchWebAuthFlow`. |
+| `tabs` | 1) Listens for active tab changes (`chrome.tabs.onActivated`, `chrome.tabs.onUpdated`) in `background.js` to notify the open side panel to prompt manual refresh. 2) Opens original URLs from My Comments in a new tab via `chrome.tabs.create`. |
+| `activeTab` | Temporarily grants access to the current tab URL only at the moment the user interacts with the extension popup, without requiring broad `<all_urls>` host permissions. |
 
-> **참고**: 향후 권한 최적화 작업 시 `tabs`와 `activeTab`의 중복 여부를 정밀 감사하여 백그라운드 탭 감지 범위를 더욱 축소할 수 있는지 검토할 예정입니다.
+> **Follow-up Note**: Future permission reviews will evaluate whether background tab change notifications can be refined to further isolate `tabs` and `activeTab` scopes.
 
 ---
 
-## 💻 로컬 개발 및 테스트 방법
+## 💻 Local Development & Testing
 
-### 사전 준비
-- Node.js 18 이상
-- Google Chrome 브라우저
-- Supabase 프로젝트 (PostgreSQL + Auth)
+### Prerequisites
+- Node.js 18+
+- Google Chrome browser
+- Supabase Project (PostgreSQL + Auth)
 
-### 1. 설정 및 의존성 설치
+### 1. Installation
 ```bash
-# 저장소 클론
+# Clone repository
 git clone https://github.com/s4ngwoo/URLComments.git
 cd URLComments
 
-# 의존성 패키지 설치
+# Install dependencies
 npm install
 ```
 
-### 2. Supabase 환경 설정
-`lib/config.example.js`를 복사하여 `lib/config.js`를 생성하고 Supabase 프로젝트 정보를 입력합니다:
+### 2. Configure Supabase Credentials
+Copy `lib/config.example.js` to `lib/config.js` and set your Supabase project credentials:
 ```javascript
 window.APP_CONFIG = {
   SUPABASE_URL: "https://your-project.supabase.co",
@@ -136,70 +136,69 @@ window.APP_CONFIG = {
 };
 ```
 
-### 3. 단위 테스트 실행
-Jest를 사용하여 모든 순수 함수, 상태 관리, 1단계 대댓글 흐름, 마크업 무결성을 검증합니다:
+### 3. Run Unit Tests
+Run Jest tests to verify all pure helpers, state flows, 1-depth multi-sibling replies, and DOM structures:
 ```bash
 npm test
 ```
 
-### 4. Chrome에 압축해제된 확장 프로그램 로드
-1. Chrome 주소창에 `chrome://extensions/` 입력 후 접속.
-2. 우측 상단의 **개발자 모드** 활성화.
-3. **[압축해제된 확장 프로그램을 로드합니다]** 클릭 후 `URLComments` 루트 폴더 선택.
+### 4. Load Unpacked Extension in Chrome
+1. Navigate to `chrome://extensions/` in Google Chrome.
+2. Enable **Developer mode** in the top right corner.
+3. Click **Load unpacked** and select the `URLComments` repository folder.
 
 ---
 
-## 🗄️ Supabase 마이그레이션 적용 안내
+## 🗄️ Supabase Migrations
 
-Supabase 대시보드의 **SQL Editor**에서 아래 마이그레이션 파일들을 번호 순서대로 실행합니다:
+Apply migrations sequentially in the Supabase **SQL Editor**:
 
-1. `001_comments_baseline.sql`: `comments` 테이블 기본 스키마 및 RLS 정책.
-2. `002_profiles_public_identity.sql`: 사용자 프로필, 닉네임, Public ID.
-3. `003_comment_votes.sql`: 좋아요/싫어요 투표 및 카운트 트리거.
-4. `004_comment_moderation.sql`: 댓글 신고 및 모니터링 테이블.
-5. `005_verify_schema.sql`: 스키마 정합성 검증 뷰 및 함수.
-6. `006_fix_linter_warnings.sql`: 성능 인덱스 최적화.
-7. `007_one_depth_replies.sql`: `parent_id` 외래키, 1단계 깊이 강제 트리거(`check_comment_one_depth()`), 활성 대댓글 확인 함수(`comment_has_active_replies()`).
+1. `001_comments_baseline.sql`: Core `comments` table and baseline RLS policies.
+2. `002_profiles_public_identity.sql`: Public profile, display name, and Public ID generation.
+3. `003_comment_votes.sql`: Comment reaction tables and server-side count triggers.
+4. `004_comment_moderation.sql`: Moderation and reporting tables.
+5. `005_verify_schema.sql`: Schema integrity verification views and helpers.
+6. `006_fix_linter_warnings.sql`: Performance and index optimizations.
+7. `007_one_depth_replies.sql`: Foreign key `parent_id`, 1-depth constraint trigger (`check_comment_one_depth()`), and active reply checker function (`comment_has_active_replies()`).
 
-### 📌 대댓글 정책 및 향후 2단계 이상 중첩 대댓글 안내
-- **현재 구현 정책**: 데이터베이스 트리거 수준에서 대댓글의 대댓글(2단계 이상 깊이)을 엄격히 차단합니다. 부모 댓글은 여러 개의 1단계 대댓글을 가질 수 있습니다.
-- **향후 계획**: 2단계 이상의 다단계 중첩 대댓글(Nested Replies)은 본 MVP 단계에서 의도적으로 제외되었습니다. 향후 지원 시에는 `007_one_depth_replies.sql` 트리거를 수정하는 DB 마이그레이션과 재귀적 트리 렌더링 컴포넌트의 도입이 필요합니다.
-
----
-
-## ⚠️ 알려진 제한 사항 (Known Limitations)
-
-- **실시간 자동 업데이트 미지원**: 개인정보 보호와 배터리/네트워크 비용 절감을 위해 Supabase Realtime(WebSocket) 구독을 의도적으로 연결하지 않았습니다. 최신 댓글을 확인하려면 상단의 수동 새로고침(`↻`) 버튼을 눌러야 합니다.
-- **URL 기준 연결**: 댓글은 페이지 본문 내용이 아닌 순수 정규화 URL에 연결되므로, URL이 동일하지만 내용이 동적으로 완전히 바뀌는 일부 웹앱의 경우 별도의 주의가 필요합니다.
+### 📌 Reply Policy & Deferred Multi-Level Nesting
+- **Current Policy**: Multiple sibling replies sharing one active top-level parent are supported. Reply-to-reply nesting (>1 depth) is strictly prevented by database triggers.
+- **Future Plan**: Deeper multi-level nesting is intentionally deferred. Supporting it will require a database migration altering the `check_comment_one_depth()` trigger and implementing a recursive thread tree component.
 
 ---
 
-## 🧪 수동 기능 검증 가이드 (Manual Verification)
+## ⚠️ Known Limitations
 
-1. **프라이버시 검증**:
-   - 개발자 도구(F12) Network 탭을 열어둔 상태로 브라우저 탭을 전환하거나 페이지를 탐색합니다.
-   - 확장 프로그램이 URL 정보를 담은 네트워크 요청을 단 1건도 발송하지 않는지 확인합니다.
-   - 팝업/사이드 패널을 열고 새로고침을 누를 때만 해당 정규화 URL 요청이 발생하는지 확인합니다.
-2. **다중 형제 대댓글 검증**:
-   - 활성 최상위 댓글 P를 작성합니다.
-   - P의 `↳ 답글` 버튼을 눌러 인라인 폼에서 '대댓글 A'를 등록합니다.
-   - 다시 P의 `↳ 답글` 버튼을 눌러 새 인라인 폼을 열고 '대댓글 B'를 등록합니다.
-   - 두 대댓글이 P 하단에 작성일시 오름차순으로 정상 노출되는지 확인합니다.
-   - 대댓글 A, B 자체에는 답글 버튼이 나타나지 않는지 확인합니다.
-3. **삭제된 부모 댓글 검증**:
-   - 대댓글이 달린 부모 댓글을 삭제합니다.
-   - 부모 댓글이 "삭제된 댓글입니다"로 바뀌고, 기존 대댓글은 맥락 유지를 위해 그대로 표시되는지 확인합니다.
-   - 삭제된 부모 댓글에는 `↳ 답글` 버튼이 사라져 새 답글 작성이 불가함을 확인합니다.
-4. **내 댓글 검증**:
-   - 댓글을 작성한 후 하단 '내 댓글' 탭으로 이동합니다.
-   - 내가 작성한 댓글 목록이 정상적으로 조회되며, '원문 보기' 클릭 시 해당 웹페이지가 새 탭으로 열리는지 확인합니다.
-5. **테마 설정 지속성 검증**:
-   - '설정' 탭에서 라이트/다크/시스템 모드를 변경합니다.
-   - 팝업을 닫았다가 다시 열었을 때 선택한 테마가 유지되는지 확인합니다.
-6. **페이지네이션 및 읽기 위치 보존 검증**:
-   - 10개 초과의 댓글 스레드가 있는 페이지에서 하단 페이지네이션 바(`< 이전`, `1 / N`, `다음 >`)가 표시되는지 확인합니다.
-   - `다음 >` 클릭 시 네트워크 요청 없이 즉시 다음 페이지 스레드가 노출되며, 부모 댓글과 대댓글이 같은 페이지에 온전히 묶여 있는지 확인합니다.
-   - 새로고침 시 기존에 머물던 페이지 위치가 유지되는지 확인합니다.
-7. **글자 크기 및 컴팩트 헤더 검증**:
-   - '설정' 탭에서 글자 크기를 '작게', '보통', '크게'로 변경했을 때 사이드 패널 전체 글자 크기가 즉시 스케일링되고 팝업 재실행 후에도 설정이 유지되는지 확인합니다.
-   - 작성자 닉네임 바로 옆에 좋아요/싫어요 버튼이 인라인으로 컴팩트하게 배치되어 있으며, 긴 닉네임이 말줄임표(...)로 깔끔히 처리되는지 확인합니다.
+- **No Real-Time Push Updates**: WebSocket realtime subscriptions are intentionally omitted to safeguard privacy, minimize client battery usage, and reduce unnecessary server load. Use the manual refresh (`↻`) button to reload comments.
+- **Normalized URL Matching**: Comments are tied to the canonical normalized URL (`origin + pathname`). Websites with dynamic internal state sharing identical URLs will share a single comment space.
+
+---
+
+## 🧪 Manual Verification Checklist
+
+1. **Privacy Verification**:
+   - Open Chrome DevTools Network panel, switch tabs, and navigate through websites.
+   - Verify that no URL data or background queries are dispatched.
+   - Confirm that network requests only occur when opening the popup and clicking refresh.
+2. **Multi-Sibling Replies**:
+   - Post top-level comment P.
+   - Click `↳ Reply` to submit Reply A.
+   - Click `↳ Reply` again on parent P to submit Reply B.
+   - Verify Reply A and Reply B render in chronological order beneath parent P, and neither reply shows a Reply button.
+3. **Soft Deletion & Context Retention**:
+   - Soft-delete a top-level parent that has replies.
+   - Verify the parent changes to `"This comment was deleted."` while replies remain visible.
+   - Confirm the deleted parent no longer displays a Reply button.
+4. **My Comments Verification**:
+   - Post a comment, navigate to the My Comments tab, and verify the comment is listed.
+   - Click "Open original page" and verify it opens in a new tab.
+5. **Theme Persistence**:
+   - Change theme between System, Light, and Dark mode in Settings.
+   - Close and reopen the extension to confirm the theme persists.
+6. **Thread Pagination & Position Preservation**:
+   - On a page with >10 comment threads, verify the pagination navigation bar (`< Prev`, `1 / N`, `Next >`) is displayed.
+   - Click `Next >` and verify that page 2 renders immediately with no network request, keeping parent and all replies grouped together.
+   - Trigger a refresh and confirm reading position remains on the current page.
+7. **Font Size & Compact Header Verification**:
+   - Switch font size between Small, Default, and Large in Settings, confirming the UI scales properly across the extension.
+   - Confirm Like and Dislike reactions are rendered directly beside author names in `.comment-header-left` without wrapping, and long usernames are cleanly truncated with an ellipsis.
