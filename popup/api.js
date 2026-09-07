@@ -135,10 +135,20 @@ export async function handleDeleteComment(id) {
   try {
     showLoading(getMessage("stateLoading"));
     const supabase = window.supabaseClient;
-    const { error } = await supabase
-      .from('comments')
-      .update({ is_deleted: true })
-      .eq('id', id);
+
+    // 1. Try secure RPC function (Zero-Trust pattern)
+    let { error } = await supabase.rpc('soft_delete_comment', {
+      p_comment_id: id
+    });
+
+    // 2. Fallback to direct update if RPC is not yet registered in database
+    if (error && (error.code === 'PGRST202' || error.message?.includes('function') || error.code === '42883')) {
+      const fallbackResult = await supabase
+        .from('comments')
+        .update({ is_deleted: true })
+        .eq('id', id);
+      error = fallbackResult.error;
+    }
 
     if (error) throw error;
 

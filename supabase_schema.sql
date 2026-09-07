@@ -474,3 +474,38 @@ drop trigger if exists on_vote_updated on comment_votes;
 create trigger on_vote_updated
   after update of vote_type on comment_votes
   for each row execute function update_comment_vote_count();
+
+-- ====================================================================
+-- 8. 제로 트러스트 소프트 삭제 RPC 함수
+-- ====================================================================
+CREATE OR REPLACE FUNCTION public.soft_delete_comment(p_comment_id bigint)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_author_id uuid;
+BEGIN
+  SELECT author_id INTO v_author_id
+  FROM public.comments
+  WHERE id = p_comment_id;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Comment not found (id: %)', p_comment_id;
+  END IF;
+
+  IF v_author_id <> auth.uid() THEN
+    RAISE EXCEPTION 'Permission denied: cannot delete another user comment';
+  END IF;
+
+  UPDATE public.comments
+  SET is_deleted = TRUE,
+      updated_at = NOW()
+  WHERE id = p_comment_id;
+
+  RETURN TRUE;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.soft_delete_comment(bigint) TO authenticated;
