@@ -1,6 +1,6 @@
 # 🏛️ URLComments Architecture & Technical Overview
 
-This document outlines the technical design, system architecture, modular components, and core engineering principles of the **URLComments** Chrome extension.
+🌍 [English](ARCHITECTURE.md) | [한국어](ko/ARCHITECTURE.md) | [日本語](ja/ARCHITECTURE.md) | [中文](zh/ARCHITECTURE.md) | [Español](es/ARCHITECTURE.md)
 
 ---
 

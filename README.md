@@ -6,6 +6,29 @@
 
 ---
 
+## 🚀 Quick Start & Usage
+
+### 1. Installation (Load Unpacked Extension)
+1. Download the latest **`URLComments-vX.X.X.zip`** from [GitHub Releases](https://github.com/s4ngwoo/URLComments/releases).
+2. Unzip the downloaded archive to a local folder.
+3. Open Google Chrome and navigate to `chrome://extensions`.
+4. Enable **Developer mode** using the toggle switch in the top-right corner.
+5. Click **Load unpacked** (top-left) and select the unzipped extension directory.
+6. Pin the URLComments icon to your browser toolbar for quick access.
+
+### 2. How to Use
+1. **Browse any webpage**: Navigate to any site where you want to read or leave comments (articles, documentation, blogs, e-commerce, etc.).
+2. **Open Extension**: Click the URLComments icon in your toolbar to open the side panel / popup.
+3. **Sign In**: Click **Sign in with Google** (one-time authentication via secure OAuth).
+4. **Discover Comments**: Read short public comments anchored to the current page's normalized URL (`origin + pathname`).
+5. **Engage & Discuss**:
+   - Type your comment (up to 1,000 characters) and click **Post**.
+   - Click `↳ Reply` on any parent comment to participate in 1-depth threaded replies.
+   - Click 👍 (Like) or 👎 (Dislike) beside an author's name to react.
+6. **Manage & Customize**: Use the bottom navigation bar to review your comment history in **My Comments**, or adjust themes (Dark/Light), font sizes, and UI language in **Settings**.
+
+---
+
 ## 🛡️ Privacy-First Principle
 
 URLComments strictly protects your browsing privacy and personal history:

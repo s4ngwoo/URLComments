@@ -5,3 +5,4 @@ lib/config.js
 .DS_Store
 notes/
 scratch/
+*.zip

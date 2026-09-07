@@ -6,6 +6,29 @@
 
 ---
 
+## 🚀 Inicio Rápido y Modo de Uso (Usage)
+
+### 1. Instalación (Cargar Extensión Descomprimida)
+1. Descarga la versión más reciente de **`URLComments-vX.X.X.zip`** desde [GitHub Releases](https://github.com/s4ngwoo/URLComments/releases).
+2. Descomprime el archivo ZIP descargado en una carpeta local.
+3. Abre Google Chrome y accede a `chrome://extensions`.
+4. Activa el **Modo de desarrollador** en la esquina superior derecha.
+5. Haz clic en **Cargar descomprimida** (arriba a la izquierda) y selecciona la carpeta descomprimida.
+6. Fija el icono de URLComments en la barra de herramientas de tu navegador.
+
+### 2. Cómo Usar la Extensión
+1. **Navega por la Web**: Abre cualquier página web (artículo, blog, documentación, tienda online, etc.).
+2. **Abre la Extensión**: Haz clic en el icono de URLComments en la barra de herramientas para abrir el panel lateral o popup.
+3. **Inicia Sesión**: Pulsa el botón de Google para iniciar sesión rápidamente (solo la primera vez).
+4. **Descubre Comentarios**: Lee los comentarios públicos asociados a la URL normalizada actual (`origin + pathname`).
+5. **Participa e Interactúa**:
+   - Escribe tu opinión (hasta 1.000 caracteres) y haz clic en **Publicar**.
+   - Haz clic en `↳ Responder` en cualquier comentario para dejar una respuesta encadenada de 1 nivel.
+   - Pulsa 👍 (Me gusta) o 👎 (No me gusta) junto al nombre del autor para reaccionar.
+6. **Mis Comentarios y Ajustes**: Usa la barra inferior para consultar tu historial de comentarios o personalizar el tema (Oscuro/Claro), tamaño de fuente e idioma.
+
+---
+
 ## 🛡️ Principio de Privacidad
 
 URLComments protege estrictamente tu historial de navegación y tu privacidad:
@@ -199,3 +222,19 @@ Aplica las migraciones secuencialmente desde el **SQL Editor** en el panel de co
 7. **Verificación de Fuente y Cabecera Compacta**:
    - Cambia el tamaño de fuente (Pequeño, Normal, Grande). Verifica el cambio inmediato de interfaz y la persistencia al reabrir la extensión.
    - Comprueba que los botones de Me gusta y No me gusta aparecen agrupados justo a la derecha del nombre del usuario y que un usuario con nombre largo se trunca (...) limpiamente sin romper la cabecera.
+
+---
+
+## 🤝 Cómo Contribuir (Contributing)
+
+¡Agradecemos enormemente cualquier contribución, reporte de fallos y sugerencias!
+
+- **Guía de Contribución**: Consulta [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) para conocer la configuración del entorno de desarrollo local, estándares de código y flujo de PRs.
+- **Descripción de la Arquitectura**: Lee [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) para comprender el diseño del sistema y las garantías de privacidad.
+- **Inicio Rápido**:
+  ```bash
+  npm install              # Instalar dependencias de desarrollo
+  npm test                 # Ejecutar la suite de pruebas automáticas (Jest)
+  npm test test/locales    # Validar la paridad de claves de traducción en los 6 idiomas
+  ```
+- **Prioridad a la Privacidad**: Toda contribución debe respetar estrictamente nuestras garantías de privacidad (sin rastreo de pestañas en segundo plano, solicitudes únicamente ante acciones explícitas del usuario y normalización estricta de URLs).

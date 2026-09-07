@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build:zip": "zip -r URLComments.zip manifest.json background.js popup content lib _locales assets utils -x \"*.test.js\" \"*__tests__*\" \"*.DS_Store*\""
   },
   "repository": {
     "type": "git",
