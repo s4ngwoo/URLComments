@@ -1,7 +1,7 @@
 {
   "name": "urlcomments",
   "version": "1.0.0",
-  "description": "🌎 [English Version](README.en.md)",
+  "description": "Privacy-first Chrome extension for public comments on any normalized URL",
   "main": "index.js",
   "directories": {
     "lib": "lib"

@@ -5,5 +5,4 @@ lib/config.js
 .DS_Store
 *.md
 !README.md
-!readme.ko.md
-!readme.en.md
+!README.*.md

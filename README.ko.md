@@ -1,6 +1,6 @@
 # 💬 URLComments (어디든 남기는 내 의견)
 
-🌍 [🇰🇷 한국어](README.md) | [🇺🇸 English](README.en.md) | [🇯🇵 日本語](README.ja.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇹🇼 繁體中文](README.zh-TW.md) | [🇪🇸 Español](README.es.md)
+🌍 [🇺🇸 English](README.md) | [🇰🇷 한국어](README.ko.md) | [🇯🇵 日本語](README.ja.md) | [🇨🇳 简体中文](README.zh-CN.md) | [🇹🇼 繁體中文](README.zh-TW.md) | [🇪🇸 Español](README.es.md)
 
 **URLComments**는 웹상의 모든 정규화된 URL을 하나의 공개 소통 공간으로 만들어주는 프라이버시 우선(Privacy-First) 크롬 확장 프로그램입니다. 기사, 블로그, 쇼핑몰 등 URL이 존재하는 웹페이지라면 어디서든 사람들과 짧은 공개 댓글을 나누고 소통할 수 있습니다.
 
