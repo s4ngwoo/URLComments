@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/s4ngwoo/URLComments/issues"
   },
-  "homepage": "https://github.com/s4ngwoo/URLComments#readme",
+  "homepage": "https://urlcomments.leesangwoo.com/",
   "devDependencies": {
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",

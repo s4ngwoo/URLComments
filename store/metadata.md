@@ -25,10 +25,15 @@ Have you ever read an article, shopped for a product, or watched a video and wis
 
 Be the first to leave a treasure comment on your favorite sites!
 
-## 4. Category
+## 4. Official URLs
+- **Homepage:** https://urlcomments.leesangwoo.com/
+- **Privacy Policy:** https://urlcomments.leesangwoo.com/privacy/
+- **Terms of Service:** https://urlcomments.leesangwoo.com/terms/
+
+## 5. Category
 Social & Communication
 
-## 5. Screenshots Guide
+## 6. Screenshots Guide
 Please prepare 1 to 5 screenshots (1280x800 or 640x400) showcasing the following scenarios:
 1. **Side Panel Overview**: The extension opened as a side panel on a popular website, showing the "Sign in with Google" button.
 2. **Comment List & Voting**: A populated list of comments with visible Like (👍) and Dislike (👎) buttons and vote counts.

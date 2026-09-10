@@ -8,6 +8,8 @@
 
 **URLComments** 是一款隱私優先 (Privacy-First) 的 Chrome 擴充功能，它將網路上所有規範化的 URL 轉變為公共的討論空間。無論在文章、部落格、文件還是購物網站，只要有 URL 存在，您都可以與他人留下簡短的公開留言並進行交流。
 
+**官網:** [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/) · [隱私權政策](https://urlcomments.leesangwoo.com/privacy/) · [服務條款](https://urlcomments.leesangwoo.com/terms/)
+
 ---
 
 ## 🚀 快速上手與使用指南 (Usage)

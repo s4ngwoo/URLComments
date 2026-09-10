@@ -2,7 +2,7 @@
 
 **Last Updated:** September 2026
 
-These Terms of Service ("Terms") govern your use of the URLComments Chrome Extension ("the Extension," "we," "our," or "us"). By installing or using the Extension, you agree to these Terms. If you do not agree, do not use the Extension.
+These Terms of Service ("Terms") govern your use of the URLComments Chrome Extension ("the Extension," "we," "our," or "us"). The official website is [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/). These terms are also published at [https://urlcomments.leesangwoo.com/terms/](https://urlcomments.leesangwoo.com/terms/). By installing or using the Extension, you agree to these Terms. If you do not agree, do not use the Extension.
 
 ## 1. The Service
 URLComments lets you read and post comments associated with the URL of the webpage you are viewing. Comments are stored on our backend and shown to other users who view the same normalized URL.
@@ -39,7 +39,7 @@ You agree not to:
 - Use the Extension for any unlawful purpose
 
 ## 5. Privacy
-Our collection and use of information is described in the [Privacy Policy](https://github.com/s4ngwoo/URLComments/blob/main/store/privacy_policy.md). By using the Extension, you also acknowledge that policy.
+Our collection and use of information is described in the [Privacy Policy](https://urlcomments.leesangwoo.com/privacy/). By using the Extension, you also acknowledge that policy.
 
 ## 6. Third-Party Services
 The Extension uses third-party services, including Google (sign-in) and Supabase (authentication and data storage). Their terms and privacy policies apply to their services. We are not responsible for those services except as required by law.
@@ -61,4 +61,4 @@ We may update these Terms from time to time. The "Last Updated" date will change
 You may stop using the Extension by uninstalling it and signing out. We may stop offering the Extension or restrict access at any time, including if these Terms are violated.
 
 ## 11. Contact
-Questions about these Terms can be sent through the Chrome Web Store support tab for URLComments, or by opening an issue at [https://github.com/s4ngwoo/URLComments/issues](https://github.com/s4ngwoo/URLComments/issues).
+Questions about these Terms can be sent through the Chrome Web Store support tab for URLComments, the official website at [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/), or by opening an issue at [https://github.com/s4ngwoo/URLComments/issues](https://github.com/s4ngwoo/URLComments/issues).

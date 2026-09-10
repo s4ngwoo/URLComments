@@ -8,6 +8,8 @@
 
 **URLComments**는 웹상의 모든 정규화된 URL을 하나의 공개 소통 공간으로 만들어주는 프라이버시 우선(Privacy-First) 크롬 확장 프로그램입니다. 기사, 블로그, 쇼핑몰 등 URL이 존재하는 웹페이지라면 어디서든 사람들과 짧은 공개 댓글을 나누고 소통할 수 있습니다.
 
+**웹사이트:** [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/) · [개인정보처리방침](https://urlcomments.leesangwoo.com/privacy/) · [이용약관](https://urlcomments.leesangwoo.com/terms/)
+
 ---
 
 ## 🚀 빠른 시작 및 사용 방법 (Quick Start & Usage)

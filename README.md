@@ -8,6 +8,8 @@
 
 **URLComments** is a privacy-first Chrome extension that turns every normalized web URL into a public discussion space. Leave and discover short public comments on articles, blog posts, documentation, and shopping sites wherever a URL exists.
 
+**Website:** [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/) · [Privacy Policy](https://urlcomments.leesangwoo.com/privacy/) · [Terms of Service](https://urlcomments.leesangwoo.com/terms/)
+
 ---
 
 ## 🚀 Quick Start & Usage

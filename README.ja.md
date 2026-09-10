@@ -8,6 +8,8 @@
 
 **URLComments** は、ウェブ上の正規化されたURLをパブリックなディスカッションスペースに変える、プライバシー重視(Privacy-First)のChrome拡張機能です。記事、ブログ、ドキュメント、ショッピングサイトなど、URLが存在するウェブページならどこでも、短い公開コメントを残してコミュニケーションをとることができます。
 
+**ウェブサイト:** [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/) · [プライバシーポリシー](https://urlcomments.leesangwoo.com/privacy/) · [利用規約](https://urlcomments.leesangwoo.com/terms/)
+
 ---
 
 ## 🚀 クイックスタートと使い方 (Usage)

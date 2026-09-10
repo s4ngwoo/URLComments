@@ -2,6 +2,9 @@
 
 **Last Updated:** September 2026
 
+Official website: [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/)  
+This policy is also published at [https://urlcomments.leesangwoo.com/privacy/](https://urlcomments.leesangwoo.com/privacy/).
+
 ## 1. Introduction
 URLComments ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and handle your data when you use the URLComments Chrome Extension ("the Extension").
 
@@ -33,4 +36,4 @@ The Extension requests the following permissions for specific functional reasons
 You can log out of the Extension at any time, which will remove the local session from your browser. You can also revoke OAuth access via your Google Account settings.
 
 ## 7. Contact Us
-If you have any questions or concerns about this Privacy Policy or our data practices, please contact the developer via the Chrome Web Store support tab.
+If you have any questions or concerns about this Privacy Policy or our data practices, please contact the developer via the Chrome Web Store support tab, or see the official website at [https://urlcomments.leesangwoo.com/](https://urlcomments.leesangwoo.com/).
