@@ -32,17 +32,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 // 4. Content Script에서 SPA 감지 시 상태 저장 및 사이드 패널로 알림
 // 5. 인증 흐름을 백그라운드에서 처리하기 위한 리스너 추가
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+function handleRuntimeMessage(message, sender, sendResponse) {
   if (message.type === 'SPA_DETECTED' && sender.tab) {
     const tabId = sender.tab.id;
     const key = getSpaKey(tabId);
-    
+
     // 로컬 스토리지에 해당 탭이 SPA임을 기록
     chrome.storage.local.set({ [key]: true }, () => {
       // 사이드 패널(popup.js) 측으로 SPA_DETECTED 브로드캐스트
       chrome.runtime.sendMessage({ type: 'SPA_DETECTED', tabId: tabId }).catch(() => {});
     });
-  } else if (message.type === 'LAUNCH_WEB_AUTH_FLOW') {
+    return false;
+  }
+
+  if (message.type === 'LAUNCH_WEB_AUTH_FLOW') {
     chrome.identity.launchWebAuthFlow(
       { url: message.url, interactive: message.interactive },
       (authUrl) => {
@@ -55,4 +58,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     );
     return true; // 비동기 응답 처리를 위해 true 반환
   }
-});
+
+  return false;
+}
+
+chrome.runtime.onMessage.addListener(handleRuntimeMessage);
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { getSpaKey, handleRuntimeMessage, notifyTabChanged };
+}
