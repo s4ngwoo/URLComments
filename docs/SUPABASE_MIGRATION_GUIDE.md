@@ -83,6 +83,14 @@ order by tablename, policyname;
 - **Purpose**: Adds `parent_id` column to `comments`, creates tree relationship index, and enforces 1-depth hierarchy constraints.
 - **Action**: Paste file content into SQL Editor and click **Run**.
 
+### Step 8: `supabase/migrations/008_zero_trust_soft_delete_rpc.sql`
+- **Purpose**: Adds the SECURITY DEFINER `soft_delete_comment` RPC so authors can soft-delete despite RLS post-UPDATE SELECT.
+- **Action**: Paste file content into SQL Editor and click **Run**. If this already ran in production, continue to Step 9.
+
+### Step 9: `supabase/migrations/009_fix_soft_delete_anon_bypass.sql` **(required on existing projects that already ran 008)**
+- **Purpose**: Closes an unauthenticated delete hole. PostgreSQL grants EXECUTE to PUBLIC by default, and `author_id <> auth.uid()` does not reject `auth.uid() IS NULL`, so the anon key could soft-delete any comment.
+- **Action**: Paste file content into SQL Editor and click **Run**. Idempotent (`CREATE OR REPLACE` + `REVOKE`/`GRANT`).
+
 ---
 
 ## 5. Rollback Policy

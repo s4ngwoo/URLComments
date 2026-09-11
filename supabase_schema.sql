@@ -486,7 +486,10 @@ SET search_path = public
 AS $$
 DECLARE
   v_author_id uuid;
+  v_uid uuid;
 BEGIN
+  v_uid := auth.uid();
+
   SELECT author_id INTO v_author_id
   FROM public.comments
   WHERE id = p_comment_id;
@@ -495,17 +498,20 @@ BEGIN
     RAISE EXCEPTION 'Comment not found (id: %)', p_comment_id;
   END IF;
 
-  IF v_author_id <> auth.uid() THEN
+  -- NULL-safe owner check: anon (uid IS NULL) and non-authors are denied
+  IF v_uid IS NULL OR v_author_id IS DISTINCT FROM v_uid THEN
     RAISE EXCEPTION 'Permission denied: cannot delete another user comment';
   END IF;
 
   UPDATE public.comments
   SET is_deleted = TRUE,
       updated_at = NOW()
-  WHERE id = p_comment_id;
+  WHERE id = p_comment_id
+    AND author_id = v_uid;
 
-  RETURN TRUE;
+  RETURN FOUND;
 END;
 $$;
 
+REVOKE EXECUTE ON FUNCTION public.soft_delete_comment(bigint) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.soft_delete_comment(bigint) TO authenticated;
