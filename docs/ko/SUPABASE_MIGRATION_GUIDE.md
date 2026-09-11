@@ -137,6 +137,14 @@ where table_schema = 'public' and table_name = 'comments' and column_name = 'aut
 - **실행**: SQL Editor에서 전체 복사 후 `Run`.
 - **성공 확인**: 각 결과 그리드에서 5개 테이블(`comments`, `profiles`, `comment_votes`, `reported_comments`, `user_profiles`)이 모두 정상 표시되는지 확인.
 
+### Step 8: `supabase/migrations/008_zero_trust_soft_delete_rpc.sql`
+- **역할**: RLS post-UPDATE SELECT 충돌을 우회하는 SECURITY DEFINER `soft_delete_comment` RPC 추가.
+- **실행**: SQL Editor에서 전체 복사 후 `Run`. 이미 적용된 프로젝트는 Step 9로 진행.
+
+### Step 9: `supabase/migrations/009_fix_soft_delete_anon_bypass.sql` **(008을 이미 실행한 운영 DB에서 필수)**
+- **역할**: 비인증 소프트 삭제 구멍을 닫습니다. PostgreSQL은 새 함수 EXECUTE를 PUBLIC에 기본 부여하고, `author_id <> auth.uid()`는 `auth.uid() IS NULL`(anon)일 때 거부 분기에 들어가지 않습니다.
+- **실행**: SQL Editor에서 전체 복사 후 `Run`. 멱등 (`CREATE OR REPLACE` + `REVOKE`/`GRANT`).
+
 ---
 
 ## 6. 롤백 원칙 (Rollback Policy)
