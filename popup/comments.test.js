@@ -9,6 +9,7 @@ import {
   compareCommentsChronological,
   groupCommentThreads,
   renderCommentList,
+  escapeHtml,
   paginateThreads,
   THREADS_PER_PAGE,
   changeCommentPage,
@@ -18,6 +19,7 @@ import {
   setCurrentCommentPage,
   resetPagination
 } from './comments.js';
+import { state } from './state.js';
 import { applyFontSize } from './settings.js';
 import { initElements } from './ui.js';
 import fs from 'fs';
@@ -228,6 +230,7 @@ describe('comments.js Pure Functions', () => {
         <div id="app-footer" class="hidden"></div>
       `;
       initElements();
+      state.currentUser = null;
       global.chrome = {
         i18n: {
           getMessage: jest.fn((key) => key)
@@ -293,6 +296,36 @@ describe('comments.js Pure Functions', () => {
       // Active reply is still rendered
       const replyContainer = items[0].querySelector('#replies-p1');
       expect(replyContainer.querySelectorAll('.reply-item').length).toBe(1);
+    });
+
+    it('escapes HTML in comment bodies, author names, and profile ids', () => {
+      expect(escapeHtml('<img src=x onerror="alert(1)">')).toBe(
+        '&lt;img src=x onerror=&quot;alert(1)&quot;&gt;'
+      );
+      expect(escapeHtml("a & b 'c'")).toBe('a &amp; b &#039;c&#039;');
+      expect(escapeHtml('')).toBe('');
+      expect(escapeHtml(null)).toBe('');
+
+      state.currentUser = { id: 'viewer' };
+      renderCommentList([{
+        id: '1',
+        parent_id: null,
+        author_id: 'attacker',
+        author_name: '<img src=x onerror=alert(1)>',
+        content: '<script>alert(1)</script><b>ok</b>',
+        created_at: '2026-09-06T10:00:00Z',
+        is_deleted: false,
+      }], {}, {
+        attacker: { display_name: '"><img src=x>', public_id: 'id"><script>' },
+      }, {});
+
+      const item = document.querySelector('.comment-item');
+      expect(item.querySelector('script')).toBeNull();
+      expect(item.querySelector('img')).toBeNull();
+      expect(item.querySelector('.comment-body').innerHTML).toContain('&lt;script&gt;');
+      expect(item.querySelector('.comment-author').innerHTML).toContain('&lt;img');
+      expect(document.getElementById('comment-edit-input-1').value)
+        .toBe('<script>alert(1)</script><b>ok</b>');
     });
 
     it('hides deleted parent completely if it has no active replies', async () => {

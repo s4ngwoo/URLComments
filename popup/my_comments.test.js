@@ -112,6 +112,21 @@ describe('my_comments.js', () => {
       expect(listItems[0].querySelector('.my-comment-body').textContent).toBe('Great read!');
       expect(listItems[0].querySelector('.btn-open-url').getAttribute('data-url')).toBe('https://example.com/article');
     });
+
+    it('escapes markup in comment body and url attributes', () => {
+      renderMyComments([{
+        id: 'xss',
+        url: 'https://example.com/" onclick="alert(1)',
+        content: '<img src=x onerror=alert(1)>',
+        created_at: '2026-09-06T12:00:00Z'
+      }]);
+
+      const item = document.querySelector('.my-comment-item');
+      expect(item.querySelector('img')).toBeNull();
+      expect(item.querySelector('.my-comment-body').innerHTML).toContain('&lt;img');
+      expect(item.querySelector('.btn-open-url').getAttribute('onclick')).toBeNull();
+      expect(item.querySelector('.my-comment-url').getAttribute('title')).toContain('https://example.com/');
+    });
   });
 
   describe('loadMyComments', () => {
