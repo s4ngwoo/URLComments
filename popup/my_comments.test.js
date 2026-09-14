@@ -112,6 +112,30 @@ describe('my_comments.js', () => {
       expect(listItems[0].querySelector('.my-comment-body').textContent).toBe('Great read!');
       expect(listItems[0].querySelector('.btn-open-url').getAttribute('data-url')).toBe('https://example.com/article');
     });
+
+    it('escapes HTML in content, url, and data-url so markup is not executed', () => {
+      renderMyComments([
+        {
+          id: 'xss',
+          url: 'https://example.com/"><img src=x onerror=alert(1)>',
+          content: '<img src=x onerror="alert(1)"><script>alert(1)</script>',
+          created_at: '2026-09-06T12:00:00Z',
+          parent_id: 'p1'
+        }
+      ]);
+
+      expect(document.querySelectorAll('script').length).toBe(0);
+      expect(document.querySelectorAll('img').length).toBe(0);
+      const body = document.querySelector('.my-comment-body');
+      expect(body.innerHTML).toContain('&lt;img');
+      expect(body.innerHTML).toContain('&lt;script&gt;');
+      expect(body.textContent).toContain('<script>alert(1)</script>');
+      const urlEl = document.querySelector('.my-comment-url');
+      expect(urlEl.getAttribute('title')).toBe('https://example.com/"><img src=x onerror=alert(1)>');
+      const openBtn = document.querySelector('.btn-open-url');
+      expect(openBtn.getAttribute('data-url')).toBe('https://example.com/"><img src=x onerror=alert(1)>');
+      expect(openBtn.nextElementSibling).toBeNull();
+    });
   });
 
   describe('loadMyComments', () => {
@@ -168,6 +192,29 @@ describe('my_comments.js', () => {
       await loadMyComments();
 
       expect(document.getElementById('my-comments-error').classList.contains('hidden')).toBe(false);
+    });
+
+    it('does not start a second fetch while one is already in flight', async () => {
+      state.currentUser = { id: 'test-user-123' };
+
+      let resolveOrder;
+      const orderPromise = new Promise((resolve) => {
+        resolveOrder = resolve;
+      });
+      const mockOrder = jest.fn().mockReturnValue(orderPromise);
+      const mockEqDeleted = jest.fn().mockReturnValue({ order: mockOrder });
+      const mockEqAuthor = jest.fn().mockReturnValue({ eq: mockEqDeleted });
+      const mockSelect = jest.fn().mockReturnValue({ eq: mockEqAuthor });
+      const mockFrom = jest.fn().mockReturnValue({ select: mockSelect });
+      window.supabaseClient = { from: mockFrom };
+
+      const first = loadMyComments();
+      const second = loadMyComments();
+      expect(mockFrom).toHaveBeenCalledTimes(1);
+
+      resolveOrder({ data: [], error: null });
+      await Promise.all([first, second]);
+      expect(mockFrom).toHaveBeenCalledTimes(1);
     });
   });
 });
