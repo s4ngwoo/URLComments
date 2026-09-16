@@ -127,6 +127,10 @@ where table_schema = 'public' and table_name = 'comments' and column_name = 'aut
 - **성공 확인**: `comment_votes` 관련 트리거 4개 정상 등록.
 
 ### Step 4: `supabase/migrations/004_comment_moderation.sql`
+- **역할**: 파일명이 moderation이지만, 실제 내용은 `003_comment_votes.sql`과 동일합니다. 이미 003을 실행했다면 이 파일은 no-op입니다.
+- **실행**: 기존 순서 유지를 위해 실행해도 안전합니다. **신고 테이블과 댓글 UPDATE 방어 트리거는 Step 4b에서 적용합니다.**
+
+### Step 4b: `supabase/migrations/009_comment_moderation.sql`
 - **역할**: `reported_comments` 테이블 생성, 자기 댓글 및 삭제 댓글 신고 차단 트리거 등록, `comments` 테이블의 수정/Soft Delete 상태 전이 방어 트리거(`update_comments_before_update`) 등록.
 - **핵심 아키텍처**: 투표 갱신 트리거와 충돌하지 않도록 `app.is_vote_count_update` 플래그를 인식하여 투표 시 불필요한 `updated_at` 갱신 및 `like_count` 덮어쓰기 버그를 방지합니다.
 - **실행**: SQL Editor에서 전체 복사 후 `Run`.
