@@ -68,7 +68,7 @@ order by tablename, policyname;
 - **Action**: Paste file content into SQL Editor and click **Run**.
 
 ### Step 4: `supabase/migrations/004_comment_moderation.sql`
-- **Purpose**: Creates `reported_comments` table, prevents self-reporting and deleted comment reporting, and registers state transition protection triggers on `comments`.
+- **Purpose**: Filename says moderation, but the file is a duplicate of `003_comment_votes.sql`. Safe to run (idempotent no-op if 003 already applied). Real moderation objects are in Step 8.
 - **Action**: Paste file content into SQL Editor and click **Run**.
 
 ### Step 5: `supabase/migrations/005_verify_schema.sql`
@@ -82,6 +82,11 @@ order by tablename, policyname;
 ### Step 7: `supabase/migrations/007_one_depth_replies.sql`
 - **Purpose**: Adds `parent_id` column to `comments`, creates tree relationship index, and enforces 1-depth hierarchy constraints.
 - **Action**: Paste file content into SQL Editor and click **Run**.
+
+### Step 8: `supabase/migrations/009_comment_moderation.sql`
+- **Purpose**: Restores `reported_comments` and the `update_comments_before_update` trigger. File `004_comment_moderation.sql` is a duplicate of `003_comment_votes.sql`, so these objects were never created by the numbered chain. Without this step, an authenticated author can `PATCH` their own row to change `url`, forge `like_count`/`dislike_count`, or undelete.
+- **Action**: Paste file content into SQL Editor and click **Run**.
+- **Success check**: `reported_comments` exists; `before_update_comments` is present on `public.comments`.
 
 ---
 

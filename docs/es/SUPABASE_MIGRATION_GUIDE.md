@@ -20,7 +20,8 @@ En el **Editor SQL** del panel de Supabase, ejecuta los archivos de `supabase/mi
 1. `001_comments_baseline.sql`: Tablas principales, índices y políticas RLS iniciales.
 2. `002_profiles_public_identity.sql`: Tabla `profiles`, validación de ID público y nombres visibles.
 3. `003_comment_votes.sql`: Votaciones y disparadores de recuento atómico.
-4. `004_comment_moderation.sql`: Tabla de reportes y protección de transiciones de estado.
+4. `004_comment_moderation.sql`: Duplicado de `003` (no crea la tabla de reportes).
 5. `005_verify_schema.sql`: Consulta de comprobación de esquema (solo lectura).
 6. `006_fix_linter_warnings.sql`: Corrección de advertencias de linter en Supabase.
 7. `007_one_depth_replies.sql`: Soporte para respuestas de 1 nivel de profundidad (`parent_id`).
+8. `009_comment_moderation.sql`: Restaura `reported_comments` y `update_comments_before_update` (obligatorio).

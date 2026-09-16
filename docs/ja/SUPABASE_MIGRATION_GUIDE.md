@@ -20,7 +20,8 @@ Supabaseダッシュボードの **SQL Editor** で、`supabase/migrations/` 配
 1. `001_comments_baseline.sql`: 基本テーブル、インデックス、初期RLSポリシー。
 2. `002_profiles_public_identity.sql`: `profiles` テーブル、公開ID制約、表示名管理。
 3. `003_comment_votes.sql`: `comment_votes` テーブル、いいね/ひどいね集計トリガー。
-4. `004_comment_moderation.sql`: `reported_comments` 通報テーブルおよび状態遷移保護。
+4. `004_comment_moderation.sql`: `003` の重複（通報テーブルは作られない）。
 5. `005_verify_schema.sql`: 読み取り専用のスキーマ検証クエリ。
 6. `006_fix_linter_warnings.sql`: リンター警告の解消。
 7. `007_one_depth_replies.sql`: `parent_id` による1階層リプライ構造の確立。
+8. `009_comment_moderation.sql`: `reported_comments` と `update_comments_before_update` を復元（必須）。
