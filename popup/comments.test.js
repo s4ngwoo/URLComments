@@ -20,6 +20,7 @@ import {
 } from './comments.js';
 import { applyFontSize } from './settings.js';
 import { initElements } from './ui.js';
+import { state, resetState } from './state.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -854,6 +855,75 @@ describe('comments.js Pure Functions', () => {
         expect(replyItem).not.toBeNull();
         expect(replyItem.querySelector('.vote-group')).not.toBeNull();
         expect(replyItem.querySelector('.reply-button')).toBeNull();
+      });
+    });
+
+    describe('reported comment masking', () => {
+      beforeEach(() => {
+        resetState();
+        state.currentUser = { id: 'viewer' };
+      });
+
+      it('masks body and omits report button when userReports marks the comment reported', () => {
+        renderCommentList(
+          [{
+            id: '9',
+            parent_id: null,
+            author_id: 'other',
+            author_name: 'Other',
+            content: 'bad take',
+            created_at: '2026-09-06T10:00:00Z',
+            is_deleted: false
+          }],
+          {},
+          {},
+          { '9': true }
+        );
+
+        expect(document.querySelector('[data-action="report"]')).toBeNull();
+        expect(document.getElementById('comment-body-9').textContent).toContain('labelReported');
+        expect(document.getElementById('comment-body-9').textContent).not.toContain('bad take');
+      });
+
+      it('masks reported replies and keeps unreported siblings reportable', () => {
+        renderCommentList(
+          [
+            {
+              id: 'p1',
+              parent_id: null,
+              author_id: 'other',
+              content: 'parent',
+              created_at: '2026-09-06T10:00:00Z',
+              is_deleted: false
+            },
+            {
+              id: 'r1',
+              parent_id: 'p1',
+              author_id: 'other',
+              content: 'reported reply',
+              created_at: '2026-09-06T10:05:00Z',
+              is_deleted: false
+            },
+            {
+              id: 'r2',
+              parent_id: 'p1',
+              author_id: 'other',
+              content: 'clean reply',
+              created_at: '2026-09-06T10:06:00Z',
+              is_deleted: false
+            }
+          ],
+          {},
+          {},
+          { 'r1': true }
+        );
+
+        const reportedReply = document.querySelector('.reply-item[data-id="r1"]');
+        const cleanReply = document.querySelector('.reply-item[data-id="r2"]');
+        expect(reportedReply.querySelector('.comment-body').textContent).toContain('labelReported');
+        expect(reportedReply.querySelector('[data-action="report"]')).toBeNull();
+        expect(cleanReply.querySelector('.comment-body').textContent).toBe('clean reply');
+        expect(cleanReply.querySelector('[data-action="report"]')).not.toBeNull();
       });
     });
 
