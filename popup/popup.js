@@ -4,8 +4,9 @@ import { getMessage } from './i18n.js';
  * URLComments 팝업 메인 스크립트 - Supabase Auth & Database 연동 및 i18n 적용
  */
 
-import { state, setSpaDetected, setNormalizedUrl } from './state.js';
-import { elements, initElements, showState, setupI18n, disableForm, hideError, showProfileModal, hideProfileModal, showProfileError } from './ui.js';
+import { state } from './state.js';
+import { elements, initElements, showState, setupI18n, hideError, showProfileModal, hideProfileModal, showProfileError } from './ui.js';
+import { handleRuntimeMessage } from './tabChange.js';
 import { initI18n } from './i18n.js';
 import { checkAuthSession, handleGoogleLogin, handleLogout, updateAuthUI } from './auth.js';
 import { 
@@ -45,18 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 백그라운드 탭 변경 및 SPA 감지 알림 수신
   if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
-    chrome.runtime.onMessage.addListener((message) => {
-      if (message.type === 'TAB_CHANGED') {
-        showState('needs-refresh');
-        disableForm(getMessage("msgNeedsRefresh") || "페이지가 변경되었습니다. 새로고침을 눌러주세요.");
-        setNormalizedUrl(null);
-        setSpaDetected(false);
-        elements.pageToolbar.classList.add('hidden');
-        elements.spaNotice.classList.add('hidden');
-      } else if (message.type === 'SPA_DETECTED') {
-        setSpaDetected(true);
-      }
-    });
+    chrome.runtime.onMessage.addListener(handleRuntimeMessage);
   }
 
   // 2. 이벤트 리스너 등록
