@@ -98,4 +98,29 @@ describe('SPA Detector', () => {
       hostname: 'example.com'
     });
   });
+
+  it('notifies when MutationObserver sees more than 5 added nodes', () => {
+    const detector = startSpaDetector(['instagram.com'], mockGlobalDeps);
+    jest.advanceTimersByTime(1000);
+
+    detector.observer.callback([
+      { addedNodes: { length: 6 }, removedNodes: { length: 0 } }
+    ]);
+
+    expect(mockGlobalDeps.chrome.runtime.sendMessage).toHaveBeenCalledWith({
+      type: 'SPA_DETECTED',
+      hostname: 'example.com'
+    });
+  });
+
+  it('does not notify when MutationObserver changes stay at 5 nodes', () => {
+    const detector = startSpaDetector(['instagram.com'], mockGlobalDeps);
+    jest.advanceTimersByTime(1000);
+
+    detector.observer.callback([
+      { addedNodes: { length: 5 }, removedNodes: { length: 5 } }
+    ]);
+
+    expect(mockGlobalDeps.chrome.runtime.sendMessage).not.toHaveBeenCalled();
+  });
 });
