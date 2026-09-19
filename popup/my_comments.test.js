@@ -6,9 +6,16 @@ import {
   setMyCommentsCache,
   resetMyCommentsCache,
   renderMyComments,
-  loadMyComments
+  loadMyComments,
+  loadMyCommentsIfNeeded,
+  initMyComments
 } from './my_comments.js';
 import { state } from './state.js';
+import { handleGoogleLogin } from './auth.js';
+
+jest.mock('./auth.js', () => ({
+  handleGoogleLogin: jest.fn()
+}));
 
 describe('my_comments.js', () => {
   beforeEach(() => {
@@ -168,6 +175,64 @@ describe('my_comments.js', () => {
       await loadMyComments();
 
       expect(document.getElementById('my-comments-error').classList.contains('hidden')).toBe(false);
+    });
+  });
+
+  describe('loadMyCommentsIfNeeded', () => {
+    it('shows unauth when there is no current user', async () => {
+      state.currentUser = null;
+      await loadMyCommentsIfNeeded();
+      expect(document.getElementById('my-comments-unauth').classList.contains('hidden')).toBe(false);
+    });
+
+    it('renders the cached list without hitting Supabase', async () => {
+      state.currentUser = { id: 'test-user-123' };
+      setMyCommentsCache([
+        { id: 'c1', url: 'https://example.com/cached', content: 'Cached', created_at: '2026-09-06T12:00:00Z' }
+      ]);
+      window.supabaseClient = { from: jest.fn() };
+
+      await loadMyCommentsIfNeeded();
+
+      expect(window.supabaseClient.from).not.toHaveBeenCalled();
+      expect(document.querySelector('.my-comment-body').textContent).toBe('Cached');
+    });
+  });
+
+  describe('initMyComments', () => {
+    it('opens the original URL and routes retry/login clicks', async () => {
+      state.currentUser = { id: 'test-user-123' };
+      initMyComments();
+
+      const openBtn = document.createElement('button');
+      openBtn.className = 'btn-open-url';
+      openBtn.setAttribute('data-url', 'https://example.com/from-delegation');
+      document.getElementById('tab-my-comments').appendChild(openBtn);
+      openBtn.click();
+      expect(global.chrome.tabs.create).toHaveBeenCalledWith({ url: 'https://example.com/from-delegation' });
+
+      const retryBtn = document.createElement('button');
+      retryBtn.id = 'btn-my-comments-retry';
+      document.getElementById('tab-my-comments').appendChild(retryBtn);
+      const mockOrder = jest.fn().mockResolvedValue({ data: [], error: null });
+      window.supabaseClient = {
+        from: jest.fn().mockReturnValue({
+          select: jest.fn().mockReturnValue({
+            eq: jest.fn().mockReturnValue({
+              eq: jest.fn().mockReturnValue({ order: mockOrder })
+            })
+          })
+        })
+      };
+      retryBtn.click();
+      await Promise.resolve();
+      expect(window.supabaseClient.from).toHaveBeenCalledWith('comments');
+
+      const loginBtn = document.createElement('button');
+      loginBtn.id = 'btn-my-comments-login';
+      document.getElementById('tab-my-comments').appendChild(loginBtn);
+      loginBtn.click();
+      expect(handleGoogleLogin).toHaveBeenCalled();
     });
   });
 });
