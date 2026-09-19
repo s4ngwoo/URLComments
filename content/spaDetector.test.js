@@ -98,4 +98,19 @@ describe('SPA Detector', () => {
       hostname: 'example.com'
     });
   });
+
+  it('latches after the first SPA_DETECTED so later history events do not spam', () => {
+    jest.setSystemTime(5_000);
+    startSpaDetector(['instagram.com'], mockGlobalDeps);
+
+    mockGlobalDeps.history.pushState({}, '', '/one');
+    mockGlobalDeps.history.pushState({}, '', '/two');
+    mockGlobalDeps.history.replaceState({}, '', '/three');
+
+    expect(mockGlobalDeps.chrome.runtime.sendMessage).toHaveBeenCalledTimes(1);
+    expect(mockGlobalDeps.chrome.runtime.sendMessage).toHaveBeenCalledWith({
+      type: 'SPA_DETECTED',
+      hostname: 'example.com'
+    });
+  });
 });

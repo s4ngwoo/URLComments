@@ -212,6 +212,22 @@ describe('comments.js Pure Functions', () => {
       const { visibleParents } = groupCommentThreads(comments);
       expect(visibleParents.length).toBe(0);
     });
+
+    it('keeps orphan replies in repliesMap without promoting them to parents', () => {
+      const comments = [
+        { id: '10', parent_id: null, content: 'Parent', created_at: '2026-09-06T10:00:00Z', is_deleted: false },
+        { id: '99', parent_id: 'missing', content: 'Orphan', created_at: '2026-09-06T10:01:00Z', is_deleted: false }
+      ];
+
+      const { visibleParents, repliesMap } = groupCommentThreads(comments);
+      expect(visibleParents.map((p) => p.id)).toEqual(['10']);
+      expect(repliesMap.missing).toHaveLength(1);
+      expect(repliesMap.missing[0].id).toBe('99');
+    });
+
+    it('returns empty groups for a non-array payload', () => {
+      expect(groupCommentThreads(null)).toEqual({ visibleParents: [], repliesMap: {} });
+    });
   });
 
   describe('renderCommentList with 1-depth replies', () => {
