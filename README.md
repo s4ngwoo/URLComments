@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -189,6 +191,8 @@ Apply migrations sequentially in the Supabase **SQL Editor**:
 5. `005_verify_schema.sql`: Schema integrity verification views and helpers.
 6. `006_fix_linter_warnings.sql`: Performance and index optimizations.
 7. `007_one_depth_replies.sql`: Foreign key `parent_id`, 1-depth constraint trigger (`check_comment_one_depth()`), and active reply checker function (`comment_has_active_replies()`).
+8. `008_zero_trust_soft_delete_rpc.sql`: `soft_delete_comment` SECURITY DEFINER RPC.
+9. `010_reject_replies_to_deleted_parents.sql`: Reject replies to soft-deleted parents so hidden content cannot be re-exposed.
 
 ### 📌 Reply Policy & Deferred Multi-Level Nesting
 - **Current Policy**: Multiple sibling replies sharing one active top-level parent are supported. Reply-to-reply nesting (>1 depth) is strictly prevented by database triggers.

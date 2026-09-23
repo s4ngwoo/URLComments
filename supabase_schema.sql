@@ -129,6 +129,7 @@ declare
   v_parent_parent_id bigint;
   v_parent_url text;
   v_parent_exists boolean;
+  v_parent_is_deleted boolean;
 begin
   if new.parent_id is null then
     return new;
@@ -139,13 +140,17 @@ begin
       new.id, new.parent_id;
   end if;
 
-  select parent_id, url, true 
-  into v_parent_parent_id, v_parent_url, v_parent_exists
+  select parent_id, url, true, is_deleted
+  into v_parent_parent_id, v_parent_url, v_parent_exists, v_parent_is_deleted
   from public.comments
   where id = new.parent_id;
 
   if not found or v_parent_exists is not true then
     raise exception 'Referenced parent comment does not exist (parent_id: %)', new.parent_id;
+  end if;
+
+  if v_parent_is_deleted is true then
+    raise exception 'Cannot reply to a deleted comment (parent_id: %)', new.parent_id;
   end if;
 
   if v_parent_parent_id is not null then

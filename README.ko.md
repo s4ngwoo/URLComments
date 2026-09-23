@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -189,6 +191,8 @@ Supabase 대시보드의 **SQL Editor**에서 아래 마이그레이션 파일�
 5. `005_verify_schema.sql`: 스키마 정합성 검증 뷰 및 함수.
 6. `006_fix_linter_warnings.sql`: 성능 인덱스 최적화.
 7. `007_one_depth_replies.sql`: `parent_id` 외래키, 1단계 깊이 강제 트리거(`check_comment_one_depth()`), 활성 대댓글 확인 함수(`comment_has_active_replies()`).
+8. `008_zero_trust_soft_delete_rpc.sql`: `soft_delete_comment` SECURITY DEFINER RPC.
+9. `010_reject_replies_to_deleted_parents.sql`: 소프트 삭제된 부모 댓글에 대한 대댓글을 거부하여 숨겨진 본문 재노출을 막습니다.
 
 ### 📌 대댓글 정책 및 향후 2단계 이상 중첩 대댓글 안내
 - **현재 구현 정책**: 데이터베이스 트리거 수준에서 대댓글의 대댓글(2단계 이상 깊이)을 엄격히 차단합니다. 부모 댓글은 여러 개의 1단계 대댓글을 가질 수 있습니다.

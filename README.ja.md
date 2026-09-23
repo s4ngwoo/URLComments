@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -187,6 +189,8 @@ Supabaseダッシュボードの **SQL Editor** で、以下のマイグレー�
 5. `005_verify_schema.sql`: スキーマの整合性検証ビューと関数。
 6. `006_fix_linter_warnings.sql`: パフォーマンスとインデックスの最適化。
 7. `007_one_depth_replies.sql`: `parent_id` 外部キー、1段階の深さ強制トリガー (`check_comment_one_depth()`)、アクティブリプライ確認関数 (`comment_has_active_replies()`)。
+8. `008_zero_trust_soft_delete_rpc.sql`: `soft_delete_comment` SECURITY DEFINER RPC。
+9. `010_reject_replies_to_deleted_parents.sql`: ソフト削除された親コメントへの返信を拒否し、隠れた本文の再露出を防ぎます。
 
 ### 📌 リプライポリシーと複数階層ネストについて
 - **現在のポリシー**: データベースのトリガーレベルで、リプライに対するリプライ（2段階以上の深さ）を厳格にブロックします。親コメントは複数の1段階リプライを持つことができます。
