@@ -83,6 +83,10 @@ order by tablename, policyname;
 - **Purpose**: Adds `parent_id` column to `comments`, creates tree relationship index, and enforces 1-depth hierarchy constraints.
 - **Action**: Paste file content into SQL Editor and click **Run**.
 
+### Step 8: `supabase/migrations/010_reject_replies_to_deleted_parents.sql`
+- **Purpose**: Rejects replies whose parent is soft-deleted so a hidden comment cannot be forced back into `comments_select_public`.
+- **Action**: Paste file content into SQL Editor and click **Run**.
+
 ---
 
 ## 5. Rollback Policy

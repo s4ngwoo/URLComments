@@ -137,6 +137,11 @@ where table_schema = 'public' and table_name = 'comments' and column_name = 'aut
 - **실행**: SQL Editor에서 전체 복사 후 `Run`.
 - **성공 확인**: 각 결과 그리드에서 5개 테이블(`comments`, `profiles`, `comment_votes`, `reported_comments`, `user_profiles`)이 모두 정상 표시되는지 확인.
 
+### Step 6: `supabase/migrations/010_reject_replies_to_deleted_parents.sql`
+- **역할**: soft-delete된 부모 댓글에 새 대댓글을 달면 `comments_select_public`이 숨겨진 본문을 다시 노출하므로, 해당 INSERT/UPDATE를 거부합니다.
+- **실행**: SQL Editor에서 전체 복사 후 `Run`.
+- **성공 확인**: 에러 없이 `Success. No rows returned` 출력.
+
 ---
 
 ## 6. 롤백 원칙 (Rollback Policy)

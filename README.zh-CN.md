@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -187,6 +189,8 @@ npm test
 5. `005_verify_schema.sql`: 架构完整性验证视图及函数。
 6. `006_fix_linter_warnings.sql`: 性能和索引优化。
 7. `007_one_depth_replies.sql`: `parent_id` 外键约束、一层深度强制触发器 (`check_comment_one_depth()`) 以及活跃回复检查函数 (`comment_has_active_replies()`)。
+8. `008_zero_trust_soft_delete_rpc.sql`: `soft_delete_comment` SECURITY DEFINER RPC。
+9. `010_reject_replies_to_deleted_parents.sql`: 拒绝向已软删除的父评论回复，避免隐藏正文被重新暴露。
 
 ### 📌 回复策略及对多级嵌套的考量
 - **当前策略**: 在数据库触发器级别，严格禁止对回复进行回复（即深度大于 1 层）。父评论可以拥有多个一层深度的回复。

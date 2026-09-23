@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -187,6 +189,8 @@ npm test
 5. `005_verify_schema.sql`: 架構完整性驗證視圖及函數。
 6. `006_fix_linter_warnings.sql`: 效能和索引最佳化。
 7. `007_one_depth_replies.sql`: `parent_id` 外部金鑰約束、一層深度強制觸發程序 (`check_comment_one_depth()`) 以及活躍回覆檢查函數 (`comment_has_active_replies()`)。
+8. `008_zero_trust_soft_delete_rpc.sql`: `soft_delete_comment` SECURITY DEFINER RPC。
+9. `010_reject_replies_to_deleted_parents.sql`: 拒絕向已軟刪除的父評論回覆，避免隱藏正文被重新暴露。
 
 ### 📌 回覆策略及對多級嵌套的考量
 - **目前策略**: 在資料庫觸發程序層級，嚴格禁止對回覆進行回覆（即深度大於 1 層）。父留言可以擁有多個一層深度的回覆。

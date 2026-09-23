@@ -118,7 +118,9 @@ URLComments/
         ├── 004_comment_moderation.sql
         ├── 005_verify_schema.sql
         ├── 006_fix_linter_warnings.sql
-        └── 007_one_depth_replies.sql
+        ├── 007_one_depth_replies.sql
+        ├── 008_zero_trust_soft_delete_rpc.sql
+        └── 010_reject_replies_to_deleted_parents.sql
 ```
 
 ---
@@ -187,6 +189,8 @@ Aplica las migraciones secuencialmente desde el **SQL Editor** en el panel de co
 5. `005_verify_schema.sql`: Vistas y funciones de verificación de la integridad de la base de datos.
 6. `006_fix_linter_warnings.sql`: Optimización de rendimiento e índices.
 7. `007_one_depth_replies.sql`: Clave foránea `parent_id`, trigger para forzar 1-nivel de profundidad (`check_comment_one_depth()`), y función comprobadora de respuestas activas (`comment_has_active_replies()`).
+8. `008_zero_trust_soft_delete_rpc.sql`: RPC `soft_delete_comment` (SECURITY DEFINER).
+9. `010_reject_replies_to_deleted_parents.sql`: Rechaza respuestas a padres eliminados para no reexponer el contenido oculto.
 
 ### 📌 Política de Respuestas y Anidamiento Múltiple Deferido
 - **Política Actual**: Se permiten múltiples respuestas a un mismo comentario padre activo. Se evita estrictamente (vía trigger en base de datos) responder a una respuesta (anidamiento de profundidad mayor a 1).
