@@ -83,6 +83,11 @@ order by tablename, policyname;
 - **Purpose**: Adds `parent_id` column to `comments`, creates tree relationship index, and enforces 1-depth hierarchy constraints.
 - **Action**: Paste file content into SQL Editor and click **Run**.
 
+### Step 8: `supabase/migrations/011_normalize_comments_before_insert.sql`
+- **Purpose**: `update_comments_before_update` only runs on UPDATE. Without this step, an authenticated author can `POST /rest/v1/comments` with arbitrary `like_count` / `dislike_count` (or `is_deleted: true`) and seed forged totals. The trigger forces `like_count = 0`, `dislike_count = 0`, and `is_deleted = false` on INSERT.
+- **Action**: Paste file content into SQL Editor and click **Run**.
+- **Success check**: `before_insert_comments` is present on `public.comments`.
+
 ---
 
 ## 5. Rollback Policy

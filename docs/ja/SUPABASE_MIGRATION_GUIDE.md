@@ -24,3 +24,4 @@ Supabaseダッシュボードの **SQL Editor** で、`supabase/migrations/` 配
 5. `005_verify_schema.sql`: 読み取り専用のスキーマ検証クエリ。
 6. `006_fix_linter_warnings.sql`: リンター警告の解消。
 7. `007_one_depth_replies.sql`: `parent_id` による1階層リプライ構造の確立。
+8. `011_normalize_comments_before_insert.sql`: INSERT 時の `like_count`/`dislike_count`（および `is_deleted`）改ざんを防止。

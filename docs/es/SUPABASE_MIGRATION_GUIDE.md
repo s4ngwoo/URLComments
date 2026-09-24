@@ -24,3 +24,4 @@ En el **Editor SQL** del panel de Supabase, ejecuta los archivos de `supabase/mi
 5. `005_verify_schema.sql`: Consulta de comprobación de esquema (solo lectura).
 6. `006_fix_linter_warnings.sql`: Corrección de advertencias de linter en Supabase.
 7. `007_one_depth_replies.sql`: Soporte para respuestas de 1 nivel de profundidad (`parent_id`).
+8. `011_normalize_comments_before_insert.sql`: Impide falsificar `like_count`/`dislike_count` (o `is_deleted`) en INSERT.

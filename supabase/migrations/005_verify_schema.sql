@@ -87,6 +87,7 @@ order by tablename, indexname;
 -- 기대 결과:
 -- - comments: before_update_comments
 -- - profiles: set_profiles_updated_at
+-- - comments: before_update_comments, before_insert_comments
 -- - comment_votes: before_insert_update_comment_votes, on_vote_inserted, on_vote_deleted, on_vote_updated
 -- - reported_comments: before_insert_reported_comments
 -- --------------------------------------------------------------------
@@ -109,6 +110,7 @@ order by event_object_table, trigger_name;
 -- - check_reported_comments_before_insert (prosecdef = true)
 -- - check_comment_votes_before_modify
 -- - update_comments_before_update
+-- - normalize_comments_before_insert
 -- - update_profiles_updated_at
 -- --------------------------------------------------------------------
 select 
@@ -122,6 +124,7 @@ where pronamespace = 'public'::regnamespace
     'check_reported_comments_before_insert',
     'check_comment_votes_before_modify',
     'update_comments_before_update',
+    'normalize_comments_before_insert',
     'update_profiles_updated_at'
   )
 order by proname;

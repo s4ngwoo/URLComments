@@ -4,6 +4,7 @@ import { invalidateMyCommentsCache } from './my_comments.js';
 import { loadComments } from './comments.js';
 import { elements, showLoading, showError, hideError, showState, setSubmitButtonLoading } from './ui.js';
 import { resetTextareaSize } from './render.js';
+import { sanitizeCommentInsert } from './commentInsertGuard.js';
 
 export async function handleCommentSubmit(e) {
   e.preventDefault();
@@ -44,12 +45,12 @@ export async function handleCommentSubmit(e) {
 
     const { error } = await supabase
       .from('comments')
-      .insert([{
+      .insert([sanitizeCommentInsert({
         url: state.normalizedCurrentUrl,
         author_id: state.currentUser.id,
         author_name: authorName,
         content: content
-      }]);
+      })]);
 
     if (error) throw error;
 
@@ -105,13 +106,13 @@ export async function handleReplySubmit(parentId) {
 
     const { error } = await supabase
       .from('comments')
-      .insert([{
+      .insert([sanitizeCommentInsert({
         url: state.normalizedCurrentUrl,
         author_id: state.currentUser.id,
         author_name: authorName,
         content: content,
         parent_id: parentId
-      }]);
+      })]);
 
     if (error) throw error;
 
