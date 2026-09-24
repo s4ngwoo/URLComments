@@ -24,3 +24,4 @@
 5. `005_verify_schema.sql`: 只读验证查询。
 6. `006_fix_linter_warnings.sql`: 修复静态检查警告。
 7. `007_one_depth_replies.sql`: `parent_id` 字段及 1 层回复完整性保障。
+8. `011_normalize_comments_before_insert.sql`: 阻止 INSERT 时伪造 `like_count`/`dislike_count`（或 `is_deleted`）。

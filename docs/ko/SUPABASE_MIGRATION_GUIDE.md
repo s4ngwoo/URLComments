@@ -137,6 +137,11 @@ where table_schema = 'public' and table_name = 'comments' and column_name = 'aut
 - **실행**: SQL Editor에서 전체 복사 후 `Run`.
 - **성공 확인**: 각 결과 그리드에서 5개 테이블(`comments`, `profiles`, `comment_votes`, `reported_comments`, `user_profiles`)이 모두 정상 표시되는지 확인.
 
+### Step 5b: `supabase/migrations/011_normalize_comments_before_insert.sql`
+- **역할**: `update_comments_before_update`는 UPDATE에만 동작합니다. 이 마이그레이션이 없으면 인증된 작성자가 `POST /rest/v1/comments`로 `like_count`/`dislike_count`를 위조하거나 `is_deleted: true`로 숨긴 행을 넣을 수 있습니다. INSERT 시 투표 캐시를 0으로, `is_deleted`를 false로 강제합니다.
+- **실행**: SQL Editor에서 전체 복사 후 `Run`.
+- **성공 확인**: `public.comments`에 `before_insert_comments` 트리거가 등록됨.
+
 ---
 
 ## 6. 롤백 원칙 (Rollback Policy)

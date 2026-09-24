@@ -280,6 +280,22 @@ create trigger before_update_comments
   before update on comments
   for each row execute function public.update_comments_before_update();
 
+-- INSERT: vote caches / is_deleted are not client-writable (UPDATE guard does not run here)
+create or replace function public.normalize_comments_before_insert()
+returns trigger as $$
+begin
+  new.like_count = 0;
+  new.dislike_count = 0;
+  new.is_deleted = false;
+  return new;
+end;
+$$ language plpgsql;
+
+drop trigger if exists before_insert_comments on comments;
+create trigger before_insert_comments
+  before insert on comments
+  for each row execute function public.normalize_comments_before_insert();
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE comments TO authenticated;
 GRANT SELECT ON TABLE comments TO anon;
 GRANT USAGE ON SEQUENCE comments_id_seq TO anon, authenticated;
